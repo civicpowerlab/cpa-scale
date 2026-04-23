@@ -123,21 +123,40 @@ main{min-width:0}
 .medi-dayLabels span{line-height:12px}
 .medi-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,12px);
   grid-auto-columns:12px;gap:3px}
-.medi-cell{width:12px;height:12px;border-radius:2.5px;
+.medi-cell{width:14px;height:14px;border-radius:3px;
   background:var(--rule-soft);cursor:pointer;
   transition:transform .1s, background .15s;
   border:1px solid transparent}
 .medi-cell:hover{transform:scale(1.25);border-color:var(--sumi)}
 .medi-cell.future{opacity:.35;cursor:default}
 .medi-cell.future:hover{transform:none;border-color:transparent}
-.medi-cell.done{background:var(--trwbo)}
 .medi-cell.today{border-color:var(--sumi)}
-.medi-cell.done.today{border-color:var(--sumi);box-shadow:0 0 0 2px rgba(42,109,122,.3)}
-.medi-legend{display:flex;align-items:center;gap:8px;margin-top:10px;
-  font-size:11px;color:var(--sumi-dim)}
-.medi-legend .mini{display:inline-block;width:11px;height:11px;border-radius:2.5px;
+
+/* Jewel-tone habits: med = amethyst purple, h2o = aquamarine, mvmt = ruby */
+.habit-med   .medi-cell.lvl-3{background:#6b3fa0}
+.habit-h2o   .medi-cell.lvl-1{background:#a8dde2}
+.habit-h2o   .medi-cell.lvl-2{background:#3ea6b0}
+.habit-h2o   .medi-cell.lvl-3{background:#055064}
+.habit-mvmt  .medi-cell.lvl-1{background:#f5a9b5}
+.habit-mvmt  .medi-cell.lvl-2{background:#c8395b}
+.habit-mvmt  .medi-cell.lvl-3{background:#7a0d2a}
+
+.habit-row{margin-bottom:10px}
+.habit-row:last-child{margin-bottom:0}
+.habit-head{display:flex;align-items:baseline;justify-content:space-between;
+  gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.habit-name{font-family:"Fraunces",serif;font-weight:500;font-size:13.5px;
+  color:var(--sumi);letter-spacing:.01em}
+.habit-stats{font-size:11.5px;color:var(--sumi-soft);font-variant-numeric:tabular-nums}
+.habit-stats strong{color:var(--sumi);font-weight:600}
+.habit-strip{display:flex;gap:3px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+
+.medi-legend-multi{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;
+  font-size:11px;color:var(--sumi-dim);align-items:center}
+.medi-legend-multi .group{display:inline-flex;align-items:center;gap:4px}
+.medi-legend-multi .mini{display:inline-block;width:11px;height:11px;border-radius:3px;
   background:var(--rule-soft);vertical-align:-2px}
-.medi-legend .mini.done{background:var(--trwbo)}
+.legend-tap{font-style:italic;margin-left:auto}
 
 /* ============ TYPOGRAPHY ============ */
 h2{font-family:"Fraunces",serif;font-weight:500;font-optical-sizing:auto;
@@ -349,27 +368,35 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 <!-- ========================= MAIN ========================= -->
 <main>
 
-<!-- MEDITATION CONTRIBUTION GRAPH -->
+<!-- HABITS — three jewel-toned strips -->
 <section class="medi">
-  <div class="medi-head">
-    <div class="medi-title">Meditation — daily · goal 7/7</div>
-    <div class="medi-stats" id="medi-stats">· · ·</div>
-  </div>
-  <div class="medi-grid-wrap">
-    <div class="medi-layout">
-      <div class="medi-dayLabels">
-        <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
-      </div>
-      <div>
-        <div class="medi-months" id="medi-months"></div>
-        <div class="medi-grid" id="medi-grid"></div>
-      </div>
+  <div class="habit-row">
+    <div class="habit-head">
+      <div class="habit-name">✶ med</div>
+      <div class="habit-stats" id="stats-med">· · ·</div>
     </div>
+    <div class="habit-strip habit-med" id="strip-med"></div>
   </div>
-  <div class="medi-legend">
-    <span class="mini"></span> skipped
-    <span class="mini done" style="margin-left:8px"></span> meditated
-    <span style="margin-left:auto;font-style:italic">Click any past/today cell to toggle.</span>
+  <div class="habit-row">
+    <div class="habit-head">
+      <div class="habit-name">◈ h2o</div>
+      <div class="habit-stats" id="stats-h2o">· · ·</div>
+    </div>
+    <div class="habit-strip habit-h2o" id="strip-h2o"></div>
+  </div>
+  <div class="habit-row">
+    <div class="habit-head">
+      <div class="habit-name">◆ mvmt</div>
+      <div class="habit-stats" id="stats-mvmt">· · ·</div>
+    </div>
+    <div class="habit-strip habit-mvmt" id="strip-mvmt"></div>
+  </div>
+  <div class="medi-legend-multi">
+    <span class="group"><span class="mini"></span>none</span>
+    <span class="group"><span class="mini" style="background:#a8dde2"></span>light</span>
+    <span class="group"><span class="mini" style="background:#3ea6b0"></span>medium</span>
+    <span class="group"><span class="mini" style="background:#055064"></span>heavy/done</span>
+    <span class="legend-tap">Tap a cell to cycle (med = on/off; h2o+mvmt cycle light → medium → heavy → off).</span>
   </div>
 </section>
 
@@ -383,7 +410,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <ul class="checks">
       <li><input type="checkbox" id="t-r1"><label for="t-r1"><span class="tag tag-plan">plan</span>Finalize schedule (this file). Lock in big-rock allocations.</label></li>
       <li><input type="checkbox" id="t-r2"><label for="t-r2"><span class="tag tag-plan">inbox</span>Inbox to zero (triage + sweep, treat as one block).</label></li>
-      <li><input type="checkbox" id="t-r3"><label for="t-r3"><span class="tag tag-pl">purple line</span>Skim PL state — what's the one question you wake up to Monday with? <em>(10 min)</em></label></li>
     </ul>
   </div>
 
@@ -436,63 +462,74 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   <div id="wk-detail"></div>
 </div>
 
-<!-- ================== PRE-STANFORD ================== -->
-<h2>Pre-Stanford <span class="sub" style="font-weight:400">· PL + trwbo + fmto · Apr 24 – Jun 2</span></h2>
-<div class="sub" style="margin:-2px 0 12px">8 big-rock days before Stanford: Purple Line (3) + trwbo (3) + fmto (2). PL front-loaded so the talk is drafted by Apr 28.</div>
+<!-- ================== PRE-STANFORD — mirrors Outlook ================== -->
+<h2>Pre-Stanford <span class="sub" style="font-weight:400">· from your Outlook blocks · Apr 24 → Jun 2</span></h2>
+<div class="sub" style="margin:-2px 0 12px">Deep-work days as actually blocked in your calendar. Purple Line lands May 7–8, then rehearsal/polish before Stanford May 31 → Jun 1.</div>
 
 <div class="card">
-  <h3 style="margin-top:0">Week of Apr 27 — finish PL draft, start trwbo</h3>
-  <div class="week"><div class="day">Mon Apr 27<small>Sue here</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w2-1"><label for="w2-1"><span class="tag tag-pl">PL D2</span>Purple Line — Day 2. Outline + evidence scaffolding.</label></li></ul>
+  <h3 style="margin-top:0">Week of Apr 27</h3>
+  <div class="week"><div class="day">Mon Apr 27</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w2-1"><label for="w2-1"><span class="tag tag-fmto">fmto</span>Deep work 10–16. Ted dinner 19:30.</label></li></ul>
   </div></div>
-  <div class="week"><div class="day">Tue Apr 28<small>Sue here</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w2-2"><label for="w2-2"><span class="tag tag-pl">PL D3</span>Purple Line — Day 3. Full draft + slide skeleton. <em>PL draft complete ✓</em></label></li></ul>
+  <div class="week"><div class="day">Tue Apr 28</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w2-2"><label for="w2-2"><span class="tag tag-fmto">fmto</span>Deep work 09–14:30. FAC 15:45 · PAE showcase 16:30.</label></li></ul>
   </div></div>
-  <div class="week"><div class="day">Wed Apr 29<small>Sue here</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w2-3"><label for="w2-3"><span class="tag tag-trwbo">trwbo D1</span>trwbo — Day 1.</label></li></ul>
+  <div class="week"><div class="day">Wed Apr 29</div><div>
+    <ul class="checks">
+      <li><input type="checkbox" id="w2-3"><label for="w2-3"><span class="tag tag-mamdani">mamdani</span>ZM follow-up + proposal 09:30–13.</label></li>
+      <li><input type="checkbox" id="w2-3b"><label for="w2-3b"><span class="tag tag-cpl">mtg</span>Convoca × CP Lab 14:00.</label></li>
+    </ul>
   </div></div>
-  <div class="week"><div class="day">Thu Apr 30<small>Alexandre → SFO (eve) · Sue</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w2-4"><label for="w2-4"><span class="tag tag-trwbo">trwbo D2</span>trwbo — Day 2. Wrap by 5 — Alexandre leaves tonight.</label></li></ul>
+  <div class="week"><div class="day">Thu Apr 30<small>Alexandre → SFO pm</small></div><div>
+    <ul class="checks">
+      <li><input type="checkbox" id="w2-4"><label for="w2-4"><span class="tag tag-gw">groundwork</span>Deep work 09–13.</label></li>
+      <li><input type="checkbox" id="w2-4b"><label for="w2-4b"><span class="tag tag-cpl">cpl</span>Civic Power 2 planning 13–18.</label></li>
+    </ul>
   </div></div>
-  <div class="week"><div class="day">Fri May 1<small>Solo parent · Sue</small></div>
-    <div><div class="fam">Solo-parenting day. Light — inbox / admin only.</div></div></div>
+  <div class="week"><div class="day">Fri May 1<small>Solo · Sue</small></div><div>
+    <ul class="checks">
+      <li><input type="checkbox" id="w2-5"><label for="w2-5"><span class="tag tag-cpl">cpl</span>Civic Tech 09–14:30.</label></li>
+      <li><input type="checkbox" id="w2-5b"><label for="w2-5b"><span class="tag tag-mamdani">mamdani</span>Mamdani bi-weekly 15:00.</label></li>
+    </ul>
+  </div></div>
 </div>
 
 <div class="card">
-  <h3 style="margin-top:0">Week of May 4 — finish trwbo, do fmto</h3>
-  <div class="week"><div class="day">Mon May 4<small>Solo day · Alexandre back 10:45pm</small></div>
-    <div><div class="fam">Solo day, Alexandre returns late. Light.</div></div></div>
-  <div class="week"><div class="day">Tue May 5<small>Sue here</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w3-1"><label for="w3-1"><span class="tag tag-trwbo">trwbo D3</span>trwbo — Day 3. <em>trwbo complete ✓</em></label></li></ul>
+  <h3 style="margin-top:0">Week of May 4 — fmto/trwbo + purple line starts</h3>
+  <div class="week"><div class="day">Mon May 4<small>Alexandre back late</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w3-1"><label for="w3-1"><span class="tag tag-trwbo">fmto/trwbo</span>Deep work 09–17 (pick one).</label></li></ul>
   </div></div>
-  <div class="week"><div class="day">Wed May 6<small>Sue leaves</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w3-2"><label for="w3-2"><span class="tag tag-fmto">fmto D1</span>fmto — Day 1.</label></li></ul>
+  <div class="week"><div class="day">Tue May 5</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w3-2"><label for="w3-2"><span class="tag tag-trwbo">fmto/trwbo</span>Deep work 09–15. HOLD FAC 15:00.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Wed May 6</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w3-3"><label for="w3-3"><span class="tag tag-plan">meetings</span>Edie 10:00 · John 11:00 · Democratic Structure report-back.</label></li></ul>
   </div></div>
   <div class="week"><div class="day">Thu May 7</div><div>
-    <ul class="checks"><li><input type="checkbox" id="w3-3"><label for="w3-3"><span class="tag tag-fmto">fmto D2</span>fmto — Day 2. <em>fmto complete ✓</em></label></li></ul>
+    <ul class="checks"><li><input type="checkbox" id="w3-4"><label for="w3-4"><span class="tag tag-pl">purple line</span>Deep work 09–17 — Stanford draft.</label></li></ul>
   </div></div>
   <div class="week"><div class="day">Fri May 8</div><div>
-    <ul class="checks"><li><input type="checkbox" id="w3-4"><label for="w3-4"><span class="tag tag-pl">PL polish</span>Stanford deck polish pass #1 — re-read with fresh eyes, simplify, cut.</label></li></ul>
+    <ul class="checks"><li><input type="checkbox" id="w3-5"><label for="w3-5"><span class="tag tag-pl">purple line</span>Deep work 09–17 — finish draft + slide skeleton.</label></li></ul>
   </div></div>
 </div>
 
 <div class="card">
-  <h3 style="margin-top:0">Week of May 11 — rehearse, breathing room</h3>
+  <h3 style="margin-top:0">Week of May 11 — rehearse</h3>
   <div class="week"><div class="day">Mon May 11</div><div>
-    <ul class="checks"><li><input type="checkbox" id="w4-1"><label for="w4-1"><span class="tag tag-pl">PL rehearse</span>Rehearse out loud once. Time it. Note rough spots.</label></li></ul>
+    <ul class="checks"><li><input type="checkbox" id="w4-1"><label for="w4-1"><span class="tag tag-pl">rehearse</span>Rehearse out loud. Time it.</label></li></ul>
   </div></div>
   <div class="week"><div class="day">Tue May 12</div><div><div class="fam">Open. Inbox / admin.</div></div></div>
   <div class="week"><div class="day">Wed May 13</div><div>
-    <ul class="checks"><li><input type="checkbox" id="w4-2"><label for="w4-2"><span class="tag tag-pl">PL Q&amp;A</span>Q&amp;A prep — list the 10 hardest questions. Write bullet answers.</label></li></ul>
+    <ul class="checks"><li><input type="checkbox" id="w4-2"><label for="w4-2"><span class="tag tag-pl">Q&amp;A</span>Q&amp;A prep — 10 hardest questions.</label></li></ul>
   </div></div>
   <div class="week"><div class="day">Thu May 14</div><div><div class="fam">Open.</div></div></div>
   <div class="week"><div class="day">Fri May 15</div><div><div class="fam">Open. Sat May 16 — HKS reunion panel</div></div></div>
 </div>
 
 <div class="card">
-  <h3 style="margin-top:0">Week of May 18 — polish #2</h3>
+  <h3 style="margin-top:0">Week of May 18 — polish</h3>
   <div class="week"><div class="day">Mon May 18</div><div>
-    <ul class="checks"><li><input type="checkbox" id="w5-1"><label for="w5-1"><span class="tag tag-pl">PL polish</span>Deck polish pass #2 — incorporate rehearsal notes.</label></li></ul>
+    <ul class="checks"><li><input type="checkbox" id="w5-1"><label for="w5-1"><span class="tag tag-pl">polish</span>Deck polish pass — incorporate rehearsal notes.</label></li></ul>
   </div></div>
   <div class="week"><div class="day">Tue May 19</div><div><div class="fam">Open.</div></div></div>
   <div class="week"><div class="day">Wed May 20<small>Leo dentist</small></div><div><div class="fam">Open around dentist.</div></div></div>
@@ -503,23 +540,23 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 <div class="card">
   <h3 style="margin-top:0">Week of May 25 — family-first, low intensity</h3>
   <div class="sub" style="margin:-4px 0 6px">Alexandre colonoscopy Thu · Andre here · Memorial Day Mon.</div>
-  <div class="week"><div class="day">Mon May 25<small>Memorial Day · Andre</small></div><div><div class="fam">Holiday. Off.</div></div></div>
-  <div class="week"><div class="day">Tue May 26<small>Andre</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w6-1"><label for="w6-1"><span class="tag tag-pl">PL rehearse</span>Rehearsal #2. Record on phone, watch back.</label></li></ul>
+  <div class="week"><div class="day">Mon May 25<small>Memorial Day</small></div><div><div class="fam">Holiday.</div></div></div>
+  <div class="week"><div class="day">Tue May 26</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w6-1"><label for="w6-1"><span class="tag tag-pl">rehearse</span>Rehearsal #2. Record on phone, watch back.</label></li></ul>
   </div></div>
-  <div class="week"><div class="day">Wed May 27<small>Alexandre fasting · Leo cardio 3:30</small></div><div><div class="fam">Support Alexandre. Light polish only if needed.</div></div></div>
-  <div class="week"><div class="day">Thu May 28<small>Alexandre colonoscopy · Andre</small></div><div><div class="fam">Support day. No work.</div></div></div>
-  <div class="week"><div class="day">Fri May 29<small>Andre</small></div><div>
+  <div class="week"><div class="day">Wed May 27<small>Alexandre fasting</small></div><div><div class="fam">Support Alexandre. Light only.</div></div></div>
+  <div class="week"><div class="day">Thu May 28<small>Alexandre colonoscopy</small></div><div><div class="fam">Support day. No work.</div></div></div>
+  <div class="week"><div class="day">Fri May 29</div><div>
     <ul class="checks">
-      <li><input type="checkbox" id="w6-3"><label for="w6-3"><span class="tag tag-plan">travel</span>Pack for Stanford. Print boarding pass. Confirm ground transport.</label></li>
-      <li><input type="checkbox" id="w6-4"><label for="w6-4"><span class="tag tag-pl">PL final</span>Final rehearsal. Deck lock — no more edits.</label></li>
+      <li><input type="checkbox" id="w6-3"><label for="w6-3"><span class="tag tag-plan">travel</span>Pack for Stanford. Boarding pass. Ground transport.</label></li>
+      <li><input type="checkbox" id="w6-4"><label for="w6-4"><span class="tag tag-pl">final</span>Final rehearsal. Deck lock.</label></li>
     </ul>
   </div></div>
-  <div class="week"><div class="day">Sat May 30<small>Andre</small></div><div><div class="fam">Rest. Travel day tomorrow.</div></div></div>
-  <div class="week"><div class="day">Sun May 31 → Mon Jun 1<small>Stanford · Andre home</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w6-5"><label for="w6-5"><span class="tag tag-pl">PL 🎤</span>Stanford — deliver the talk.</label></li></ul>
+  <div class="week"><div class="day">Sat May 30</div><div><div class="fam">Rest.</div></div></div>
+  <div class="week"><div class="day">Sun May 31 → Mon Jun 1</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w6-5"><label for="w6-5"><span class="tag tag-pl">🎤 Stanford</span>Deliver the talk.</label></li></ul>
   </div></div>
-  <div class="week"><div class="day">Tue Jun 2<small>Boston</small></div><div>
+  <div class="week"><div class="day">Tue Jun 2</div><div>
     <ul class="checks"><li><input type="checkbox" id="w6-6"><label for="w6-6"><span class="tag tag-pl">GEO</span>GEO talk, Boston.</label></li></ul>
   </div></div>
 </div>
@@ -646,7 +683,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     }catch(e){console.warn('sync replace failed',e.message);}
   }
 
-  // After hydrate, re-apply state to DOM (checkbox visual + med cells).
+  // After hydrate, re-apply state to DOM (checkbox visual + habit cells).
   function applyRemote(){
     document.querySelectorAll('input[type=checkbox]').forEach(cb=>{
       const done=!!saved[cb.id];
@@ -654,8 +691,10 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
       cb.closest('li')?.classList.toggle('done',done);
     });
     document.querySelectorAll('.medi-cell').forEach(cell=>{
-      if(cell.classList.contains('future')) return;
-      cell.classList.toggle('done',!!mediState[cell.dataset.date]);
+      cell.classList.remove('lvl-1','lvl-2','lvl-3');
+      const habit=cell.dataset.habit;
+      const lvl=(typeof getHabit==='function' && habit)?getHabit(cell.dataset.date,habit):0;
+      if(lvl) cell.classList.add('lvl-'+lvl);
     });
     updateCounts?.();
     updateMediStats?.();
@@ -724,107 +763,98 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   }
   updateCounts();
 
-  // ===== Meditation contribution graph =====
+  // ===== Habit strips (med / h2o / mvmt) =====
   function isoDate(d){
     return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   }
   function saveMedi(){localStorage.setItem(MEDI_LS,JSON.stringify(mediState));}
 
-  // Build grid: starts TODAY, runs forward 52 weeks
-  const now=new Date();now.setHours(0,0,0,0);
-  const todayKey=isoDate(now);
-  const start=new Date(now);
-  const end=new Date(now);end.setDate(end.getDate()+7*52-1);
-
-  // Align column to Sunday so weekday rows line up GitHub-style
-  const firstDayOffset=start.getDay(); // 0=Sun
-  const gridStart=new Date(start);gridStart.setDate(start.getDate()-firstDayOffset);
-
-  const gridEl=document.getElementById('medi-grid');
-  const monthsEl=document.getElementById('medi-months');
-  const monthLabels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  let lastMonthShown=-1;
-  let weekCount=0;
-
-  // Build cells week by week
-  const cells=[];
-  let cursor=new Date(gridStart);
-  while(cursor<=end){
-    const weekStart=new Date(cursor);
-    for(let i=0;i<7;i++){
-      const d=new Date(cursor);
-      const cell=document.createElement('div');
-      cell.className='medi-cell';
-      cell.dataset.date=isoDate(d);
-      cell.title=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
-      if(d<start||d>end){cell.style.visibility='hidden';}
-      else{
-        if(d>now) cell.classList.add('future');
-        if(isoDate(d)===todayKey) cell.classList.add('today');
-        if(mediState[isoDate(d)]) cell.classList.add('done');
-        if(!cell.classList.contains('future')){
-          cell.addEventListener('click',()=>toggleMedi(cell));
-        }
-      }
-      gridEl.appendChild(cell);
-      cells.push(cell);
-      cursor.setDate(cursor.getDate()+1);
-    }
-    // Month label for this column (if first week of new month appears)
-    const wkMonth=weekStart.getMonth();
-    if(wkMonth!==lastMonthShown && weekStart>=start){
-      const mlab=document.createElement('span');
-      mlab.textContent=monthLabels[wkMonth];
-      mlab.style.flex='0 0 '+(15)+'px'; // approximate per-week width
-      mlab.style.width='60px';
-      monthsEl.appendChild(mlab);
-      lastMonthShown=wkMonth;
-    }else{
-      const spacer=document.createElement('span');
-      spacer.style.flex='0 0 15px';
-      monthsEl.appendChild(spacer);
-    }
-    weekCount++;
+  // mediState schema: { "YYYY-MM-DD": { med: 0|3, h2o: 0-3, mvmt: 0-3 } }
+  // Legacy (old sync returns {date:1}) — upgrade inline.
+  function normDay(v){
+    if(v==null) return null;
+    if(typeof v==='number') return {med:v?3:0,h2o:0,mvmt:0};
+    return {med:v.med||0,h2o:v.h2o||0,mvmt:v.mvmt||0};
   }
-
-  function toggleMedi(cell){
-    const date=cell.dataset.date;
-    if(mediState[date]){
-      delete mediState[date];cell.classList.remove('done');
+  function getHabit(date,habit){
+    const d=normDay(mediState[date]);
+    return d ? d[habit]||0 : 0;
+  }
+  function setHabit(date,habit,level){
+    const cur=normDay(mediState[date])||{med:0,h2o:0,mvmt:0};
+    cur[habit]=level;
+    if(cur.med===0 && cur.h2o===0 && cur.mvmt===0){
+      delete mediState[date];
       queuePatch({unsetMedi:[date]});
     }else{
-      mediState[date]=1;cell.classList.add('done');
-      queuePatch({setMedi:{[date]:1}});
+      mediState[date]=cur;
+      queuePatch({setMedi:{[date]:cur}});
     }
     saveMedi();
+  }
+
+  // Build strips: today back 56 days (8 weeks) so UI is compact.
+  const now=new Date();now.setHours(0,0,0,0);
+  const todayKey=isoDate(now);
+  const STRIP_DAYS=56;
+
+  const habits=['med','h2o','mvmt'];
+  const strips={med:document.getElementById('strip-med'),h2o:document.getElementById('strip-h2o'),mvmt:document.getElementById('strip-mvmt')};
+  const cellsByHabit={med:[],h2o:[],mvmt:[]};
+
+  function buildStrip(habit){
+    const el=strips[habit];el.innerHTML='';cellsByHabit[habit]=[];
+    for(let i=STRIP_DAYS-1;i>=0;i--){
+      const d=new Date(now);d.setDate(now.getDate()-i);
+      const key=isoDate(d);
+      const cell=document.createElement('div');
+      cell.className='medi-cell';
+      cell.dataset.date=key;
+      cell.dataset.habit=habit;
+      const dayName=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+      const lvl=getHabit(key,habit);
+      if(lvl) cell.classList.add('lvl-'+lvl);
+      if(key===todayKey) cell.classList.add('today');
+      cell.title=`${dayName} — ${habit}: ${['none','light','medium','heavy'][lvl]||'none'}`;
+      cell.addEventListener('click',()=>cycleHabit(cell));
+      el.appendChild(cell);
+      cellsByHabit[habit].push(cell);
+    }
+  }
+
+  function cycleHabit(cell){
+    const date=cell.dataset.date;
+    const habit=cell.dataset.habit;
+    const cur=getHabit(date,habit);
+    let next;
+    if(habit==='med'){next=cur===3?0:3;}
+    else{next=(cur+1)%4;} // 0 → 1 → 2 → 3 → 0
+    setHabit(date,habit,next);
+    cell.classList.remove('lvl-1','lvl-2','lvl-3');
+    if(next) cell.classList.add('lvl-'+next);
+    cell.title=`${new Date(date+'T00:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})} — ${habit}: ${['none','light','medium','heavy'][next]||'none'}`;
     syncTodayMediCheckbox();
     updateMediStats();
   }
 
-  // Sync the "Meditate" checkbox with today's medi cell
-  const mediCb=document.querySelector('input[data-medi="today"]');
-  const todayCell=[...cells].find(c=>c.dataset.date===todayKey);
+  habits.forEach(buildStrip);
 
+  // "Meditate" checkbox in Personal drawer still syncs today's med cell
+  const mediCb=document.querySelector('input[data-medi="today"]');
   function syncTodayMediCheckbox(){
     if(!mediCb) return;
-    const done=!!mediState[todayKey];
+    const done=getHabit(todayKey,'med')>0;
     if(mediCb.checked!==done){
       mediCb.checked=done;
-      const li=mediCb.closest('li');
-      if(li) li.classList.toggle('done',done);
+      mediCb.closest('li')?.classList.toggle('done',done);
     }
   }
   if(mediCb){
     mediCb.addEventListener('change',()=>{
-      if(mediCb.checked){
-        mediState[todayKey]=1;
-        queuePatch({setMedi:{[todayKey]:1}});
-      }else{
-        delete mediState[todayKey];
-        queuePatch({unsetMedi:[todayKey]});
-      }
-      saveMedi();
-      if(todayCell){todayCell.classList.toggle('done',mediCb.checked);}
+      setHabit(todayKey,'med',mediCb.checked?3:0);
+      // repaint today cell
+      const c=cellsByHabit.med.find(x=>x.dataset.date===todayKey);
+      if(c){c.classList.remove('lvl-1','lvl-2','lvl-3');if(mediCb.checked)c.classList.add('lvl-3');}
       updateMediStats();
     });
   }
@@ -1006,21 +1036,20 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   document.getElementById('wk-today').addEventListener('click',()=>{wkCursor=toMonday(new Date(now));renderWeek();});
   renderWeek();
 
-  // Stats — current streak + this-week count
+  // Stats — per-habit streak + this-week count
   function updateMediStats(){
-    // Streak counting backwards from today while done
-    let streak=0;
-    let d=new Date(now);
-    while(mediState[isoDate(d)]){streak++;d.setDate(d.getDate()-1);}
-    // This week (Sun→today)
-    const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay());
-    let wk=0;
-    for(let i=0;i<=now.getDay();i++){
-      const dd=new Date(weekStart);dd.setDate(weekStart.getDate()+i);
-      if(mediState[isoDate(dd)])wk++;
-    }
-    const statsEl=document.getElementById('medi-stats');
-    statsEl.innerHTML=`<strong>${wk}/7</strong> this week · <strong>${streak}</strong>-day streak`;
+    habits.forEach(habit=>{
+      let streak=0;let d=new Date(now);
+      while(getHabit(isoDate(d),habit)>0){streak++;d.setDate(d.getDate()-1);}
+      const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay());
+      let wk=0;
+      for(let i=0;i<=now.getDay();i++){
+        const dd=new Date(weekStart);dd.setDate(weekStart.getDate()+i);
+        if(getHabit(isoDate(dd),habit)>0) wk++;
+      }
+      const el=document.getElementById('stats-'+habit);
+      if(el) el.innerHTML=`<strong>${wk}/7</strong> · <strong>${streak}</strong>-day streak`;
+    });
   }
   updateMediStats();
 
