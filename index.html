@@ -172,19 +172,16 @@ h3{font-family:"Inter Tight",sans-serif;font-weight:600;
   border-radius:10px;padding:22px 24px;margin-bottom:16px;
   box-shadow:0 1px 0 rgba(45,42,38,.03), 0 6px 18px -14px rgba(45,42,38,.15)}
 
-.today{border:2px solid var(--sumi);padding-top:28px;position:relative}
-.today::before{content:"TODAY";position:absolute;top:-11px;left:22px;
-  background:var(--washi);padding:0 10px;
-  font-family:"Inter Tight";font-weight:700;letter-spacing:.28em;
-  font-size:10.5px;color:var(--sumi)}
+.today{border:1.5px solid var(--sumi);position:relative}
 
 /* ============ DEEP WORK (top-priority block) ============ */
-.rocks{background:linear-gradient(180deg, #e3efd8 0%, #cde1b8 100%);
-  border:1px solid #8aaa5e;border-radius:8px;padding:14px 18px;
+/* Tones derived from --gw (matcha #6a8f4f) and --agency (uguisu #7b8c4e) */
+.rocks{background:linear-gradient(180deg, #e6eed1 0%, #cfdaac 100%);
+  border:1px solid var(--gw);border-radius:8px;padding:14px 18px;
   margin:4px 0 14px;position:relative}
 .rocks::before{content:"◉";position:absolute;top:10px;right:14px;
-  font-size:17px;color:var(--gw);opacity:.7}
-.rocks h3{color:#3b5023;margin-top:0;margin-bottom:6px;letter-spacing:.14em}
+  font-size:17px;color:var(--gw);opacity:.8}
+.rocks h3{color:#3f5824;margin-top:0;margin-bottom:6px;letter-spacing:.14em}
 .rocks h3::before{content:"Deep work · ";color:var(--sumi);font-weight:700}
 
 /* ============ CHECK ITEMS ============ */
@@ -287,10 +284,11 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   display:flex;flex-direction:column;gap:4px;cursor:pointer;
   transition:transform .1s,border-color .15s,background .15s}
 .wk-col:hover{border-color:var(--sumi-soft);transform:translateY(-1px)}
-.wk-col.today{background:#fff8e1;border:1.5px solid var(--sumi)}
+/* Today highlight — nadeshiko pink family (same as --dia) */
+.wk-col.today{background:#fbeaee;border:1.5px solid var(--dia)}
 .wk-col .dow{font-family:"Inter Tight",sans-serif;font-size:10.5px;
   font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--kin)}
-.wk-col.today .dow{color:var(--sumi)}
+.wk-col.today .dow{color:var(--dia)}
 .wk-col .dnum{font-family:"Fraunces",serif;font-size:20px;font-weight:500;
   line-height:1;color:var(--sumi);margin:1px 0 4px}
 .wk-col .items{font-size:11.5px;color:var(--sumi-soft);line-height:1.35;
@@ -303,7 +301,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:14px;
   cursor:pointer;transition:border-color .15s}
 .wk-wknd:hover{border-color:var(--sumi-soft)}
-.wk-wknd.today{border:1.5px solid var(--sumi);background:#fff8e1}
+.wk-wknd.today{border:1.5px solid var(--dia);background:#fbeaee}
 .wk-wknd .dow{font-family:"Inter Tight";font-size:10.5px;font-weight:600;
   letter-spacing:.14em;text-transform:uppercase;color:var(--kin)}
 .wk-wknd .dnum{font-family:"Fraunces",serif;font-size:18px;color:var(--sumi);line-height:1}
@@ -407,12 +405,12 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <summary>Personal <span class="count" id="personal-count"></span></summary>
     <div class="drawer-body">
       <ul class="checks">
-        <li><input type="checkbox" id="t-m1" data-group="personal"><label for="t-m1"><span class="tag tag-rt">rhythm</span>Yoga</label></li>
-        <li><input type="checkbox" id="t-m2" data-group="personal" data-medi="today"><label for="t-m2"><span class="tag tag-rt">rhythm</span>Meditate</label></li>
-        <li><input type="checkbox" id="t-m3" data-group="personal"><label for="t-m3"><span class="tag tag-rt">rhythm</span>Shower</label></li>
-        <li><input type="checkbox" id="t-m4" data-group="personal"><label for="t-m4"><span class="tag tag-rt">rhythm</span>Tea</label></li>
-        <li><input type="checkbox" id="t-m5" data-group="personal"><label for="t-m5"><span class="tag tag-rt">rhythm</span>Gratitude</label></li>
-        <li><input type="checkbox" id="t-m6" data-group="personal"><label for="t-m6"><span class="tag tag-rt">rhythm</span>Walk / bike to office</label></li>
+        <li><input type="checkbox" id="t-m1" data-group="personal"><label for="t-m1"><span class="tag tag-rt">ritual</span>Yoga</label></li>
+        <li><input type="checkbox" id="t-m2" data-group="personal" data-medi="today"><label for="t-m2"><span class="tag tag-rt">ritual</span>Meditate</label></li>
+        <li><input type="checkbox" id="t-m3" data-group="personal"><label for="t-m3"><span class="tag tag-rt">ritual</span>Shower</label></li>
+        <li><input type="checkbox" id="t-m4" data-group="personal"><label for="t-m4"><span class="tag tag-rt">ritual</span>Tea</label></li>
+        <li><input type="checkbox" id="t-m5" data-group="personal"><label for="t-m5"><span class="tag tag-rt">ritual</span>Gratitude</label></li>
+        <li><input type="checkbox" id="t-m6" data-group="personal"><label for="t-m6"><span class="tag tag-rt">ritual</span>Walk / bike to office</label></li>
       </ul>
     </div>
   </details>
@@ -421,7 +419,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <summary>Admin / desk <span class="count" id="desk-count"></span></summary>
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
-        <li><input type="checkbox" id="t-d4" data-group="desk"><label for="t-d4"><span class="tag tag-rt">rhythm</span>Lunch at desk.</label></li>
+        <li><input type="checkbox" id="t-d4" data-group="desk"><label for="t-d4"><span class="tag tag-rt">ritual</span>Lunch at desk.</label></li>
         <li><label><em class="admin-placeholder">Ad-hoc admin lands here. Ask me in chat to add something.</em></label></li>
       </ul>
     </div>
