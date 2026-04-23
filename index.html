@@ -124,18 +124,20 @@ main{min-width:0}
 .medi-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,12px);
   grid-auto-columns:12px;gap:3px}
 /* Habits grid — tight cells, month labels on top, habit labels on left */
-.habit-grid{display:grid;grid-template-columns:74px 1fr;row-gap:2px;column-gap:12px;
+.habit-grid{display:grid;grid-template-columns:54px 1fr;row-gap:2px;column-gap:10px;
   align-items:center;overflow-x:auto;padding-bottom:2px}
-.habit-months{display:flex;gap:0;min-width:fit-content;
-  font-family:"Inter Tight",sans-serif;font-size:10px;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--sumi-dim)}
-.m-tick{flex:0 0 14px;height:14px;line-height:14px;white-space:nowrap}
-.habit-label{display:flex;justify-content:space-between;align-items:baseline;
-  padding-right:4px;font-family:"Fraunces",serif;font-size:14px;color:var(--sumi);
-  font-weight:500;line-height:1}
-.habit-label .habit-stats{font-family:"Inter Tight",sans-serif;font-size:10px;
-  color:var(--sumi-soft);white-space:nowrap;letter-spacing:.02em}
-.habit-label .habit-stats strong{color:var(--sumi);font-weight:600}
+.habit-months{display:flex;gap:0;min-width:fit-content;min-height:13px;
+  font-family:"Inter Tight",sans-serif;font-size:9.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--sumi-dim);
+  position:relative}
+.m-tick{flex:0 0 14px;height:13px;line-height:13px;white-space:nowrap;overflow:visible}
+.habit-label{display:flex;flex-direction:column;align-items:flex-start;
+  gap:1px;padding-right:4px;line-height:1}
+.habit-label .name{font-family:"Fraunces",serif;font-size:13.5px;
+  color:var(--sumi);font-weight:500}
+.habit-label .habit-stats{font-family:"Inter Tight",sans-serif;font-size:9.5px;
+  color:var(--sumi-dim);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.habit-label .habit-stats strong{color:var(--sumi-soft);font-weight:600}
 .habit-strip{display:flex;gap:0;min-width:fit-content}
 
 .medi-cell{width:14px;height:14px;border-radius:0;
@@ -155,12 +157,7 @@ main{min-width:0}
 .habit-mvmt  .medi-cell.lvl-2{background:#c8395b}
 .habit-mvmt  .medi-cell.lvl-3{background:#7a0d2a}
 
-.medi-legend-multi{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;
-  font-size:11px;color:var(--sumi-dim);align-items:center}
-.medi-legend-multi .group{display:inline-flex;align-items:center;gap:4px}
-.medi-legend-multi .mini{display:inline-block;width:11px;height:11px;border-radius:2px;
-  background:var(--rule-soft);vertical-align:-2px}
-.legend-tap{font-style:italic;margin-left:auto}
+/* legend removed */
 
 /* ============ TYPOGRAPHY ============ */
 h2{font-family:"Fraunces",serif;font-weight:500;font-optical-sizing:auto;
@@ -378,21 +375,14 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div></div>
     <div class="habit-months" id="habit-months"></div>
 
-    <div class="habit-label"><span>med</span><span class="habit-stats" id="stats-med">· · ·</span></div>
+    <div class="habit-label"><span class="name">med</span><span class="habit-stats" id="stats-med"></span></div>
     <div class="habit-strip habit-med" id="strip-med"></div>
 
-    <div class="habit-label"><span>h2o</span><span class="habit-stats" id="stats-h2o">· · ·</span></div>
+    <div class="habit-label"><span class="name">h2o</span><span class="habit-stats" id="stats-h2o"></span></div>
     <div class="habit-strip habit-h2o" id="strip-h2o"></div>
 
-    <div class="habit-label"><span>mvmt</span><span class="habit-stats" id="stats-mvmt">· · ·</span></div>
+    <div class="habit-label"><span class="name">mvmt</span><span class="habit-stats" id="stats-mvmt"></span></div>
     <div class="habit-strip habit-mvmt" id="strip-mvmt"></div>
-  </div>
-  <div class="medi-legend-multi">
-    <span class="group"><span class="mini"></span>none</span>
-    <span class="group"><span class="mini" style="background:#a8dde2"></span>light</span>
-    <span class="group"><span class="mini" style="background:#3ea6b0"></span>medium</span>
-    <span class="group"><span class="mini" style="background:#055064"></span>heavy/done</span>
-    <span class="legend-tap">Tap a cell to cycle (med = on/off; h2o+mvmt cycle light → medium → heavy → off).</span>
   </div>
 </section>
 
@@ -1049,11 +1039,9 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   document.getElementById('wk-today').addEventListener('click',()=>{wkCursor=toMonday(new Date(now));renderWeek();});
   renderWeek();
 
-  // Stats — per-habit streak + this-week count
+  // Stats — per-habit this-week count only (no streak)
   function updateMediStats(){
     habits.forEach(habit=>{
-      let streak=0;let d=new Date(now);
-      while(getHabit(isoDate(d),habit)>0){streak++;d.setDate(d.getDate()-1);}
       const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay());
       let wk=0;
       for(let i=0;i<=now.getDay();i++){
@@ -1061,7 +1049,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
         if(getHabit(isoDate(dd),habit)>0) wk++;
       }
       const el=document.getElementById('stats-'+habit);
-      if(el) el.innerHTML=`<strong>${wk}/7</strong> · <strong>${streak}</strong>-day streak`;
+      if(el) el.innerHTML=`<strong>${wk}</strong>/7 wk`;
     });
   }
   updateMediStats();
