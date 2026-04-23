@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Planner — Apr 23 → Summer 2026</title>
+<style>
+  :root{
+    --bg:#fafaf7; --ink:#1a1a1a; --muted:#6b7280; --rule:#e5e7eb; --card:#ffffff;
+    --pl:#7c3aed;   /* Purple Line */
+    --tr:#0891b2;   /* trwbo */
+    --ar:#e11d48;   /* ars */
+    --fm:#d97706;   /* fmto */
+    --gw:#059669;   /* groundwork */
+    --zm:#4f46e5;   /* ZM */
+    --fn:#64748b;   /* fundraising / cplab */
+    --rt:#0284c7;   /* today rhythm */
+    --im:#9ca3af;   /* immovable / family */
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
+  .wrap{max-width:980px;margin:0 auto;padding:28px 24px 80px}
+  header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+  h1{font-size:26px;margin:0;letter-spacing:-.01em}
+  h2{font-size:20px;margin:32px 0 10px;letter-spacing:-.01em}
+  h3{font-size:15px;margin:18px 0 6px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
+  .sub{color:var(--muted);font-size:14px}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 18px;font-size:13px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;background:#fff;border:1px solid var(--rule)}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  .today{border:1.5px solid var(--ink)}
+  .rocks{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+  .rocks h3{color:#92400e;margin-top:0}
+  ul.checks{list-style:none;padding:0;margin:0}
+  ul.checks li{display:flex;align-items:flex-start;gap:10px;padding:5px 0;border-bottom:1px dashed transparent}
+  ul.checks li:hover{border-bottom-color:#f0f0ec}
+  input[type=checkbox]{appearance:none;-webkit-appearance:none;width:17px;height:17px;border:1.5px solid #c9c9c2;border-radius:4px;background:#fff;cursor:pointer;flex:none;margin-top:3px;position:relative}
+  input[type=checkbox]:checked{background:var(--ink);border-color:var(--ink)}
+  input[type=checkbox]:checked::after{content:"";position:absolute;left:4px;top:0px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  li.done label{text-decoration:line-through;color:var(--muted)}
+  label{cursor:pointer;flex:1}
+  .tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:1px 7px;border-radius:999px;color:#fff;margin-right:6px;vertical-align:2px}
+  .tag-pl{background:var(--pl)} .tag-tr{background:var(--tr)} .tag-ar{background:var(--ar)}
+  .tag-fm{background:var(--fm)} .tag-gw{background:var(--gw)} .tag-zm{background:var(--zm)}
+  .tag-fn{background:var(--fn)} .tag-rt{background:var(--rt)} .tag-im{background:var(--im)}
+  .note{color:var(--muted);font-size:13px;margin-left:6px}
+  .week{display:grid;grid-template-columns:90px 1fr;gap:6px 14px;align-items:start;padding:8px 0;border-top:1px solid var(--rule)}
+  .week:first-of-type{border-top:none}
+  .week .day{font-weight:600;color:var(--ink);font-size:14px}
+  .week .day small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+  .fam{font-size:12px;color:var(--muted);margin-top:2px}
+  .fam::before{content:"◦ ";color:#bbb}
+  .bar{display:flex;gap:6px;align-items:center;margin-top:18px}
+  button{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer}
+  button:hover{background:#f4f4ef}
+  .hint{background:#eef6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;font-size:14px;color:#1e40af}
+  .hint code{background:#dbeafe;padding:1px 5px;border-radius:4px;font-size:12.5px}
+  details{margin-top:10px}
+  details summary{cursor:pointer;font-weight:600;color:var(--muted)}
+  @media print{
+    body{background:#fff}
+    .bar,button{display:none}
+    .card{break-inside:avoid;box-shadow:none;border-color:#ddd}
+    input[type=checkbox]{border-color:#333}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Planner — Path to Stanford &amp; Summer 2026</h1>
+  <div class="sub" id="today-label"></div>
+</header>
+
+<div class="legend">
+  <span><i class="dot" style="background:var(--pl)"></i>Purple Line</span>
+  <span><i class="dot" style="background:var(--tr)"></i>trwbo</span>
+  <span><i class="dot" style="background:var(--ar)"></i>ars</span>
+  <span><i class="dot" style="background:var(--fm)"></i>fmto</span>
+  <span><i class="dot" style="background:var(--gw)"></i>groundwork</span>
+  <span><i class="dot" style="background:var(--zm)"></i>ZM</span>
+  <span><i class="dot" style="background:var(--fn)"></i>fundraising / cplab</span>
+  <span><i class="dot" style="background:var(--rt)"></i>today rhythm</span>
+  <span><i class="dot" style="background:var(--im)"></i>family / immovable</span>
+</div>
+
+<!-- ================== TODAY ================== -->
+<div class="card today">
+  <h2 style="margin-top:0">Today — Thu, Apr 23</h2>
+  <div class="sub" style="margin-bottom:10px">Leo: all-day after school · Sue &amp; Michael in town</div>
+
+  <div class="rocks">
+    <h3>The 3 rocks for today</h3>
+    <ul class="checks">
+      <li><input type="checkbox" id="t-r1"><label for="t-r1"><span class="tag tag-fn">plan</span>Build the full schedule (this file). Lock in week-by-week big-rock allocations through June 2.</label></li>
+      <li><input type="checkbox" id="t-r2"><label for="t-r2"><span class="tag tag-fn">inbox</span>Triage &amp; zero out inbox.</label></li>
+      <li><input type="checkbox" id="t-r3"><label for="t-r3"><span class="tag tag-pl">PL</span>Skim Purple Line state — what's the one question you wake up to Monday with? (10 min, not real work)</label></li>
+    </ul>
+  </div>
+
+  <h3>Morning</h3>
+  <ul class="checks">
+    <li><input type="checkbox" id="t-m1"><label for="t-m1"><span class="tag tag-rt">rhythm</span>Yoga</label></li>
+    <li><input type="checkbox" id="t-m2"><label for="t-m2"><span class="tag tag-rt">rhythm</span>Meditate</label></li>
+    <li><input type="checkbox" id="t-m3"><label for="t-m3"><span class="tag tag-rt">rhythm</span>Shower</label></li>
+    <li><input type="checkbox" id="t-m4"><label for="t-m4"><span class="tag tag-rt">rhythm</span>Tea</label></li>
+    <li><input type="checkbox" id="t-m5"><label for="t-m5"><span class="tag tag-rt">rhythm</span>Gratitude</label></li>
+    <li><input type="checkbox" id="t-m6"><label for="t-m6"><span class="tag tag-rt">rhythm</span>Walk / bike to office</label></li>
+  </ul>
+
+  <h3>At the desk</h3>
+  <ul class="checks">
+    <li><input type="checkbox" id="t-d1"><label for="t-d1"><span class="tag tag-fn">plan</span>Export Outlook calendar (.ics) — see box below — and send to me so I can refine time blocks.</label></li>
+    <li><input type="checkbox" id="t-d2"><label for="t-d2"><span class="tag tag-fn">plan</span>Walk through this planner, adjust any project-day counts or swaps that feel wrong.</label></li>
+    <li><input type="checkbox" id="t-d3"><label for="t-d3"><span class="tag tag-fn">inbox</span>Inbox sweep #1: unsubscribe / delete obvious noise.</label></li>
+    <li><input type="checkbox" id="t-d4"><label for="t-d4"><span class="tag tag-rt">rhythm</span>Lunch at desk.</label></li>
+    <li><input type="checkbox" id="t-d5"><label for="t-d5"><span class="tag tag-fn">inbox</span>Inbox sweep #2: reply to anything &lt;2 min, snooze/defer the rest with a date.</label></li>
+    <li><input type="checkbox" id="t-d6"><label for="t-d6"><span class="tag tag-fn">inbox</span>Inbox to zero. Capture anything actionable into tomorrow's list.</label></li>
+  </ul>
+</div>
+
+<div class="hint">
+  <strong>How to export your Outlook (MS Office) calendar so I can work around it:</strong>
+  <details open>
+    <summary style="color:#1e40af">Mac — Outlook desktop (New or Classic)</summary>
+    <div style="margin-top:6px">
+      1. Open Outlook → switch to <strong>Calendar</strong> view.<br>
+      2. <strong>File → Export</strong> (Classic) <em>or</em> <strong>Tools → Export</strong> (New Outlook).<br>
+      3. Choose <strong>Calendar</strong> / <strong>iCalendar (.ics)</strong> → date range: <code>Apr 23 → Jun 5, 2026</code> → detail: <em>Full details</em>.<br>
+      4. Save to Desktop as <code>liz-calendar.ics</code>, drop the path in chat with me.
+    </div>
+  </details>
+  <details>
+    <summary style="color:#1e40af">Outlook on the web (office.com / outlook.office.com)</summary>
+    <div style="margin-top:6px">
+      1. Calendar → <strong>Settings (gear)</strong> → <strong>Calendar</strong> → <strong>Shared calendars</strong>.<br>
+      2. Under <strong>Publish a calendar</strong>, select your main calendar, choose <em>Can view all details</em>, click <strong>Publish</strong>.<br>
+      3. Copy the <strong>ICS link</strong> (ends in <code>.ics</code>). Paste it in chat — I can fetch it directly.<br>
+      <em>Alt:</em> Settings → <strong>General → Privacy and data → Export mailbox</strong> works too but is slow.
+    </div>
+  </details>
+  <details>
+    <summary style="color:#1e40af">Windows — Outlook desktop</summary>
+    <div style="margin-top:6px">
+      1. <strong>File → Save Calendar</strong> → <strong>More Options</strong>.<br>
+      2. Date range: <code>Apr 23 → Jun 5, 2026</code>. Detail: <em>Full details</em>.<br>
+      3. Save as <code>.ics</code> to Desktop. Share the path.
+    </div>
+  </details>
+  <div style="margin-top:8px;font-size:13px;color:#1e40af">Tip: <code>.ics</code> is far more useful than CSV — it keeps times, durations, and recurrence. If a CSV is all you can get, export from Outlook Web's <em>Import/Export</em> and I'll still work with it.</div>
+</div>
+
+<!-- ================== REST OF THIS WEEK ================== -->
+<h2>The rest of this week (Apr 24 – 26)</h2>
+<div class="card">
+  <div class="week">
+    <div class="day">Fri Apr 24<small>Leo after-school · Sue &amp; Michael</small></div>
+    <div>
+      <ul class="checks">
+        <li><input type="checkbox" id="w1-1"><label for="w1-1"><span class="tag tag-pl">PL D1</span>Purple Line — Day 1. Frame the Stanford talk: what's the single argument?</label></li>
+        <li><input type="checkbox" id="w1-2"><label for="w1-2"><span class="tag tag-rt">rhythm</span>Morning: yoga + meditate + tea. Walk/bike in.</label></li>
+      </ul>
+      <div class="fam">Sue &amp; Michael — carve an evening for them</div>
+    </div>
+  </div>
+  <div class="week">
+    <div class="day">Sat Apr 25<small>Sue &amp; Michael</small></div>
+    <div><div class="fam">Family / social. No deep work scheduled.</div></div>
+  </div>
+  <div class="week">
+    <div class="day">Sun Apr 26<small>Sue &amp; Michael</small></div>
+    <div>
+      <ul class="checks">
+        <li><input type="checkbox" id="w1-3"><label for="w1-3"><span class="tag tag-fn">plan</span>Sunday 20-min reset: look at the week, confirm PL D2 + D3 time blocks, pre-pick lunches.</label></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ================== PRE-STANFORD ================== -->
+<h2>Pre-Stanford: PL + trwbo + fmto (Apr 24 – Jun 2)</h2>
+<div class="sub" style="margin:-6px 0 10px">8 big-rock days before Stanford: Purple Line (3) + trwbo (3) + fmto (2). PL front-loaded so the talk is drafted by Apr 28. trwbo + fmto land in the next 2 weeks while Sue is still helping.</div>
+
+<!-- Week of Apr 27 -->
+<div class="card">
+  <h3 style="margin-top:0">Week of Apr 27 — finish PL draft, start trwbo</h3>
+  <div class="week"><div class="day">Mon Apr 27<small>Sue here</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w2-1"><label for="w2-1"><span class="tag tag-pl">PL D2</span>Purple Line — Day 2. Outline + evidence scaffolding.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Tue Apr 28<small>Sue here</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w2-2"><label for="w2-2"><span class="tag tag-pl">PL D3</span>Purple Line — Day 3. Full draft of talk + slide skeleton. <em>PL draft complete ✓</em></label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Wed Apr 29<small>Sue here</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w2-3"><label for="w2-3"><span class="tag tag-tr">trwbo D1</span>trwbo — Day 1.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Thu Apr 30<small>Alex → SFO (eve) · Sue here</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w2-4"><label for="w2-4"><span class="tag tag-tr">trwbo D2</span>trwbo — Day 2. Wrap by 5 — Alex leaves tonight.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Fri May 1<small>Solo parent · Sue here</small></div><div><div class="fam">Solo-parenting day. Light — inbox / admin only.</div></div></div>
+</div>
+
+<!-- Week of May 4 -->
+<div class="card">
+  <h3 style="margin-top:0">Week of May 4 — finish trwbo, do fmto</h3>
+  <div class="week"><div class="day">Mon May 4<small>Solo day · Alex back 10:45pm</small></div><div><div class="fam">Solo day, Alex returns late. Light.</div></div></div>
+  <div class="week"><div class="day">Tue May 5<small>Sue here</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w3-1"><label for="w3-1"><span class="tag tag-tr">trwbo D3</span>trwbo — Day 3. <em>trwbo complete ✓</em></label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Wed May 6<small>Sue leaves</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w3-2"><label for="w3-2"><span class="tag tag-fm">fmto D1</span>fmto — Day 1.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Thu May 7</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w3-3"><label for="w3-3"><span class="tag tag-fm">fmto D2</span>fmto — Day 2. <em>fmto complete ✓</em></label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Fri May 8</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w3-4"><label for="w3-4"><span class="tag tag-pl">PL polish</span>Stanford deck polish pass #1 — re-read the draft with fresh eyes, simplify, cut.</label></li></ul>
+  </div></div>
+</div>
+
+<!-- Week of May 11 -->
+<div class="card">
+  <h3 style="margin-top:0">Week of May 11 — rehearse, breathing room</h3>
+  <div class="week"><div class="day">Mon May 11</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w4-1"><label for="w4-1"><span class="tag tag-pl">PL rehearse</span>Rehearse Stanford talk out loud once. Time it. Note the rough spots.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Tue May 12</div><div><div class="fam">Open. Inbox / admin.</div></div></div>
+  <div class="week"><div class="day">Wed May 13</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w4-2"><label for="w4-2"><span class="tag tag-pl">PL Q&amp;A</span>Q&amp;A prep — list the 10 hardest questions. Write bullet answers.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Thu May 14</div><div><div class="fam">Open.</div></div></div>
+  <div class="week"><div class="day">Fri May 15</div><div><div class="fam">Open.<br>Sat May 16 — HKS reunion panel</div></div></div>
+</div>
+
+<!-- Week of May 18 -->
+<div class="card">
+  <h3 style="margin-top:0">Week of May 18 — polish #2</h3>
+  <div class="week"><div class="day">Mon May 18</div><div>
+    <ul class="checks"><li><input type="checkbox" id="w5-1"><label for="w5-1"><span class="tag tag-pl">PL polish</span>Stanford deck polish pass #2 — incorporate what came up in rehearsal.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Tue May 19</div><div><div class="fam">Open.</div></div></div>
+  <div class="week"><div class="day">Wed May 20<small>Leo dentist</small></div><div><div class="fam">Open around dentist.</div></div></div>
+  <div class="week"><div class="day">Thu May 21</div><div><div class="fam">Open.</div></div></div>
+  <div class="week"><div class="day">Fri May 22<small>Andre arrives</small></div><div><div class="fam">Host Andre.</div></div></div>
+</div>
+
+<!-- Week of May 25 -->
+<div class="card">
+  <h3 style="margin-top:0">Week of May 25 — low-intensity, family-first</h3>
+  <div class="sub" style="margin:-6px 0 8px">Alex colonoscopy Thu, Andre here, Memorial Day Monday. Light by design.</div>
+  <div class="week"><div class="day">Mon May 25<small>Memorial Day · Andre</small></div><div><div class="fam">Holiday. Off.</div></div></div>
+  <div class="week"><div class="day">Tue May 26<small>Andre</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w6-1"><label for="w6-1"><span class="tag tag-pl">PL rehearse</span>Rehearsal #2. Record yourself on phone, watch back.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Wed May 27<small>Alex fasting · Leo cardio 3:30</small></div><div><div class="fam">Support Alex. Light polish only if needed.</div></div></div>
+  <div class="week"><div class="day">Thu May 28<small>Alex colonoscopy · Andre</small></div><div><div class="fam">Support day. No work.</div></div></div>
+  <div class="week"><div class="day">Fri May 29<small>Andre</small></div><div>
+    <ul class="checks">
+      <li><input type="checkbox" id="w6-3"><label for="w6-3"><span class="tag tag-fn">travel</span>Pack for Stanford. Print boarding pass. Confirm ground transport.</label></li>
+      <li><input type="checkbox" id="w6-4"><label for="w6-4"><span class="tag tag-pl">PL final</span>Final rehearsal. Deck lock — no more edits.</label></li>
+    </ul>
+  </div></div>
+  <div class="week"><div class="day">Sat May 30<small>Andre</small></div><div><div class="fam">Rest. Travel day tomorrow.</div></div></div>
+  <div class="week"><div class="day">Sun May 31 → Mon Jun 1<small>Stanford · Andre home</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w6-5"><label for="w6-5"><span class="tag tag-pl">PL 🎤</span>Stanford — deliver the talk.</label></li></ul>
+  </div></div>
+  <div class="week"><div class="day">Tue Jun 2<small>Boston</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w6-6"><label for="w6-6"><span class="tag tag-pl">GEO</span>GEO talk, Boston.</label></li></ul>
+  </div></div>
+</div>
+
+<!-- ================== SUMMER ================== -->
+<h2>Summer — 9 remaining big-rock days (Jun 3 → Aug 22)</h2>
+<div class="sub" style="margin:-6px 0 10px">ars (3) + groundwork (2) + ZM (3) + fundraising (1) = 9 days. Max 2 deep-work days/week. Everything finished before family trip Aug 12.</div>
+
+<!-- Window 1: Jun 3 - Jun 26 -->
+<div class="card">
+  <h3 style="margin-top:0">Window 1 · Jun 3 – Jun 26 — ars + fundraising (4 days)</h3>
+  <div class="sub" style="margin:-4px 0 8px">Boston, Leo in school through Jun 26. 18 available weekdays — post-Stanford recovery built in.</div>
+  <ul class="checks">
+    <li><input type="checkbox" id="s1-1"><label for="s1-1"><span class="tag tag-fn">fundraising</span>Week of Jun 8 — the 1-day item. Good gentle re-entry after Stanford.</label></li>
+    <li><input type="checkbox" id="s1-2"><label for="s1-2"><span class="tag tag-ar">ars D1</span>Week of Jun 15.</label></li>
+    <li><input type="checkbox" id="s1-3"><label for="s1-3"><span class="tag tag-ar">ars D2</span>Week of Jun 15 or 22.</label></li>
+    <li><input type="checkbox" id="s1-4"><label for="s1-4"><span class="tag tag-ar">ars D3</span>Week of Jun 22. <em>ars complete ✓</em></label></li>
+  </ul>
+  <div class="fam">Jun 11 — Lana showcase @ 3pm · Jun 19 — Juneteenth · Jun 26 — Leo last day of school</div>
+</div>
+
+<!-- Window 2: Jun 29 - Jul 14 -->
+<div class="card">
+  <h3 style="margin-top:0">Window 2 · Jun 29 – Jul 14 — groundwork (2 days)</h3>
+  <div class="sub" style="margin:-4px 0 8px">Leo at DHSP camp. Structured, quiet days. Only 2 work days needed — the rest is summer breathing room.</div>
+  <ul class="checks">
+    <li><input type="checkbox" id="s2-1"><label for="s2-1"><span class="tag tag-gw">groundwork D1</span>Week of Jul 6.</label></li>
+    <li><input type="checkbox" id="s2-2"><label for="s2-2"><span class="tag tag-gw">groundwork D2</span>By Tue Jul 14 (CA Wed). <em>groundwork complete ✓</em></label></li>
+  </ul>
+  <div class="fam">Jul 15–19 — CA · Jul 20–27 — Tahoe · Jul 28 — return</div>
+</div>
+
+<!-- Window 3: Jul 29 - Aug 11 -->
+<div class="card">
+  <h3 style="margin-top:0">Window 3 · Jul 29 – Aug 11 — ZM (3 days)</h3>
+  <div class="sub" style="margin:-4px 0 8px">Back in Boston post-Tahoe, Leo at camp. 10 weekdays. All rocks done before family trip.</div>
+  <ul class="checks">
+    <li><input type="checkbox" id="s3-1"><label for="s3-1"><span class="tag tag-zm">ZM D1</span>Week of Aug 3.</label></li>
+    <li><input type="checkbox" id="s3-2"><label for="s3-2"><span class="tag tag-zm">ZM D2</span>Week of Aug 3.</label></li>
+    <li><input type="checkbox" id="s3-3"><label for="s3-3"><span class="tag tag-zm">ZM D3</span>By Tue Aug 11 (family trip Wed). <em>ZM complete ✓ — all 7 big rocks done 🎉</em></label></li>
+    <li><input type="checkbox" id="s3-4"><label for="s3-4"><span class="tag tag-fn">catchup</span>Any slipped days land here. Buffer.</label></li>
+  </ul>
+  <div class="fam">Aug 11 — Lana last day 25–26 · Aug 12–22 — Family trip (fully off)</div>
+</div>
+
+<!-- Summer context -->
+<div class="card">
+  <h3 style="margin-top:0">Rest-of-summer context (no work)</h3>
+  <ul class="checks">
+    <li><label><span class="tag tag-im">trip</span><strong>Jul 15 – 19:</strong> CA.</label></li>
+    <li><label><span class="tag tag-im">trip</span><strong>Jul 20 – 28:</strong> Tahoe (return Tue Jul 28).</label></li>
+    <li><label><span class="tag tag-im">trip</span><strong>Aug 12 – 22:</strong> Family trip (10 days).</label></li>
+    <li><label><span class="tag tag-im">school</span><strong>Aug 24 → Sep 1:</strong> Camp / school ramp. Sep 1 = Lana first day 26–27.</label></li>
+  </ul>
+
+  <h3>Summer intentions to define (fill in with me)</h3>
+  <ul class="checks">
+    <li><input type="checkbox" id="si1"><label for="si1"><span class="tag tag-fn">define</span>One dissertation milestone I want hit by Aug 11 (before family trip).</label></li>
+    <li><input type="checkbox" id="si2"><label for="si2"><span class="tag tag-fn">define</span>One non-work goal for summer (health, relationship, place, hobby).</label></li>
+    <li><input type="checkbox" id="si3"><label for="si3"><span class="tag tag-fn">define</span>One "no" I'm committing to — what I'm <em>not</em> doing this summer.</label></li>
+  </ul>
+</div>
+
+<div class="bar">
+  <button id="resetToday">Reset today's checkmarks</button>
+  <button id="resetAll">Reset everything</button>
+  <span class="sub" style="margin-left:auto">Progress auto-saves in this browser.</span>
+</div>
+
+</div>
+
+<script>
+(function(){
+  const LS_KEY = 'lizPlanner:v1';
+  const todayEl = document.getElementById('today-label');
+  todayEl.textContent = new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+
+  // Hydrate from localStorage
+  const saved = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+  document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    if(saved[cb.id]) {
+      cb.checked = true;
+      cb.closest('li')?.classList.add('done');
+    }
+    cb.addEventListener('change', () => {
+      const s = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+      if(cb.checked){ s[cb.id] = 1; cb.closest('li')?.classList.add('done'); }
+      else { delete s[cb.id]; cb.closest('li')?.classList.remove('done'); }
+      localStorage.setItem(LS_KEY, JSON.stringify(s));
+    });
+  });
+
+  document.getElementById('resetToday').addEventListener('click', () => {
+    const s = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+    document.querySelectorAll('.today input[type=checkbox]').forEach(cb => {
+      cb.checked = false;
+      cb.closest('li')?.classList.remove('done');
+      delete s[cb.id];
+    });
+    localStorage.setItem(LS_KEY, JSON.stringify(s));
+  });
+  document.getElementById('resetAll').addEventListener('click', () => {
+    if(!confirm('Clear every check on the whole page?')) return;
+    localStorage.removeItem(LS_KEY);
+    document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+      cb.checked = false;
+      cb.closest('li')?.classList.remove('done');
+    });
+  });
+})();
+</script>
+</body>
+</html>
