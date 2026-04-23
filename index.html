@@ -877,17 +877,16 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-06-02':[{tag:'tag-pl',label:'GEO',text:'GEO talk, Boston'}],
   };
 
-  const WK_KEY='weekCursor:v1';
   const dowFull=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  let cursor=new Date(now);
+  let wkCursor=new Date(now);
 
   // Align cursor to Monday of current week
   function toMonday(d){const x=new Date(d);const day=x.getDay();const diff=(day===0?-6:1-day);x.setDate(x.getDate()+diff);x.setHours(0,0,0,0);return x;}
-  cursor=toMonday(cursor);
+  wkCursor=toMonday(wkCursor);
 
   function renderWeek(){
-    const wkMon=new Date(cursor);
-    const wkSun=new Date(cursor);wkSun.setDate(wkSun.getDate()+6);
+    const wkMon=new Date(wkCursor);
+    const wkSun=new Date(wkCursor);wkSun.setDate(wkSun.getDate()+6);
     const rangeEl=document.getElementById('wk-range');
     const fmt=d=>d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
     rangeEl.textContent=`· ${fmt(wkMon)} – ${fmt(wkSun)}`;
@@ -965,9 +964,9 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     host.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
 
-  document.getElementById('wk-prev').addEventListener('click',()=>{cursor.setDate(cursor.getDate()-7);renderWeek();});
-  document.getElementById('wk-next').addEventListener('click',()=>{cursor.setDate(cursor.getDate()+7);renderWeek();});
-  document.getElementById('wk-today').addEventListener('click',()=>{cursor=toMonday(new Date(now));renderWeek();});
+  document.getElementById('wk-prev').addEventListener('click',()=>{wkCursor.setDate(wkCursor.getDate()-7);renderWeek();});
+  document.getElementById('wk-next').addEventListener('click',()=>{wkCursor.setDate(wkCursor.getDate()+7);renderWeek();});
+  document.getElementById('wk-today').addEventListener('click',()=>{wkCursor=toMonday(new Date(now));renderWeek();});
   renderWeek();
 
   // Stats — current streak + this-week count
