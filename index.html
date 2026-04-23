@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Liz McKenna's Planner</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%237a6099'/><stop offset='50%25' stop-color='%232a6d7a'/><stop offset='100%25' stop-color='%23b28a3c'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='%23f4ecd8'/><polygon points='32,10 52,28 32,54 12,28' fill='url(%23g)' stroke='%232d2a26' stroke-width='2' stroke-linejoin='round'/><polygon points='32,10 52,28 32,28 12,28' fill='%23ffffff' opacity='0.28'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=Inter+Tight:wght@400..700&display=swap" rel="stylesheet">
@@ -162,14 +163,14 @@ h3{font-family:"Inter Tight",sans-serif;font-weight:600;
   font-family:"Inter Tight";font-weight:700;letter-spacing:.28em;
   font-size:10.5px;color:var(--sumi)}
 
-/* ============ THREE ROCKS ============ */
-.rocks{background:linear-gradient(180deg,var(--highlight) 0%,#f3dc5c 100%);
-  border:1px solid #d4bb3a;border-radius:8px;padding:14px 18px;
+/* ============ DEEP WORK (top-priority block) ============ */
+.rocks{background:linear-gradient(180deg, #e3efd8 0%, #cde1b8 100%);
+  border:1px solid #8aaa5e;border-radius:8px;padding:14px 18px;
   margin:4px 0 14px;position:relative}
-.rocks::before{content:"❋";position:absolute;top:10px;right:14px;
-  font-size:17px;color:var(--kin);opacity:.6}
-.rocks h3{color:#6b561b;margin-top:0;margin-bottom:6px}
-.rocks h3::before{content:"Three rocks ";color:var(--sumi)}
+.rocks::before{content:"◉";position:absolute;top:10px;right:14px;
+  font-size:17px;color:var(--gw);opacity:.7}
+.rocks h3{color:#3b5023;margin-top:0;margin-bottom:6px;letter-spacing:.14em}
+.rocks h3::before{content:"Deep work · ";color:var(--sumi);font-weight:700}
 
 /* ============ CHECK ITEMS ============ */
 ul.checks{list-style:none;padding:0;margin:0}
@@ -375,16 +376,25 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 <!-- ================== TODAY ================== -->
 <section class="card today">
   <h2 style="margin-top:0">Today — Thu, Apr 23</h2>
-  <div class="sub" style="margin-bottom:10px">Leo: all-day after school · Sue &amp; Michael in town</div>
+  <div class="sub" style="margin-bottom:10px">Leo: all-day after school</div>
 
   <div class="rocks">
-    <h3>for today</h3>
+    <h3>today</h3>
     <ul class="checks">
-      <li><input type="checkbox" id="t-r1"><label for="t-r1"><span class="tag tag-plan">plan</span>Build the full schedule (this file). Lock in week-by-week big-rock allocations through June 2.</label></li>
-      <li><input type="checkbox" id="t-r2"><label for="t-r2"><span class="tag tag-plan">inbox</span>Triage &amp; zero out inbox.</label></li>
-      <li><input type="checkbox" id="t-r3"><label for="t-r3"><span class="tag tag-pl">PL</span>Skim Purple Line state — what's the one question you wake up to Monday with? <em>(10 min, not real work)</em></label></li>
+      <li><input type="checkbox" id="t-r1"><label for="t-r1"><span class="tag tag-plan">plan</span>Finalize schedule (this file). Lock in big-rock allocations.</label></li>
+      <li><input type="checkbox" id="t-r2"><label for="t-r2"><span class="tag tag-plan">inbox</span>Inbox to zero (triage + sweep, treat as one block).</label></li>
+      <li><input type="checkbox" id="t-r3"><label for="t-r3"><span class="tag tag-pl">purple line</span>Skim PL state — what's the one question you wake up to Monday with? <em>(10 min)</em></label></li>
     </ul>
   </div>
+
+  <details class="drawer" open>
+    <summary>Meetings <span class="count" id="meetings-count"></span></summary>
+    <div class="drawer-body">
+      <ul class="checks" id="meetings-list">
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-plan">mtg</span>HPF · 16:30–17:30</label></li>
+      </ul>
+    </div>
+  </details>
 
   <details class="drawer" open>
     <summary>Personal <span class="count" id="personal-count"></span></summary>
@@ -401,23 +411,11 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   </details>
 
   <details class="drawer">
-    <summary>At the desk <span class="count" id="desk-count"></span></summary>
-    <div class="drawer-body">
-      <ul class="checks">
-        <li><input type="checkbox" id="t-d2" data-group="desk"><label for="t-d2"><span class="tag tag-plan">plan</span>Walk through this planner, adjust any project-day counts or swaps that feel wrong.</label></li>
-        <li><input type="checkbox" id="t-d3" data-group="desk"><label for="t-d3"><span class="tag tag-plan">inbox</span>Inbox sweep #1: unsubscribe / delete obvious noise.</label></li>
-        <li><input type="checkbox" id="t-d4" data-group="desk"><label for="t-d4"><span class="tag tag-rt">rhythm</span>Lunch at desk.</label></li>
-        <li><input type="checkbox" id="t-d5" data-group="desk"><label for="t-d5"><span class="tag tag-plan">inbox</span>Inbox sweep #2: reply &lt;2 min, snooze/defer the rest with a date.</label></li>
-        <li><input type="checkbox" id="t-d6" data-group="desk"><label for="t-d6"><span class="tag tag-plan">inbox</span>Inbox to zero. Capture anything actionable into tomorrow's list.</label></li>
-      </ul>
-    </div>
-  </details>
-
-  <details class="drawer">
-    <summary>Admin <span class="count" id="admin-count"></span></summary>
+    <summary>Admin / desk <span class="count" id="desk-count"></span></summary>
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span><em class="admin-placeholder">(empty — ad-hoc admin tasks land here. Edit on GitHub or ask me to add one.)</em></label></li>
+        <li><input type="checkbox" id="t-d4" data-group="desk"><label for="t-d4"><span class="tag tag-rt">rhythm</span>Lunch at desk.</label></li>
+        <li><label><em class="admin-placeholder">Ad-hoc admin lands here. Ask me in chat to add something.</em></label></li>
       </ul>
     </div>
   </details>
@@ -717,7 +715,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
   // Drawer count badges (x/y)
   function updateCounts(){
-    ['personal','desk'].forEach(g=>{
+    ['personal','desk','meetings','admin'].forEach(g=>{
       const items=[...document.querySelectorAll(`input[data-group="${g}"]`)];
       const done=items.filter(i=>i.checked).length;
       const el=document.getElementById(g+'-count');
@@ -834,25 +832,64 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
   // ===== WEEKLY VIEW =====
   // Data-driven: each date maps to an array of items (tag class + text).
-  // Extend this as schedule evolves.
+  // Populated from Outlook ICS 2026-04-23. Deep-work blocks from Outlook, meetings from Outlook.
   const SCHEDULE = {
-    '2026-04-23':[{tag:'tag-plan',label:'plan',text:'Plan the schedule + inbox zero'}],
-    '2026-04-24':[{tag:'tag-pl',label:'PL D1',text:'Frame Stanford talk'}],
-    '2026-04-25':[{tag:'tag-im',label:'family',text:'Sue & Michael'}],
-    '2026-04-26':[{tag:'tag-plan',label:'plan',text:'Sunday reset'}],
-    '2026-04-27':[{tag:'tag-pl',label:'PL D2',text:'Outline + scaffolding'}],
-    '2026-04-28':[{tag:'tag-pl',label:'PL D3',text:'Full draft'}],
-    '2026-04-29':[{tag:'tag-trwbo',label:'trwbo D1',text:'trwbo — Day 1'}],
-    '2026-04-30':[{tag:'tag-trwbo',label:'trwbo D2',text:'Wrap by 5 — Alexandre leaves'}],
-    '2026-05-01':[{tag:'tag-im',label:'solo',text:'Solo parent — light'}],
+    '2026-04-23':[
+      {tag:'tag-plan',label:'plan',text:'Finalize schedule + inbox zero'},
+      {tag:'tag-plan',label:'mtg',text:'HPF 16:30'},
+    ],
+    '2026-04-24':[
+      {tag:'tag-trwbo',label:'trwbo',text:'Deep work 09–15'},
+      {tag:'tag-rt',label:'personal',text:'Haircut 10:00 @ garage'},
+      {tag:'tag-plan',label:'mtg',text:'Patrick Hunter 15:00 (mamdani)'},
+      {tag:'tag-plan',label:'mtg',text:'David Meyer 15:30'},
+    ],
+    '2026-04-25':[{tag:'tag-im',label:'trip',text:'Maine w/ Alexandre'}],
+    '2026-04-26':[
+      {tag:'tag-im',label:'trip',text:'Maine'},
+      {tag:'tag-plan',label:'plan',text:'Sunday reset'},
+    ],
+    '2026-04-27':[
+      {tag:'tag-fmto',label:'fmto',text:'Deep work 10–16'},
+      {tag:'tag-plan',label:'mtg',text:'tt & PSL 09:00'},
+      {tag:'tag-im',label:'eve',text:'Ted dinner 19:30'},
+    ],
+    '2026-04-28':[
+      {tag:'tag-fmto',label:'fmto',text:'Deep work 09–14:30'},
+      {tag:'tag-plan',label:'mtg',text:'FAC 15:45 @ L-140'},
+      {tag:'tag-plan',label:'mtg',text:'PAE showcase 16:30'},
+    ],
+    '2026-04-29':[
+      {tag:'tag-mamdani',label:'ZM→mamdani',text:'ZM follow-up + proposal 09:30–13'},
+      {tag:'tag-plan',label:'mtg',text:'Monique 13:00'},
+      {tag:'tag-cpl',label:'mtg',text:'Convoca × CP Lab 14:00'},
+      {tag:'tag-plan',label:'admin',text:'Renew Leo passport'},
+    ],
+    '2026-04-30':[
+      {tag:'tag-gw',label:'groundwork',text:'Deep work 09–13'},
+      {tag:'tag-cpl',label:'cpl',text:'Civic Power 2 planning 13–18'},
+      {tag:'tag-im',label:'eve',text:'POF cohort 19:30 (Alexandre → SFO)'},
+    ],
+    '2026-05-01':[
+      {tag:'tag-cpl',label:'cpl',text:'Civic Tech 09–14:30'},
+      {tag:'tag-mamdani',label:'mamdani',text:'Mamdani bi-weekly 15:00'},
+    ],
     '2026-05-02':[],
     '2026-05-03':[],
-    '2026-05-04':[{tag:'tag-im',label:'solo',text:'Solo day'}],
-    '2026-05-05':[{tag:'tag-trwbo',label:'trwbo D3',text:'trwbo complete'}],
-    '2026-05-06':[{tag:'tag-fmto',label:'fmto D1',text:'fmto — Day 1'}],
-    '2026-05-07':[{tag:'tag-fmto',label:'fmto D2',text:'fmto complete'}],
-    '2026-05-08':[{tag:'tag-pl',label:'PL polish',text:'Polish pass #1'}],
-    '2026-05-11':[{tag:'tag-pl',label:'rehearse',text:'Rehearse out loud'}],
+    '2026-05-04':[{tag:'tag-trwbo',label:'fmto/trwbo',text:'Deep work 09–17'}],
+    '2026-05-05':[
+      {tag:'tag-trwbo',label:'fmto/trwbo',text:'Deep work 09–15'},
+      {tag:'tag-plan',label:'mtg',text:'HOLD FAC 15:00'},
+    ],
+    '2026-05-06':[
+      {tag:'tag-plan',label:'mtg',text:'Edie 10:00 · John 11:00'},
+      {tag:'tag-plan',label:'mtg',text:'Democratic Structure report-back'},
+    ],
+    '2026-05-07':[{tag:'tag-pl',label:'purple line',text:'Deep work 09–17'}],
+    '2026-05-08':[{tag:'tag-pl',label:'purple line',text:'Deep work 09–17'}],
+    '2026-05-09':[],
+    '2026-05-10':[{tag:'tag-plan',label:'deadline',text:'DHSP lottery'}],
+    '2026-05-11':[{tag:'tag-pl',label:'rehearse',text:'Stanford rehearsal'}],
     '2026-05-12':[],
     '2026-05-13':[{tag:'tag-pl',label:'Q&A',text:'Q&A prep'}],
     '2026-05-14':[],
@@ -864,14 +901,14 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-05-20':[{tag:'tag-im',label:'family',text:'Leo dentist'}],
     '2026-05-21':[],
     '2026-05-22':[{tag:'tag-im',label:'family',text:'Andre arrives'}],
-    '2026-05-23':[{tag:'tag-im',label:'family',text:'Andre'}],
-    '2026-05-24':[{tag:'tag-im',label:'family',text:'Andre'}],
-    '2026-05-25':[{tag:'tag-im',label:'holiday',text:'Memorial Day · Andre'}],
+    '2026-05-23':[],
+    '2026-05-24':[],
+    '2026-05-25':[{tag:'tag-im',label:'holiday',text:'Memorial Day'}],
     '2026-05-26':[{tag:'tag-pl',label:'rehearse',text:'Rehearsal #2'}],
-    '2026-05-27':[{tag:'tag-im',label:'family',text:'Alexandre fasting · Leo cardio'}],
+    '2026-05-27':[{tag:'tag-im',label:'family',text:'Alexandre fasting'}],
     '2026-05-28':[{tag:'tag-im',label:'family',text:'Alexandre colonoscopy'}],
     '2026-05-29':[{tag:'tag-pl',label:'final',text:'Final rehearsal · deck lock'}],
-    '2026-05-30':[{tag:'tag-im',label:'family',text:'Rest · Andre'}],
+    '2026-05-30':[],
     '2026-05-31':[{tag:'tag-pl',label:'🎤 Stanford',text:'Stanford (travel)'}],
     '2026-06-01':[{tag:'tag-pl',label:'🎤 Stanford',text:'Deliver the talk'}],
     '2026-06-02':[{tag:'tag-pl',label:'GEO',text:'GEO talk, Boston'}],
