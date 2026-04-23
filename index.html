@@ -256,6 +256,57 @@ button{background:transparent;border:1px solid var(--sumi-soft);
   font:inherit;font-size:12.5px;cursor:pointer;transition:all .12s}
 button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
+/* ============ WEEKLY VIEW ============ */
+.wk-wrap{margin:8px 0 22px}
+.wk-nav{display:flex;align-items:center;gap:10px;margin-bottom:10px;
+  font-family:"Inter Tight",sans-serif}
+.wk-nav h2{margin:0;padding:0}
+.wk-nav .wk-range{font-size:14px;color:var(--sumi-soft);font-style:italic}
+.wk-nav button.wk-btn{font-size:11.5px;padding:4px 10px;letter-spacing:.05em}
+.wk-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+  background:var(--washi-card);border:1px solid var(--rule);
+  border-radius:10px;padding:10px}
+.wk-col{background:var(--washi);border:1px solid var(--rule-soft);
+  border-radius:7px;padding:9px 10px;min-height:140px;
+  display:flex;flex-direction:column;gap:4px;cursor:pointer;
+  transition:transform .1s,border-color .15s,background .15s}
+.wk-col:hover{border-color:var(--sumi-soft);transform:translateY(-1px)}
+.wk-col.today{background:#fff8e1;border:1.5px solid var(--sumi)}
+.wk-col .dow{font-family:"Inter Tight",sans-serif;font-size:10.5px;
+  font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--kin)}
+.wk-col.today .dow{color:var(--sumi)}
+.wk-col .dnum{font-family:"Fraunces",serif;font-size:20px;font-weight:500;
+  line-height:1;color:var(--sumi);margin:1px 0 4px}
+.wk-col .items{font-size:11.5px;color:var(--sumi-soft);line-height:1.35;
+  display:flex;flex-direction:column;gap:3px;flex:1}
+.wk-col .item{display:flex;align-items:flex-start;gap:5px}
+.wk-col .item .dot-sm{width:6px;height:6px;border-radius:50%;flex:none;margin-top:5px}
+.wk-col .empty{color:var(--sumi-dim);font-style:italic;font-size:11px}
+.wk-weekend{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.wk-wknd{background:var(--washi-card);border:1px solid var(--rule-soft);
+  border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:border-color .15s}
+.wk-wknd:hover{border-color:var(--sumi-soft)}
+.wk-wknd.today{border:1.5px solid var(--sumi);background:#fff8e1}
+.wk-wknd .dow{font-family:"Inter Tight";font-size:10.5px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--kin)}
+.wk-wknd .dnum{font-family:"Fraunces",serif;font-size:18px;color:var(--sumi);line-height:1}
+.wk-wknd .items{flex:1;font-size:12px;color:var(--sumi-soft);line-height:1.35}
+.wk-wknd .empty{color:var(--sumi-dim);font-style:italic}
+
+.wk-day-detail{background:var(--washi-card);border:2px solid var(--sumi);
+  border-radius:10px;padding:18px 22px;margin-top:10px;position:relative}
+.wk-day-detail h4{font-family:"Fraunces",serif;font-weight:500;font-size:18px;
+  margin:0 0 8px;color:var(--sumi)}
+.wk-day-detail .close{position:absolute;top:10px;right:14px;
+  background:transparent;border:none;color:var(--sumi-soft);font-size:18px;
+  cursor:pointer;padding:4px 8px}
+.wk-day-detail .close:hover{color:var(--sumi)}
+
+@media (max-width:720px){.wk-grid{grid-template-columns:repeat(5,minmax(90px,1fr));overflow-x:auto}}
+
+.admin-placeholder{color:var(--sumi-dim);font-family:"Fraunces",serif}
+
 @media print{
   body{background:#fff}
   .sidebar{position:static}
@@ -353,7 +404,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <summary>At the desk <span class="count" id="desk-count"></span></summary>
     <div class="drawer-body">
       <ul class="checks">
-        <li><input type="checkbox" id="t-d1" data-group="desk"><label for="t-d1"><span class="tag tag-plan">plan</span>Export Outlook calendar (.ics) — see box below.</label></li>
         <li><input type="checkbox" id="t-d2" data-group="desk"><label for="t-d2"><span class="tag tag-plan">plan</span>Walk through this planner, adjust any project-day counts or swaps that feel wrong.</label></li>
         <li><input type="checkbox" id="t-d3" data-group="desk"><label for="t-d3"><span class="tag tag-plan">inbox</span>Inbox sweep #1: unsubscribe / delete obvious noise.</label></li>
         <li><input type="checkbox" id="t-d4" data-group="desk"><label for="t-d4"><span class="tag tag-rt">rhythm</span>Lunch at desk.</label></li>
@@ -362,45 +412,30 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
       </ul>
     </div>
   </details>
+
+  <details class="drawer">
+    <summary>Admin <span class="count" id="admin-count"></span></summary>
+    <div class="drawer-body">
+      <ul class="checks" id="admin-list">
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span><em class="admin-placeholder">(empty — ad-hoc admin tasks land here. Edit on GitHub or ask me to add one.)</em></label></li>
+      </ul>
+    </div>
+  </details>
 </section>
 
-<!-- HINT: How to export Outlook -->
-<div class="hint">
-  <strong>How to export your Outlook calendar so I can work around it:</strong>
-  <details class="inline" open>
-    <summary>Mac — Outlook desktop (New or Classic)</summary>
-    <div style="margin-top:6px">
-      1. Open Outlook → <strong>Calendar</strong> view.<br>
-      2. <strong>File → Export</strong> (Classic) <em>or</em> <strong>Tools → Export</strong> (New).<br>
-      3. <strong>iCalendar (.ics)</strong> → range: <code>Apr 23 → Jun 5, 2026</code> → detail: <em>Full details</em>.<br>
-      4. Save as <code>liz-calendar.ics</code>, share path in chat.
-    </div>
-  </details>
-  <details class="inline">
-    <summary>Outlook web (preferred for automation)</summary>
-    <div style="margin-top:6px">
-      1. Calendar → <strong>Settings (gear)</strong> → <strong>Calendar</strong> → <strong>Shared calendars</strong>.<br>
-      2. <strong>Publish a calendar</strong> → <em>Can view all details</em> → <strong>Publish</strong>.<br>
-      3. Copy the <strong>ICS link</strong> (ends in <code>.ics</code>) — this can be fetched automatically on a schedule.
-    </div>
-  </details>
-</div>
-
-<!-- ================== REST OF THIS WEEK ================== -->
-<h2><span class="num">ii.</span>The rest of this week <span class="sub" style="font-weight:400">· Apr 24 – 26</span></h2>
-<div class="card">
-  <div class="week"><div class="day">Fri Apr 24<small>Leo a/s · Sue &amp; Michael</small></div><div>
-    <ul class="checks">
-      <li><input type="checkbox" id="w1-1"><label for="w1-1"><span class="tag tag-pl">PL D1</span>Purple Line — Day 1. Frame the Stanford talk: single argument?</label></li>
-      <li><input type="checkbox" id="w1-2"><label for="w1-2"><span class="tag tag-rt">rhythm</span>Morning: yoga + meditate + tea. Walk/bike in.</label></li>
-    </ul>
-    <div class="fam">Sue &amp; Michael — carve an evening for them</div>
-  </div></div>
-  <div class="week"><div class="day">Sat Apr 25<small>Sue &amp; Michael</small></div>
-    <div><div class="fam">Family &amp; social. No deep work.</div></div></div>
-  <div class="week"><div class="day">Sun Apr 26<small>Sue &amp; Michael</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w1-3"><label for="w1-3"><span class="tag tag-plan">plan</span>Sunday 20-min reset: confirm PL D2 + D3 time blocks, pre-pick lunches.</label></li></ul>
-  </div></div>
+<!-- ================== WEEKLY VIEW ================== -->
+<div class="wk-wrap">
+  <div class="wk-nav">
+    <h2 style="margin:0"><span class="num">ii.</span>This week</h2>
+    <span class="wk-range" id="wk-range"></span>
+    <button class="wk-btn" id="wk-prev" title="Previous week">‹ prev</button>
+    <button class="wk-btn" id="wk-today">this week</button>
+    <button class="wk-btn" id="wk-next" title="Next week">next ›</button>
+  </div>
+  <div class="sub" style="margin:-4px 0 10px;font-size:13px">Click any day to expand.</div>
+  <div class="wk-grid" id="wk-grid-weekdays"></div>
+  <div class="wk-weekend" id="wk-grid-weekend"></div>
+  <div id="wk-detail"></div>
 </div>
 
 <!-- ================== PRE-STANFORD ================== -->
@@ -418,8 +453,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   <div class="week"><div class="day">Wed Apr 29<small>Sue here</small></div><div>
     <ul class="checks"><li><input type="checkbox" id="w2-3"><label for="w2-3"><span class="tag tag-trwbo">trwbo D1</span>trwbo — Day 1.</label></li></ul>
   </div></div>
-  <div class="week"><div class="day">Thu Apr 30<small>Alex → SFO (eve) · Sue</small></div><div>
-    <ul class="checks"><li><input type="checkbox" id="w2-4"><label for="w2-4"><span class="tag tag-trwbo">trwbo D2</span>trwbo — Day 2. Wrap by 5 — Alex leaves tonight.</label></li></ul>
+  <div class="week"><div class="day">Thu Apr 30<small>Alexandre → SFO (eve) · Sue</small></div><div>
+    <ul class="checks"><li><input type="checkbox" id="w2-4"><label for="w2-4"><span class="tag tag-trwbo">trwbo D2</span>trwbo — Day 2. Wrap by 5 — Alexandre leaves tonight.</label></li></ul>
   </div></div>
   <div class="week"><div class="day">Fri May 1<small>Solo parent · Sue</small></div>
     <div><div class="fam">Solo-parenting day. Light — inbox / admin only.</div></div></div>
@@ -427,8 +462,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
 <div class="card">
   <h3 style="margin-top:0">Week of May 4 — finish trwbo, do fmto</h3>
-  <div class="week"><div class="day">Mon May 4<small>Solo day · Alex back 10:45pm</small></div>
-    <div><div class="fam">Solo day, Alex returns late. Light.</div></div></div>
+  <div class="week"><div class="day">Mon May 4<small>Solo day · Alexandre back 10:45pm</small></div>
+    <div><div class="fam">Solo day, Alexandre returns late. Light.</div></div></div>
   <div class="week"><div class="day">Tue May 5<small>Sue here</small></div><div>
     <ul class="checks"><li><input type="checkbox" id="w3-1"><label for="w3-1"><span class="tag tag-trwbo">trwbo D3</span>trwbo — Day 3. <em>trwbo complete ✓</em></label></li></ul>
   </div></div>
@@ -469,13 +504,13 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
 <div class="card">
   <h3 style="margin-top:0">Week of May 25 — family-first, low intensity</h3>
-  <div class="sub" style="margin:-4px 0 6px">Alex colonoscopy Thu · Andre here · Memorial Day Mon.</div>
+  <div class="sub" style="margin:-4px 0 6px">Alexandre colonoscopy Thu · Andre here · Memorial Day Mon.</div>
   <div class="week"><div class="day">Mon May 25<small>Memorial Day · Andre</small></div><div><div class="fam">Holiday. Off.</div></div></div>
   <div class="week"><div class="day">Tue May 26<small>Andre</small></div><div>
     <ul class="checks"><li><input type="checkbox" id="w6-1"><label for="w6-1"><span class="tag tag-pl">PL rehearse</span>Rehearsal #2. Record on phone, watch back.</label></li></ul>
   </div></div>
-  <div class="week"><div class="day">Wed May 27<small>Alex fasting · Leo cardio 3:30</small></div><div><div class="fam">Support Alex. Light polish only if needed.</div></div></div>
-  <div class="week"><div class="day">Thu May 28<small>Alex colonoscopy · Andre</small></div><div><div class="fam">Support day. No work.</div></div></div>
+  <div class="week"><div class="day">Wed May 27<small>Alexandre fasting · Leo cardio 3:30</small></div><div><div class="fam">Support Alexandre. Light polish only if needed.</div></div></div>
+  <div class="week"><div class="day">Thu May 28<small>Alexandre colonoscopy · Andre</small></div><div><div class="fam">Support day. No work.</div></div></div>
   <div class="week"><div class="day">Fri May 29<small>Andre</small></div><div>
     <ul class="checks">
       <li><input type="checkbox" id="w6-3"><label for="w6-3"><span class="tag tag-plan">travel</span>Pack for Stanford. Print boarding pass. Confirm ground transport.</label></li>
@@ -705,6 +740,140 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     });
   }
   syncTodayMediCheckbox();
+
+  // ===== WEEKLY VIEW =====
+  // Data-driven: each date maps to an array of items (tag class + text).
+  // Extend this as schedule evolves.
+  const SCHEDULE = {
+    '2026-04-23':[{tag:'tag-plan',label:'plan',text:'Plan the schedule + inbox zero'}],
+    '2026-04-24':[{tag:'tag-pl',label:'PL D1',text:'Frame Stanford talk'}],
+    '2026-04-25':[{tag:'tag-im',label:'family',text:'Sue & Michael'}],
+    '2026-04-26':[{tag:'tag-plan',label:'plan',text:'Sunday reset'}],
+    '2026-04-27':[{tag:'tag-pl',label:'PL D2',text:'Outline + scaffolding'}],
+    '2026-04-28':[{tag:'tag-pl',label:'PL D3',text:'Full draft'}],
+    '2026-04-29':[{tag:'tag-trwbo',label:'trwbo D1',text:'trwbo — Day 1'}],
+    '2026-04-30':[{tag:'tag-trwbo',label:'trwbo D2',text:'Wrap by 5 — Alexandre leaves'}],
+    '2026-05-01':[{tag:'tag-im',label:'solo',text:'Solo parent — light'}],
+    '2026-05-02':[],
+    '2026-05-03':[],
+    '2026-05-04':[{tag:'tag-im',label:'solo',text:'Solo day'}],
+    '2026-05-05':[{tag:'tag-trwbo',label:'trwbo D3',text:'trwbo complete'}],
+    '2026-05-06':[{tag:'tag-fmto',label:'fmto D1',text:'fmto — Day 1'}],
+    '2026-05-07':[{tag:'tag-fmto',label:'fmto D2',text:'fmto complete'}],
+    '2026-05-08':[{tag:'tag-pl',label:'PL polish',text:'Polish pass #1'}],
+    '2026-05-11':[{tag:'tag-pl',label:'rehearse',text:'Rehearse out loud'}],
+    '2026-05-12':[],
+    '2026-05-13':[{tag:'tag-pl',label:'Q&A',text:'Q&A prep'}],
+    '2026-05-14':[],
+    '2026-05-15':[],
+    '2026-05-16':[{tag:'tag-im',label:'event',text:'HKS reunion panel'}],
+    '2026-05-17':[],
+    '2026-05-18':[{tag:'tag-pl',label:'polish',text:'Polish pass #2'}],
+    '2026-05-19':[],
+    '2026-05-20':[{tag:'tag-im',label:'family',text:'Leo dentist'}],
+    '2026-05-21':[],
+    '2026-05-22':[{tag:'tag-im',label:'family',text:'Andre arrives'}],
+    '2026-05-23':[{tag:'tag-im',label:'family',text:'Andre'}],
+    '2026-05-24':[{tag:'tag-im',label:'family',text:'Andre'}],
+    '2026-05-25':[{tag:'tag-im',label:'holiday',text:'Memorial Day · Andre'}],
+    '2026-05-26':[{tag:'tag-pl',label:'rehearse',text:'Rehearsal #2'}],
+    '2026-05-27':[{tag:'tag-im',label:'family',text:'Alexandre fasting · Leo cardio'}],
+    '2026-05-28':[{tag:'tag-im',label:'family',text:'Alexandre colonoscopy'}],
+    '2026-05-29':[{tag:'tag-pl',label:'final',text:'Final rehearsal · deck lock'}],
+    '2026-05-30':[{tag:'tag-im',label:'family',text:'Rest · Andre'}],
+    '2026-05-31':[{tag:'tag-pl',label:'🎤 Stanford',text:'Stanford (travel)'}],
+    '2026-06-01':[{tag:'tag-pl',label:'🎤 Stanford',text:'Deliver the talk'}],
+    '2026-06-02':[{tag:'tag-pl',label:'GEO',text:'GEO talk, Boston'}],
+  };
+
+  const WK_KEY='weekCursor:v1';
+  const dowFull=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let cursor=new Date(now);
+
+  // Align cursor to Monday of current week
+  function toMonday(d){const x=new Date(d);const day=x.getDay();const diff=(day===0?-6:1-day);x.setDate(x.getDate()+diff);x.setHours(0,0,0,0);return x;}
+  cursor=toMonday(cursor);
+
+  function renderWeek(){
+    const wkMon=new Date(cursor);
+    const wkSun=new Date(cursor);wkSun.setDate(wkSun.getDate()+6);
+    const rangeEl=document.getElementById('wk-range');
+    const fmt=d=>d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+    rangeEl.textContent=`· ${fmt(wkMon)} – ${fmt(wkSun)}`;
+
+    // weekdays Mon–Fri
+    const wd=document.getElementById('wk-grid-weekdays');
+    wd.innerHTML='';
+    for(let i=0;i<5;i++){
+      const d=new Date(wkMon);d.setDate(d.getDate()+i);
+      const key=isoDate(d);
+      const isToday=(key===todayKey);
+      const items=SCHEDULE[key]||[];
+      const col=document.createElement('div');
+      col.className='wk-col'+(isToday?' today':'');
+      col.innerHTML=`
+        <div class="dow">${dowFull[d.getDay()]}</div>
+        <div class="dnum">${d.getDate()}</div>
+        <div class="items">${items.length
+          ? items.map(it=>`<div class="item"><span class="dot-sm" style="background:var(--${tagToVar(it.tag)})"></span><span>${it.text}</span></div>`).join('')
+          : '<div class="empty">open</div>'}</div>`;
+      col.addEventListener('click',()=>openDay(key,d));
+      wd.appendChild(col);
+    }
+    // weekend Sat+Sun as cards
+    const we=document.getElementById('wk-grid-weekend');
+    we.innerHTML='';
+    [5,6].forEach(offset=>{
+      const d=new Date(wkMon);d.setDate(d.getDate()+offset);
+      const key=isoDate(d);
+      const isToday=(key===todayKey);
+      const items=SCHEDULE[key]||[];
+      const card=document.createElement('div');
+      card.className='wk-wknd'+(isToday?' today':'');
+      card.innerHTML=`
+        <div><div class="dow">${dowFull[d.getDay()]}</div><div class="dnum">${d.getDate()}</div></div>
+        <div class="items">${items.length
+          ? items.map(it=>it.text).join(' · ')
+          : '<span class="empty">open</span>'}</div>`;
+      card.addEventListener('click',()=>openDay(key,d));
+      we.appendChild(card);
+    });
+  }
+
+  function tagToVar(t){return t.replace('tag-','');} // tag-trwbo → trwbo matches --trwbo
+
+  function openDay(key,d){
+    const items=SCHEDULE[key]||[];
+    const host=document.getElementById('wk-detail');
+    const nice=d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+    host.innerHTML=`
+      <div class="wk-day-detail">
+        <button class="close" aria-label="Close">×</button>
+        <h4>${nice}</h4>
+        ${items.length
+          ? '<ul class="checks">'+items.map((it,i)=>`
+              <li><input type="checkbox" id="wkd-${key}-${i}" data-wkday="${key}"><label for="wkd-${key}-${i}"><span class="tag ${it.tag}">${it.label}</span>${it.text}</label></li>
+            `).join('')+'</ul>'
+          : '<div class="sub" style="font-style:italic">No scheduled items. Open day — protect for rest, admin, or spillover.</div>'}
+      </div>`;
+    // re-hydrate new checkboxes
+    host.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+      if(saved[cb.id]){cb.checked=true;cb.closest('li')?.classList.add('done');}
+      cb.addEventListener('change',()=>{
+        const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+        if(cb.checked){s[cb.id]=1;cb.closest('li')?.classList.add('done');}
+        else{delete s[cb.id];cb.closest('li')?.classList.remove('done');}
+        localStorage.setItem(LS_KEY,JSON.stringify(s));
+      });
+    });
+    host.querySelector('.close')?.addEventListener('click',()=>{host.innerHTML='';});
+    host.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  document.getElementById('wk-prev').addEventListener('click',()=>{cursor.setDate(cursor.getDate()-7);renderWeek();});
+  document.getElementById('wk-next').addEventListener('click',()=>{cursor.setDate(cursor.getDate()+7);renderWeek();});
+  document.getElementById('wk-today').addEventListener('click',()=>{cursor=toMonday(new Date(now));renderWeek();});
+  renderWeek();
 
   // Stats — current streak + this-week count
   function updateMediStats(){
