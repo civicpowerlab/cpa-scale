@@ -592,41 +592,127 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
 <script>
 (function(){
-  // ===== Task-state persistence =====
+  // ===== Cross-device sync (Cloudflare Worker + KV) =====
+  const SYNC_URL='https://liz-planner-sync.elizabethmck.workers.dev/state';
+  const SYNC_KEY='9a2aad274acc5fe9506dedf3a4e84307c87aedaafed340d2';
   const LS_KEY='lizPlanner:v1';
-  const saved=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+  const MEDI_LS='meditation:v1';
+
+  // State objects (source of truth in memory; localStorage is backup cache).
+  let saved=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+  let mediState=JSON.parse(localStorage.getItem(MEDI_LS)||'{}');
+
+  // Pull latest from server on boot. Merge server state over local cache.
+  async function hydrateFromServer(){
+    try{
+      const r=await fetch(SYNC_URL,{headers:{'X-Planner-Key':SYNC_KEY}});
+      if(!r.ok) throw new Error('fetch '+r.status);
+      const s=await r.json();
+      saved=s.checks||{};
+      mediState=s.medi||{};
+      localStorage.setItem(LS_KEY,JSON.stringify(saved));
+      localStorage.setItem(MEDI_LS,JSON.stringify(mediState));
+      applyRemote();
+    }catch(e){
+      console.warn('sync: using local cache only —',e.message);
+    }
+  }
+
+  // Push a partial change to server. Debounced slightly to coalesce rapid clicks.
+  let pushTimer=null;
+  const pendingPatch={setChecks:{},unsetChecks:[],setMedi:{},unsetMedi:[]};
+  function queuePatch(patch){
+    if(patch.setChecks) Object.assign(pendingPatch.setChecks,patch.setChecks);
+    if(patch.unsetChecks) pendingPatch.unsetChecks.push(...patch.unsetChecks);
+    if(patch.setMedi) Object.assign(pendingPatch.setMedi,patch.setMedi);
+    if(patch.unsetMedi) pendingPatch.unsetMedi.push(...patch.unsetMedi);
+    clearTimeout(pushTimer);
+    pushTimer=setTimeout(flushPatch,250);
+  }
+  async function flushPatch(){
+    const body=JSON.parse(JSON.stringify(pendingPatch));
+    // reset buffer first so new clicks during the fetch get their own patch
+    pendingPatch.setChecks={};pendingPatch.unsetChecks=[];
+    pendingPatch.setMedi={};pendingPatch.unsetMedi=[];
+    try{
+      await fetch(SYNC_URL,{method:'PATCH',
+        headers:{'Content-Type':'application/json','X-Planner-Key':SYNC_KEY},
+        body:JSON.stringify(body)});
+    }catch(e){console.warn('sync push failed — cached locally',e.message);}
+  }
+  async function replaceAll(){
+    try{
+      await fetch(SYNC_URL,{method:'PUT',
+        headers:{'Content-Type':'application/json','X-Planner-Key':SYNC_KEY},
+        body:JSON.stringify({checks:saved,medi:mediState})});
+    }catch(e){console.warn('sync replace failed',e.message);}
+  }
+
+  // After hydrate, re-apply state to DOM (checkbox visual + med cells).
+  function applyRemote(){
+    document.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+      const done=!!saved[cb.id];
+      cb.checked=done;
+      cb.closest('li')?.classList.toggle('done',done);
+    });
+    document.querySelectorAll('.medi-cell').forEach(cell=>{
+      if(cell.classList.contains('future')) return;
+      cell.classList.toggle('done',!!mediState[cell.dataset.date]);
+    });
+    updateCounts?.();
+    updateMediStats?.();
+    syncTodayMediCheckbox?.();
+  }
+
+  // Poll every 30s so another device's edits appear (cheap — free tier easily handles it).
+  setInterval(hydrateFromServer,30000);
+
+  // Hydrate after DOM is built at bottom of this script.
 
   // Date label
   document.getElementById('today-label').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 
-  // Hydrate checkboxes
+  // Hydrate checkboxes from local cache first (instant paint), server will catch up on hydrate.
   document.querySelectorAll('input[type=checkbox]').forEach(cb=>{
     if(saved[cb.id]){cb.checked=true;cb.closest('li')?.classList.add('done');}
     cb.addEventListener('change',()=>{
-      const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
-      if(cb.checked){s[cb.id]=1;cb.closest('li')?.classList.add('done');}
-      else{delete s[cb.id];cb.closest('li')?.classList.remove('done');}
-      localStorage.setItem(LS_KEY,JSON.stringify(s));
+      if(cb.checked){
+        saved[cb.id]=1;
+        cb.closest('li')?.classList.add('done');
+        queuePatch({setChecks:{[cb.id]:1}});
+      }else{
+        delete saved[cb.id];
+        cb.closest('li')?.classList.remove('done');
+        queuePatch({unsetChecks:[cb.id]});
+      }
+      localStorage.setItem(LS_KEY,JSON.stringify(saved));
       updateCounts();
     });
   });
 
   // Reset buttons
   document.getElementById('resetToday').addEventListener('click',()=>{
-    const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+    const ids=[];
     document.querySelectorAll('.today input[type=checkbox]').forEach(cb=>{
-      cb.checked=false;cb.closest('li')?.classList.remove('done');delete s[cb.id];
+      cb.checked=false;cb.closest('li')?.classList.remove('done');
+      if(saved[cb.id]){delete saved[cb.id];ids.push(cb.id);}
     });
-    localStorage.setItem(LS_KEY,JSON.stringify(s));
+    localStorage.setItem(LS_KEY,JSON.stringify(saved));
+    if(ids.length) queuePatch({unsetChecks:ids});
     updateCounts();
   });
   document.getElementById('resetAll').addEventListener('click',()=>{
-    if(!confirm('Clear every check?'))return;
-    localStorage.removeItem(LS_KEY);
+    if(!confirm('Clear every check on every device?'))return;
+    saved={};mediState={};
+    localStorage.setItem(LS_KEY,'{}');
+    localStorage.setItem(MEDI_LS,'{}');
     document.querySelectorAll('input[type=checkbox]').forEach(cb=>{
       cb.checked=false;cb.closest('li')?.classList.remove('done');
     });
+    document.querySelectorAll('.medi-cell').forEach(c=>c.classList.remove('done'));
+    replaceAll();
     updateCounts();
+    updateMediStats();
   });
 
   // Drawer count badges (x/y)
@@ -641,13 +727,10 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   updateCounts();
 
   // ===== Meditation contribution graph =====
-  const MEDI_KEY='meditation:v1';
-  const mediState=JSON.parse(localStorage.getItem(MEDI_KEY)||'{}');
-
   function isoDate(d){
     return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   }
-  function saveMedi(){localStorage.setItem(MEDI_KEY,JSON.stringify(mediState));}
+  function saveMedi(){localStorage.setItem(MEDI_LS,JSON.stringify(mediState));}
 
   // Build grid: starts TODAY, runs forward 52 weeks
   const now=new Date();now.setHours(0,0,0,0);
@@ -708,8 +791,13 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
   function toggleMedi(cell){
     const date=cell.dataset.date;
-    if(mediState[date]){delete mediState[date];cell.classList.remove('done');}
-    else{mediState[date]=1;cell.classList.add('done');}
+    if(mediState[date]){
+      delete mediState[date];cell.classList.remove('done');
+      queuePatch({unsetMedi:[date]});
+    }else{
+      mediState[date]=1;cell.classList.add('done');
+      queuePatch({setMedi:{[date]:1}});
+    }
     saveMedi();
     syncTodayMediCheckbox();
     updateMediStats();
@@ -730,12 +818,15 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   }
   if(mediCb){
     mediCb.addEventListener('change',()=>{
-      if(mediCb.checked) mediState[todayKey]=1;
-      else delete mediState[todayKey];
-      saveMedi();
-      if(todayCell){
-        todayCell.classList.toggle('done',mediCb.checked);
+      if(mediCb.checked){
+        mediState[todayKey]=1;
+        queuePatch({setMedi:{[todayKey]:1}});
+      }else{
+        delete mediState[todayKey];
+        queuePatch({unsetMedi:[todayKey]});
       }
+      saveMedi();
+      if(todayCell){todayCell.classList.toggle('done',mediCb.checked);}
       updateMediStats();
     });
   }
@@ -856,14 +947,18 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
             `).join('')+'</ul>'
           : '<div class="sub" style="font-style:italic">No scheduled items. Open day — protect for rest, admin, or spillover.</div>'}
       </div>`;
-    // re-hydrate new checkboxes
+    // re-hydrate new checkboxes — same sync path as the rest
     host.querySelectorAll('input[type=checkbox]').forEach(cb=>{
       if(saved[cb.id]){cb.checked=true;cb.closest('li')?.classList.add('done');}
       cb.addEventListener('change',()=>{
-        const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
-        if(cb.checked){s[cb.id]=1;cb.closest('li')?.classList.add('done');}
-        else{delete s[cb.id];cb.closest('li')?.classList.remove('done');}
-        localStorage.setItem(LS_KEY,JSON.stringify(s));
+        if(cb.checked){
+          saved[cb.id]=1;cb.closest('li')?.classList.add('done');
+          queuePatch({setChecks:{[cb.id]:1}});
+        }else{
+          delete saved[cb.id];cb.closest('li')?.classList.remove('done');
+          queuePatch({unsetChecks:[cb.id]});
+        }
+        localStorage.setItem(LS_KEY,JSON.stringify(saved));
       });
     });
     host.querySelector('.close')?.addEventListener('click',()=>{host.innerHTML='';});
@@ -892,6 +987,10 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     statsEl.innerHTML=`<strong>${wk}/7</strong> this week · <strong>${streak}</strong>-day streak`;
   }
   updateMediStats();
+
+  // ===== Kick off cross-device sync =====
+  // Pull server state now; re-paint whatever the server has.
+  hydrateFromServer();
 })();
 </script>
 </body>
