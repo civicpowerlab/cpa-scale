@@ -131,13 +131,8 @@ main{min-width:0}
   letter-spacing:.12em;text-transform:uppercase;color:var(--sumi-dim);
   position:relative}
 .m-tick{flex:0 0 14px;height:13px;line-height:13px;white-space:nowrap;overflow:visible}
-.habit-label{display:flex;flex-direction:column;align-items:flex-start;
-  gap:1px;padding-right:4px;line-height:1}
-.habit-label .name{font-family:"Fraunces",serif;font-size:13.5px;
-  color:var(--sumi);font-weight:500}
-.habit-label .habit-stats{font-family:"Inter Tight",sans-serif;font-size:9.5px;
-  color:var(--sumi-dim);letter-spacing:.02em;font-variant-numeric:tabular-nums}
-.habit-label .habit-stats strong{color:var(--sumi-soft);font-weight:600}
+.habit-label{font-family:"Fraunces",serif;font-size:13.5px;
+  color:var(--sumi);font-weight:500;padding-right:4px;line-height:1}
 .habit-strip{display:flex;gap:0;min-width:fit-content}
 
 .medi-cell{width:14px;height:14px;border-radius:0;
@@ -375,13 +370,13 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div></div>
     <div class="habit-months" id="habit-months"></div>
 
-    <div class="habit-label"><span class="name">med</span><span class="habit-stats" id="stats-med"></span></div>
+    <div class="habit-label">med</div>
     <div class="habit-strip habit-med" id="strip-med"></div>
 
-    <div class="habit-label"><span class="name">h2o</span><span class="habit-stats" id="stats-h2o"></span></div>
+    <div class="habit-label">h2o</div>
     <div class="habit-strip habit-h2o" id="strip-h2o"></div>
 
-    <div class="habit-label"><span class="name">mvmt</span><span class="habit-stats" id="stats-mvmt"></span></div>
+    <div class="habit-label">mvmt</div>
     <div class="habit-strip habit-mvmt" id="strip-mvmt"></div>
   </div>
 </section>
@@ -790,8 +785,9 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
   function buildStrip(habit){
     const el=strips[habit];el.innerHTML='';cellsByHabit[habit]=[];
-    for(let i=STRIP_DAYS-1;i>=0;i--){
-      const d=new Date(now);d.setDate(now.getDate()-i);
+    // Forward-looking: today is leftmost, then STRIP_DAYS-1 future days to the right.
+    for(let i=0;i<STRIP_DAYS;i++){
+      const d=new Date(now);d.setDate(now.getDate()+i);
       const key=isoDate(d);
       const cell=document.createElement('div');
       cell.className='medi-cell';
@@ -825,18 +821,17 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
   habits.forEach(buildStrip);
 
-  // Month labels aligned with cells (one label per cell column, first-of-month only)
+  // Month labels aligned with cells. Forward-looking: today leftmost, then right.
   (function buildMonthLabels(){
     const el=document.getElementById('habit-months');if(!el)return;
     el.innerHTML='';
     const monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     let lastMonth=-1;
-    for(let i=STRIP_DAYS-1;i>=0;i--){
-      const d=new Date(now);d.setDate(now.getDate()-i);
+    for(let i=0;i<STRIP_DAYS;i++){
+      const d=new Date(now);d.setDate(now.getDate()+i);
       const m=d.getMonth();
       const tick=document.createElement('span');
       tick.className='m-tick';
-      // show label on first day we see a new month
       if(m!==lastMonth){tick.textContent=monthNames[m];lastMonth=m;}
       el.appendChild(tick);
     }
@@ -1039,19 +1034,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   document.getElementById('wk-today').addEventListener('click',()=>{wkCursor=toMonday(new Date(now));renderWeek();});
   renderWeek();
 
-  // Stats — per-habit this-week count only (no streak)
-  function updateMediStats(){
-    habits.forEach(habit=>{
-      const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay());
-      let wk=0;
-      for(let i=0;i<=now.getDay();i++){
-        const dd=new Date(weekStart);dd.setDate(weekStart.getDate()+i);
-        if(getHabit(isoDate(dd),habit)>0) wk++;
-      }
-      const el=document.getElementById('stats-'+habit);
-      if(el) el.innerHTML=`<strong>${wk}</strong>/7 wk`;
-    });
-  }
+  // Stats removed (was redundant). Keep no-op so existing callers don't throw.
+  function updateMediStats(){}
   updateMediStats();
 
   // ===== Kick off cross-device sync =====
