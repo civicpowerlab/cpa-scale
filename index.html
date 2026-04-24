@@ -396,7 +396,9 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <summary>Meetings <span class="count" id="meetings-count"></span></summary>
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
+        <!-- AUTO_MEETINGS_START -->
         <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-plan">mtg</span>HPF · 16:30–17:30</label></li>
+        <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
   </details>
@@ -858,7 +860,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
   // ===== WEEKLY VIEW =====
   // Data-driven: each date maps to an array of items (tag class + text).
-  // Populated from Outlook ICS 2026-04-23. Deep-work blocks from Outlook, meetings from Outlook.
+  // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
+  // AUTO_SCHEDULE_START
   const SCHEDULE = {
     '2026-04-23':[
       {tag:'tag-plan',label:'plan',text:'Finalize schedule + inbox zero'},
@@ -939,6 +942,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-06-01':[{tag:'tag-pl',label:'🎤 Stanford',text:'Deliver the talk'}],
     '2026-06-02':[{tag:'tag-pl',label:'GEO',text:'GEO talk, Boston'}],
   };
+  // AUTO_SCHEDULE_END
 
   const dowFull=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   let wkCursor=new Date(now);

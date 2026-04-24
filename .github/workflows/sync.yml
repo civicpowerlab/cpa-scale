@@ -1,0 +1,48 @@
+name: Outlook sync
+
+on:
+  schedule:
+    # 06:30 Eastern. GitHub cron is UTC → 10:30 UTC during EDT (Mar–Nov), 11:30 UTC during EST.
+    # Running both; the no-change early-exit makes the extra run harmless.
+    - cron: '30 10 * * *'
+    - cron: '30 11 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: outlook-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install --quiet icalendar
+
+      - name: Run sync
+        env:
+          ICS_URL: ${{ secrets.ICS_URL }}
+        run: python3 scripts/sync_outlook.py
+
+      - name: Commit & push if changed
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git config user.name "liz-planner-bot"
+          git config user.email "bot@lizmckenna.github.io"
+          git add index.html
+          git commit -m "Outlook sync $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
