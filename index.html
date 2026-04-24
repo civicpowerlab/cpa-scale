@@ -42,9 +42,10 @@
   --cpl:#c49d3b;            /* 芥子 karashi — mustard (civic power lab) */
 
   /* Other */
-  --rt:#4a7ba8;             /* rhythm — pale indigo */
+  --rt:#4a7ba8;             /* self — pale indigo */
   --im:#8e7a5e;             /* family/immovable — sand */
-  --plan:#635c51;           /* plan/inbox */
+  --plan:#635c51;           /* admin — ink brown-grey */
+  --mtg:#6b7b8b;            /* meetings — slate (distinct from self + admin) */
 }
 
 *{box-sizing:border-box}
@@ -220,6 +221,7 @@ label{cursor:pointer;flex:1;padding-top:1px}
 .tag-rt{background:var(--rt)}
 .tag-im{background:var(--im)}
 .tag-plan{background:var(--plan)}
+.tag-mtg{background:var(--mtg)}
 
 /* ============ COLLAPSIBLES (Personal / Desk) ============ */
 .drawer{margin-top:10px;border-top:1px dashed var(--rule);padding-top:8px}
@@ -387,8 +389,9 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   <div class="rocks">
     <h3>today</h3>
     <ul class="checks">
-      <li><input type="checkbox" id="t-r1"><label for="t-r1"><span class="tag tag-plan">plan</span>Finalize schedule (this file). Lock in big-rock allocations.</label></li>
-      <li><input type="checkbox" id="t-r2"><label for="t-r2"><span class="tag tag-plan">inbox</span>Inbox to zero (triage + sweep, treat as one block).</label></li>
+      <!-- AUTO_TODAY_ROCKS_START -->
+      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-plan">plan</span>(loading from Outlook…)</label></li>
+      <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
 
@@ -424,8 +427,9 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <summary>Admin / desk <span class="count" id="desk-count"></span></summary>
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
-        <li><input type="checkbox" id="t-d4" data-group="desk"><label for="t-d4"><span class="tag tag-rt">self</span>Lunch at desk.</label></li>
-        <li><label><em class="admin-placeholder">Ad-hoc admin lands here. Ask me in chat to add something.</em></label></li>
+        <!-- AUTO_ADMIN_START -->
+        <li><label><em class="admin-placeholder">(loading from Outlook…)</em></label></li>
+        <!-- AUTO_ADMIN_END -->
       </ul>
     </div>
   </details>
@@ -447,7 +451,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 </div>
 
 <!-- ================== PRE-STANFORD — mirrors Outlook ================== -->
-<h2>Pre-Stanford <span class="sub" style="font-weight:400">· from your Outlook blocks · Apr 24 → Jun 2</span></h2>
+<h2>Rest of spring <span class="sub" style="font-weight:400">· from your Outlook blocks · through Jun 2</span></h2>
 <div class="sub" style="margin:-2px 0 12px">Deep-work days as actually blocked in your calendar. Purple Line lands May 7–8, then rehearsal/polish before Stanford May 31 → Jun 1.</div>
 
 <div class="card">
@@ -631,10 +635,33 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
       mediState=s.medi||{};
       localStorage.setItem(LS_KEY,JSON.stringify(saved));
       localStorage.setItem(MEDI_LS,JSON.stringify(mediState));
+      dailyResetIfNewDay();
       applyRemote();
     }catch(e){
       console.warn('sync: using local cache only —',e.message);
     }
+  }
+
+  // Daily reset: clear all checkboxes inside .today if the date rolled over.
+  // Habit strips (mediState) are date-keyed so they persist correctly — only
+  // reset the daily checklist items. The "last reset date" is stored as a
+  // special value in saved so it syncs across devices.
+  function dailyResetIfNewDay(){
+    const RESET_KEY='_resetDate';
+    const stored=saved[RESET_KEY];
+    if(stored===todayKeyStr()) return;
+    const idsToUnset=[];
+    document.querySelectorAll('.today input[type=checkbox]').forEach(cb=>{
+      if(saved[cb.id]){idsToUnset.push(cb.id);delete saved[cb.id];}
+    });
+    saved[RESET_KEY]=todayKeyStr();
+    localStorage.setItem(LS_KEY,JSON.stringify(saved));
+    if(idsToUnset.length) queuePatch({unsetChecks:idsToUnset});
+    queuePatch({setChecks:{[RESET_KEY]:todayKeyStr()}});
+  }
+  function todayKeyStr(){
+    const d=new Date();d.setHours(0,0,0,0);
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   }
 
   // Push a partial change to server. Debounced slightly to coalesce rapid clicks.
@@ -777,10 +804,11 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     saveMedi();
   }
 
-  // Build strips: today back 56 days (8 weeks) so UI is compact.
+  // Build strips: 7 past days + today + 49 forward = 8 weeks total.
   const now=new Date();now.setHours(0,0,0,0);
   const todayKey=isoDate(now);
-  const STRIP_DAYS=56;
+  const PAST_DAYS=7, FUTURE_DAYS=49;
+  const STRIP_DAYS=PAST_DAYS+1+FUTURE_DAYS;
 
   const habits=['med','h2o','mvmt'];
   const strips={med:document.getElementById('strip-med'),h2o:document.getElementById('strip-h2o'),mvmt:document.getElementById('strip-mvmt')};
@@ -788,8 +816,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
   function buildStrip(habit){
     const el=strips[habit];el.innerHTML='';cellsByHabit[habit]=[];
-    // Forward-looking: today is leftmost, then STRIP_DAYS-1 future days to the right.
-    for(let i=0;i<STRIP_DAYS;i++){
+    // Past 7 + today + forward 49. Leftmost = 7 days ago; today is at index PAST_DAYS.
+    for(let i=-PAST_DAYS;i<=FUTURE_DAYS;i++){
       const d=new Date(now);d.setDate(now.getDate()+i);
       const key=isoDate(d);
       const cell=document.createElement('div');
@@ -824,13 +852,13 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
 
   habits.forEach(buildStrip);
 
-  // Month labels aligned with cells. Forward-looking: today leftmost, then right.
+  // Month labels aligned with cells. Matches strip range (past + today + future).
   (function buildMonthLabels(){
     const el=document.getElementById('habit-months');if(!el)return;
     el.innerHTML='';
     const monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     let lastMonth=-1;
-    for(let i=0;i<STRIP_DAYS;i++){
+    for(let i=-PAST_DAYS;i<=FUTURE_DAYS;i++){
       const d=new Date(now);d.setDate(now.getDate()+i);
       const m=d.getMonth();
       const tick=document.createElement('span');
