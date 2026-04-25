@@ -390,7 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-trwbo">trwbo</span>trwbo 09:00-15:00</label></li>
+      <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No deep work today - open day.</em></label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -400,8 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-rt">self</span>haircut 10:00-11:00</label></li>
-        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>Liz &amp; Patrick 15:00-15:30</label></li>
+        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -426,8 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>david meyer 15:30-16:00</label></li>
-        <li><input type="checkbox" id="t-a2" data-group="admin"><label for="t-a2"><span class="tag tag-plan">admin</span>admin emails 20:00-20:30</label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-im">family</span>Leo TKD 10:00-11:00</label></li>
       <!-- AUTO_ADMIN_END -->
       </ul>
     </div>
@@ -893,13 +891,12 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-04-24':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-15:00'},{tag:'tag-rt',label:'self',text:'haircut 10:00-11:00'},{tag:'tag-mtg',label:'mtg',text:'Liz & Patrick 15:00-15:30'},{tag:'tag-plan',label:'admin',text:'david meyer 15:30-16:00'},{tag:'tag-plan',label:'admin',text:'admin emails 20:00-20:30'}],
     '2026-04-25':[{tag:'tag-im',label:'family',text:'Maine trip (Alexandre & Liz)'},{tag:'tag-im',label:'family',text:'Leo TKD 10:00-11:00'}],
     '2026-04-27':[{tag:'tag-plan',label:'admin',text:'tt & meeting scheduling (PSL) 09:00-10:00'},{tag:'tag-fmto',label:'fmto',text:'fmto 10:00-16:00'},{tag:'tag-plan',label:'admin',text:'admin/emails 16:00-17:00'},{tag:'tag-plan',label:'admin',text:'Ted dinner 19:30-21:00'}],
     '2026-04-28':[{tag:'tag-fmto',label:'fmto',text:'fmto 09:00-14:30'},{tag:'tag-plan',label:'admin',text:'admin/emails 14:30-15:30'},{tag:'tag-mtg',label:'mtg',text:'FAC 15:45-16:30'},{tag:'tag-plan',label:'admin',text:'PAE showcase 16:30-17:00'}],
     '2026-04-29':[{tag:'tag-im',label:'family',text:'Renew Leo\'s Passport (Valid to 12/2026)'},{tag:'tag-plan',label:'admin',text:'schedule st social w/ Lotem & fam 09:00-09:30'},{tag:'tag-mamdani',label:'mamdani',text:'ZM follow-up and work - prep proposal 09:30-13:00'},{tag:'tag-plan',label:'admin',text:'Liz and Monique 13:00-13:30'},{tag:'tag-mtg',label:'mtg',text:'Liz and Edwin 13:30-14:00'},{tag:'tag-cpl',label:'civic power lab',text:'HOLD: Convoca and CP Lab 14:00-15:00'},{tag:'tag-plan',label:'admin',text:'Office hours: Liz and Eknath 15:30-15:40'},{tag:'tag-plan',label:'admin',text:'Office hours: Liz and Barbara 15:45-16:00'}],
     '2026-04-30':[{tag:'tag-plan',label:'admin',text:'Mom'},{tag:'tag-gw',label:'groundwork',text:'groundwork 09:00-13:00'},{tag:'tag-cpl',label:'civic power lab',text:'Civic Power 2 planning 13:00-18:00'},{tag:'tag-plan',label:'admin',text:'admin/emails 19:30-20:30'},{tag:'tag-mtg',label:'mtg',text:'POF Cohort Check-in 20:30-22:00'},{tag:'tag-mtg',label:'mtg',text:'POF Cohort Check-in 20:30-22:00'}],
-    '2026-05-01':[{tag:'tag-cpl',label:'civic power lab',text:'Civic Tech 09:00-14:30'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-plan',label:'admin',text:'admin/emails 16:00-17:00'}],
+    '2026-05-01':[{tag:'tag-cpl',label:'civic power lab',text:'Civic Tech 09:00-14:30'},{tag:'tag-mtg',label:'mtg',text:'Clem Aeppli Dissertation Defense 13:00-15:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-plan',label:'admin',text:'admin/emails 16:00-17:00'}],
     '2026-05-04':[{tag:'tag-fmto',label:'fmto',text:'fmto or trwbo 09:00-17:00'}],
     '2026-05-05':[{tag:'tag-fmto',label:'fmto',text:'fmto or trwbo 09:00-15:00'},{tag:'tag-plan',label:'admin',text:'HOLD FOR FAC 15:00-16:30'}],
     '2026-05-06':[{tag:'tag-mtg',label:'mtg',text:'Edie/Liz 10:00-10:20'},{tag:'tag-mtg',label:'mtg',text:'Liz and John 11:00-11:20'},{tag:'tag-mtg',label:'mtg',text:'Office Hour w/ Eman Muamar 11:30-11:45'},{tag:'tag-mtg',label:'mtg',text:'Building Democratic Structure Shapes research report-back 13:00-14:15'}],
@@ -908,7 +905,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-05-10':[{tag:'tag-plan',label:'admin',text:'DHSP lottery deadline'}],
     '2026-05-12':[{tag:'tag-plan',label:'admin',text:'API-203 wrap up: download all canvas comments, prep for next year, grade finals 09:00-15:00'},{tag:'tag-plan',label:'admin',text:'HOLD FOR FAC 15:00-16:30'},{tag:'tag-mtg',label:'mtg',text:'Spring 2026 Democracy Faculty Dinner 18:00-20:00'}],
     '2026-05-13':[{tag:'tag-mtg',label:'mtg',text:'End of Year Junior Faculty Breakfast 09:00-10:00'},{tag:'tag-mtg',label:'mtg',text:'Miya/ Liz/ Joy re Political Actor Survey 13:00-14:00'},{tag:'tag-mtg',label:'mtg',text:'Sochie Nnaemeka and Liz McKenna 15:30-16:00'}],
-    '2026-05-15':[{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'}],
+    '2026-05-15':[{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'}],
+    '2026-05-16':[{tag:'tag-mtg',label:'mtg',text:'HKS Reunion Panel: "Polarization and Public Policy in the U.S." 15:45-17:30'}],
   };
 // AUTO_SCHEDULE_END
 
