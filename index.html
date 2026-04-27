@@ -390,7 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No deep work today - open day.</em></label></li>
+      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-fmto">fmto</span>fmto 10:00-16:00</label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -425,7 +425,9 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>tt &amp; meeting scheduling (PSL) 09:00-10:00</label></li>
+        <li><input type="checkbox" id="t-a2" data-group="admin"><label for="t-a2"><span class="tag tag-plan">admin</span>admin/emails 16:00-17:00</label></li>
+        <li><input type="checkbox" id="t-a3" data-group="admin"><label for="t-a3"><span class="tag tag-plan">admin</span>Ted dinner 19:30-21:00</label></li>
       <!-- AUTO_ADMIN_END -->
       </ul>
     </div>
