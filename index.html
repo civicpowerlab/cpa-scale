@@ -390,9 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-cpl">civic power lab</span>Civic Tech 09:00-14:30</label></li>
-      <li><input type="checkbox" id="t-r2" data-group="rocks"><label for="t-r2"><span class="tag tag-mamdani">mamdani</span>Mamdani Research Team Biweekly 15:00-16:00</label></li>
-      <li><input type="checkbox" id="t-r3" data-group="rocks"><label for="t-r3"><span class="tag tag-mamdani">mamdani</span>Mamdani Research Team Biweekly 15:00-16:00</label></li>
+      <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No deep work today - open day.</em></label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -427,7 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>admin/emails 16:00-17:00</label></li>
+        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
       <!-- AUTO_ADMIN_END -->
         <li><input type="checkbox" id="t-ad1" data-group="admin"><label for="t-ad1"><span class="tag tag-plan">admin</span>Buy kids' Vivobarefoot shoes</label></li>
         <li><input type="checkbox" id="t-ad2" data-group="admin"><label for="t-ad2"><span class="tag tag-plan">admin</span>Make eye appointment</label></li>
@@ -898,7 +896,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-05-01':[{tag:'tag-cpl',label:'civic power lab',text:'Civic Tech 09:00-14:30'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-plan',label:'admin',text:'admin/emails 16:00-17:00'}],
     '2026-05-04':[{tag:'tag-fmto',label:'fmto',text:'fmto or trwbo 09:00-17:00'},{tag:'tag-plan',label:'admin',text:'Scott Cunninham AI thing 13:00-14:00'}],
     '2026-05-05':[{tag:'tag-fmto',label:'fmto',text:'fmto or trwbo 09:00-15:00'},{tag:'tag-plan',label:'admin',text:'Canceled: HOLD FOR FAC 15:00-16:30'}],
     '2026-05-06':[{tag:'tag-mtg',label:'mtg',text:'Edie/Liz 10:00-10:20'},{tag:'tag-mtg',label:'mtg',text:'Liz and John 11:00-11:20'},{tag:'tag-mtg',label:'mtg',text:'Office Hour w/ Eman Muamar 11:30-11:45'},{tag:'tag-mtg',label:'mtg',text:'Building Democratic Structure Shapes research report-back 13:00-14:15'}],
