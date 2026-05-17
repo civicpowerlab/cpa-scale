@@ -400,8 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Aviva's birthday party 10:00-12:00</label></li>
-        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>HKS Reunion Panel: "Polarization and Public Policy in the U.S." 15:45-17:30</label></li>
+        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -426,7 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>API-203 wrap up: download all canvas comments, prep for next year, grade finals 09:00-11:30</label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -893,7 +892,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-05-16':[{tag:'tag-mtg',label:'mtg',text:'Aviva\'s birthday party 10:00-12:00'},{tag:'tag-mtg',label:'mtg',text:'HKS Reunion Panel: "Polarization and Public Policy in the U.S." 15:45-17:30'}],
     '2026-05-17':[{tag:'tag-plan',label:'admin',text:'API-203 wrap up: download all canvas comments, prep for next year, grade finals 09:00-11:30'}],
     '2026-05-18':[{tag:'tag-plan',label:'admin',text:'GRADES DUE'},{tag:'tag-mtg',label:'mtg',text:'Vehicle 18:00-19:00'}],
     '2026-05-19':[{tag:'tag-mtg',label:'mtg',text:'Jennie Riley | Rx Foundation and Liz McKenna 15:00-15:30'},{tag:'tag-mtg',label:'mtg',text:'Sanjiv Rao and Liz McKenna 15:30-16:00'}],
