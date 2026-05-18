@@ -400,7 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Vehicle 18:00-19:00</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -425,7 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>API-203 wrap up: download all canvas comments, prep for next year, grade finals 09:00-11:30</label></li>
+        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -892,7 +892,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-05-17':[{tag:'tag-plan',label:'admin',text:'API-203 wrap up: download all canvas comments, prep for next year, grade finals 09:00-11:30'}],
     '2026-05-18':[{tag:'tag-plan',label:'admin',text:'GRADES DUE'},{tag:'tag-mtg',label:'mtg',text:'Vehicle 18:00-19:00'}],
     '2026-05-19':[{tag:'tag-mtg',label:'mtg',text:'Jennie Riley | Rx Foundation and Liz McKenna 15:00-15:30'},{tag:'tag-mtg',label:'mtg',text:'Sanjiv Rao and Liz McKenna 15:30-16:00'}],
     '2026-05-20':[{tag:'tag-plan',label:'admin',text:'Associate Promotion Packet Requested'},{tag:'tag-im',label:'family',text:'Leo dentist 10:00-11:00'},{tag:'tag-mtg',label:'mtg',text:'Liz and John 13:00-13:20'},{tag:'tag-plan',label:'admin',text:'Emily and Liz re: lab infra stuff 14:00-14:30'},{tag:'tag-mtg',label:'mtg',text:'Liz and Micah 15:00-15:30'}],
@@ -901,9 +900,10 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-05-25':[{tag:'tag-im',label:'travel',text:'NO SCHOOL - MEMORIAL DAY'},{tag:'tag-im',label:'travel',text:'Memorial Day (MLK) 08:00-17:00'}],
     '2026-05-28':[{tag:'tag-plan',label:'admin',text:'Commencement'}],
     '2026-05-29':[{tag:'tag-plan',label:'admin',text:'Fancy day MLK'},{tag:'tag-mtg',label:'mtg',text:'PTCC conference 12:30-13:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'}],
-    '2026-06-01':[{tag:'tag-plan',label:'admin',text:'Hat day MLK'},{tag:'tag-plan',label:'admin',text:'PACS/SCANCOR talk'},{tag:'tag-plan',label:'admin',text:'PACS TALK 18:00-19:00'}],
+    '2026-06-01':[{tag:'tag-plan',label:'admin',text:'PACS/SCANCOR talk'},{tag:'tag-plan',label:'admin',text:'Hat day MLK'},{tag:'tag-plan',label:'admin',text:'PACS TALK 18:00-19:00'}],
     '2026-06-02':[{tag:'tag-plan',label:'admin',text:'Inside Out Day'}],
     '2026-06-04':[{tag:'tag-plan',label:'admin',text:'Ian Simmons Henrietta Thing 12:00-14:00'}],
+    '2026-06-05':[{tag:'tag-mtg',label:'mtg',text:'Spring Concert @ MLK 08:15-09:00'}],
   };
 // AUTO_SCHEDULE_END
 
