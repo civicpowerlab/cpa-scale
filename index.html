@@ -400,7 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Woody / Liz 16:30-17:30</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -425,7 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>PACS TALK 18:00-19:00</label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -897,13 +897,15 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-06-03':[{tag:'tag-mamdani',label:'mamdani',text:'ZM proposal 09:00-11:00'},{tag:'tag-plan',label:'admin',text:'HKS staff awards & vision launch 11:00-12:00'},{tag:'tag-plan',label:'admin',text:'Liz and Noah check-in 16:00-16:20'},{tag:'tag-mtg',label:'mtg',text:'Liz and Patrick 16:30-17:15'}],
     '2026-06-04':[{tag:'tag-mtg',label:'mtg',text:'Liz and Nicco 11:00-11:30'},{tag:'tag-plan',label:'admin',text:'Ian Simmons Henrietta Thing 12:00-14:00'},{tag:'tag-mtg',label:'mtg',text:'Liz and Miriam 15:00-15:30'},{tag:'tag-gw',label:'groundwork',text:'Liz McKenna & The Equity Fund (re: Groundwork) 16:00-16:30'}],
     '2026-06-05':[{tag:'tag-mtg',label:'mtg',text:'Spring Concert @ MLK 08:15-09:00'},{tag:'tag-mtg',label:'mtg',text:'Julie Fernandes and Liz McKenna 09:30-10:00'},{tag:'tag-mtg',label:'mtg',text:'Bonnie and Liz McKenna 13:00-13:30'}],
-    '2026-06-09':[{tag:'tag-plan',label:'admin',text:'Neon day MLK'},{tag:'tag-mtg',label:'mtg',text:'GW (Tianyi, Joy, Liz) 10:00-11:00'},{tag:'tag-mtg',label:'mtg',text:'Liz?! + Stephanie/LaNee/Ellen 14:30-15:30'}],
+    '2026-06-09':[{tag:'tag-plan',label:'admin',text:'Neon day MLK'},{tag:'tag-mtg',label:'mtg',text:'GW (Tianyi, Joy, Liz) 10:00-11:00'}],
+    '2026-06-10':[{tag:'tag-mtg',label:'mtg',text:'Liz?! + Stephanie/LaNee/Ellen 12:00-13:00'}],
     '2026-06-11':[{tag:'tag-plan',label:'admin',text:'Pajama day MLK'},{tag:'tag-mtg',label:'mtg',text:'SHOWCASE 17:00-19:00'},{tag:'tag-mtg',label:'mtg',text:'POF Cohort Check-in 20:30-22:00'}],
     '2026-06-12':[{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'}],
     '2026-06-13':[{tag:'tag-plan',label:'admin',text:'BBQ + Brazil Game 15:00-21:00'},{tag:'tag-mtg',label:'mtg',text:'Brazil v. Morocco - World Cup BBQ 16:00-21:00'}],
     '2026-06-15':[{tag:'tag-plan',label:'admin',text:'Rainbow day MLK'}],
     '2026-06-17':[{tag:'tag-plan',label:'admin',text:'Team day MLK'},{tag:'tag-mtg',label:'mtg',text:'Liz and Micah 15:00-15:45'}],
     '2026-06-19':[{tag:'tag-im',label:'travel',text:'NO SCHOOL - JUNETEENTH'}],
+    '2026-06-22':[{tag:'tag-plan',label:'admin',text:'Valentine\'s in June MLK'}],
   };
 // AUTO_SCHEDULE_END
 
