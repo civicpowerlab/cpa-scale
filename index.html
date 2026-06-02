@@ -390,7 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No deep work today - open day.</em></label></li>
+      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-trwbo">trwbo</span>trwbo 10:00-18:00</label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -400,7 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Woody / Liz 16:30-17:30</label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Translating Civic Participation Into Power 19:00-20:30</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -425,7 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>PACS TALK 18:00-19:00</label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>GEO Talk w/ Foundation Leaders 19:00-20:30</label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -892,8 +892,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-06-01':[{tag:'tag-plan',label:'admin',text:'PACS/SCANCOR talk'},{tag:'tag-plan',label:'admin',text:'Hat day MLK'},{tag:'tag-mtg',label:'mtg',text:'Woody / Liz 16:30-17:30'},{tag:'tag-plan',label:'admin',text:'PACS TALK 18:00-19:00'}],
-    '2026-06-02':[{tag:'tag-plan',label:'admin',text:'Inside Out Day'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 10:00-18:00'},{tag:'tag-plan',label:'admin',text:'GEO Talk w/ Foundation Leaders 19:00-20:30'}],
+    '2026-06-02':[{tag:'tag-plan',label:'admin',text:'Inside Out Day'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 10:00-18:00'},{tag:'tag-plan',label:'admin',text:'GEO Talk w/ Foundation Leaders 19:00-20:30'},{tag:'tag-mtg',label:'mtg',text:'Translating Civic Participation Into Power 19:00-20:30'}],
     '2026-06-03':[{tag:'tag-mamdani',label:'mamdani',text:'ZM proposal 09:00-11:00'},{tag:'tag-plan',label:'admin',text:'HKS staff awards & vision launch 11:00-12:00'},{tag:'tag-plan',label:'admin',text:'Liz and Noah check-in 16:00-16:20'},{tag:'tag-mtg',label:'mtg',text:'Liz and Patrick 16:30-17:15'}],
     '2026-06-04':[{tag:'tag-mtg',label:'mtg',text:'Liz and Nicco 11:00-11:30'},{tag:'tag-plan',label:'admin',text:'Ian Simmons Henrietta Thing 12:00-14:00'},{tag:'tag-mtg',label:'mtg',text:'Liz and Miriam 15:00-15:30'},{tag:'tag-gw',label:'groundwork',text:'Liz McKenna & The Equity Fund (re: Groundwork) 16:00-16:30'}],
     '2026-06-05':[{tag:'tag-mtg',label:'mtg',text:'Spring Concert @ MLK 08:15-09:00'},{tag:'tag-mtg',label:'mtg',text:'Julie Fernandes and Liz McKenna 09:30-10:00'},{tag:'tag-mtg',label:'mtg',text:'Bonnie and Liz McKenna 13:00-13:30'}],
@@ -906,6 +905,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-06-17':[{tag:'tag-plan',label:'admin',text:'Team day MLK'},{tag:'tag-mtg',label:'mtg',text:'Liz and Micah 15:00-15:45'}],
     '2026-06-19':[{tag:'tag-im',label:'travel',text:'NO SCHOOL - JUNETEENTH'}],
     '2026-06-22':[{tag:'tag-plan',label:'admin',text:'Valentine\'s in June MLK'}],
+    '2026-06-23':[{tag:'tag-plan',label:'admin',text:'Last Day of MLK'}],
   };
 // AUTO_SCHEDULE_END
 
