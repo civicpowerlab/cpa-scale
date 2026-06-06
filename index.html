@@ -390,8 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-mamdani">mamdani</span>ZM proposal 10:00-13:00</label></li>
-      <li><input type="checkbox" id="t-r2" data-group="rocks"><label for="t-r2"><span class="tag tag-pl">purple line</span>purple line 13:30-16:00</label></li>
+      <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No deep work today - open day.</em></label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -401,9 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Spring Concert @ MLK 08:15-09:00</label></li>
-        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>Julie Fernandes and Liz McKenna 09:30-10:00</label></li>
-        <li><input type="checkbox" id="t-mtg-3" data-group="meetings"><label for="t-mtg-3"><span class="tag tag-mtg">mtg</span>Bonnie and Liz McKenna 13:00-13:30</label></li>
+        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -428,7 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>tt/planning 16:00-17:00</label></li>
+        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -895,9 +892,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-06-05':[{tag:'tag-mtg',label:'mtg',text:'Spring Concert @ MLK 08:15-09:00'},{tag:'tag-mtg',label:'mtg',text:'Julie Fernandes and Liz McKenna 09:30-10:00'},{tag:'tag-mamdani',label:'mamdani',text:'ZM proposal 10:00-13:00'},{tag:'tag-mtg',label:'mtg',text:'Bonnie and Liz McKenna 13:00-13:30'},{tag:'tag-pl',label:'purple line',text:'purple line 13:30-16:00'},{tag:'tag-plan',label:'admin',text:'tt/planning 16:00-17:00'}],
-    '2026-06-08':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-10:00'},{tag:'tag-plan',label:'admin',text:'Ian Simmons 10:00-11:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 11:00-12:00'},{tag:'tag-mtg',label:'mtg',text:'JB: Catch up with Liz McKenna (12pm ET) 12:00-12:30'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 12:30-17:00'}],
-    '2026-06-09':[{tag:'tag-plan',label:'admin',text:'Neon day MLK'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-10:00'},{tag:'tag-mtg',label:'mtg',text:'GW (Tianyi, Joy, Liz) 10:00-11:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 11:00-17:00'},{tag:'tag-mtg',label:'mtg',text:'Emergency Mtg on Public School Funding 20:30-21:30'}],
+    '2026-06-08':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-10:00'},{tag:'tag-plan',label:'admin',text:'Ian Simmons 10:00-11:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 11:00-12:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 12:30-17:00'}],
+    '2026-06-09':[{tag:'tag-plan',label:'admin',text:'Neon day MLK'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-10:00'},{tag:'tag-mtg',label:'mtg',text:'GW (Tianyi, Joy, Liz) 10:00-11:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 11:00-17:00'},{tag:'tag-mtg',label:'mtg',text:'JB: Catch up with Liz McKenna (11am ET) 11:00-11:30'},{tag:'tag-mtg',label:'mtg',text:'Emergency Mtg on Public School Funding 20:30-21:30'}],
     '2026-06-10':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-12:00'},{tag:'tag-mtg',label:'mtg',text:'Liz?! + Stephanie/LaNee/Ellen 12:00-13:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 13:00-17:00'}],
     '2026-06-11':[{tag:'tag-plan',label:'admin',text:'Pajama day MLK'},{tag:'tag-gw',label:'groundwork',text:'Connecting RE Groundwork 10:00-10:45'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 11:00-17:00'},{tag:'tag-mtg',label:'mtg',text:'SHOWCASE 17:00-19:00'},{tag:'tag-mtg',label:'mtg',text:'POF Cohort Check-in 20:30-22:00'}],
     '2026-06-12':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-15:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-mtg',label:'mtg',text:'Liz and Iris 16:00-16:30'}],
@@ -908,7 +904,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-06-21':[{tag:'tag-plan',label:'admin',text:'Father\'s Day'}],
     '2026-06-22':[{tag:'tag-plan',label:'admin',text:'Valentine\'s in June MLK'}],
     '2026-06-23':[{tag:'tag-plan',label:'admin',text:'Last Day of MLK'}],
-    '2026-06-24':[{tag:'tag-mtg',label:'mtg',text:'MGF <> Harvard Kennedy School 15:00-15:30'}],
+    '2026-06-24':[{tag:'tag-im',label:'family',text:'Leo\'s early dismissal 11:45-16:30'},{tag:'tag-mtg',label:'mtg',text:'MGF <> Harvard Kennedy School 15:00-15:30'}],
     '2026-06-25':[{tag:'tag-mtg',label:'mtg',text:'LIZ/SEAN & JAVIER 10:30-11:00'}],
     '2026-06-26':[{tag:'tag-plan',label:'admin',text:'Brazil'},{tag:'tag-plan',label:'admin',text:'lunch? 12:00-13:00'},{tag:'tag-plan',label:'admin',text:'Liz:Emily in person! 13:00-14:30'}],
   };
