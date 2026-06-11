@@ -390,8 +390,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-trwbo">trwbo</span>trwbo 09:00-12:00</label></li>
-      <li><input type="checkbox" id="t-r2" data-group="rocks"><label for="t-r2"><span class="tag tag-trwbo">trwbo</span>trwbo 13:00-17:00</label></li>
+      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-gw">groundwork</span>Connecting RE Groundwork 10:00-10:45</label></li>
+      <li><input type="checkbox" id="t-r2" data-group="rocks"><label for="t-r2"><span class="tag tag-trwbo">trwbo</span>trwbo 11:00-17:00</label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -401,7 +401,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Liz?! + Stephanie/LaNee/Ellen 12:00-13:00</label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>SHOWCASE 17:00-19:00</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -426,7 +426,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>Pajamas 20:00-20:00</label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>Field day 20:00-20:00</label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -893,8 +893,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-06-10':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-12:00'},{tag:'tag-mtg',label:'mtg',text:'Liz?! + Stephanie/LaNee/Ellen 12:00-13:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 13:00-17:00'},{tag:'tag-plan',label:'admin',text:'Pajamas 20:00-20:00'}],
-    '2026-06-11':[{tag:'tag-plan',label:'admin',text:'Pajama day MLK'},{tag:'tag-gw',label:'groundwork',text:'Connecting RE Groundwork 10:00-10:45'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 11:00-17:00'},{tag:'tag-mtg',label:'mtg',text:'SHOWCASE 17:00-19:00'},{tag:'tag-mtg',label:'mtg',text:'Amplifier Training - Parents for MO Public Schools 19:30-21:00'},{tag:'tag-plan',label:'admin',text:'Field day 20:00-20:00'},{tag:'tag-mtg',label:'mtg',text:'POF Cohort Check-in 20:30-22:00'},{tag:'tag-mtg',label:'mtg',text:'POF Cohort Check-in 20:30-22:00'}],
+    '2026-06-11':[{tag:'tag-plan',label:'admin',text:'Pajama day MLK'},{tag:'tag-gw',label:'groundwork',text:'Connecting RE Groundwork 10:00-10:45'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 11:00-17:00'},{tag:'tag-mtg',label:'mtg',text:'SHOWCASE 17:00-19:00'},{tag:'tag-plan',label:'admin',text:'Field day 20:00-20:00'}],
     '2026-06-12':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-15:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-mtg',label:'mtg',text:'Liz and Iris 16:00-16:30'}],
     '2026-06-13':[{tag:'tag-plan',label:'admin',text:'BBQ + Brazil Game 15:00-21:00'},{tag:'tag-mtg',label:'mtg',text:'Brazil v. Morocco - World Cup BBQ 16:00-21:00'}],
     '2026-06-14':[{tag:'tag-plan',label:'admin',text:'Jemel / Malika BBQ 16:00-18:00'}],
@@ -906,8 +905,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-06-22':[{tag:'tag-plan',label:'admin',text:'Valentine\'s in June MLK'}],
     '2026-06-23':[{tag:'tag-plan',label:'admin',text:'Last Day of MLK'}],
     '2026-06-24':[{tag:'tag-im',label:'family',text:'Leo\'s early dismissal 11:45-16:30'},{tag:'tag-mtg',label:'mtg',text:'MGF <> Harvard Kennedy School 15:00-15:30'}],
-    '2026-06-25':[{tag:'tag-mtg',label:'mtg',text:'LIZ/SEAN & JAVIER 10:30-11:00'}],
-    '2026-06-26':[{tag:'tag-plan',label:'admin',text:'Brazil'},{tag:'tag-mtg',label:'mtg',text:'AI Innovation FLC: June Meeting 10:00-11:00'},{tag:'tag-plan',label:'admin',text:'lunch? 12:00-13:00'},{tag:'tag-plan',label:'admin',text:'Liz:Emily in person! 13:00-14:30'}],
+    '2026-06-25':[{tag:'tag-mtg',label:'mtg',text:'LIZ/SEAN & JAVIER 10:30-11:00'},{tag:'tag-mtg',label:'mtg',text:'POF Cohort Check-in 20:30-22:00'}],
+    '2026-06-26':[{tag:'tag-plan',label:'admin',text:'Brazil'},{tag:'tag-mtg',label:'mtg',text:'Canceled: AI Innovation FLC: June Meeting 10:00-11:30'},{tag:'tag-plan',label:'admin',text:'lunch? 12:00-13:00'},{tag:'tag-plan',label:'admin',text:'Liz:Emily in person! 13:00-14:30'}],
     '2026-06-28':[{tag:'tag-mtg',label:'mtg',text:'Cafe da Manhã Spitz 10:00-12:30'}],
     '2026-06-29':[{tag:'tag-plan',label:'admin',text:'PTCC closed for July 4 week'}],
     '2026-07-01':[{tag:'tag-im',label:'family',text:'renew Leo\'s passport (expires 12/2026)'}],
