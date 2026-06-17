@@ -390,8 +390,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-mamdani">mamdani</span>ZM fup 13:00-13:30</label></li>
-      <li><input type="checkbox" id="t-r2" data-group="rocks"><label for="t-r2"><span class="tag tag-gw">groundwork</span>groundwork fundraising admin 13:30-14:30</label></li>
+      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-trwbo">trwbo</span>trwbo work/prep 09:00-13:00</label></li>
+      <li><input type="checkbox" id="t-r2" data-group="rocks"><label for="t-r2"><span class="tag tag-mamdani">mamdani</span>ZM chapter prep 13:00-14:00</label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -401,7 +401,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>House Meeting Training 19:00-20:15</label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Co-governance chapter mtg 14:00-14:45</label></li>
+        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>Liz and Micah 15:00-15:45</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -426,9 +427,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>ship MSUFR 09:00-12:00</label></li>
-        <li><input type="checkbox" id="t-a2" data-group="admin"><label for="t-a2"><span class="tag tag-plan">admin</span>ANOM 12:00-13:00</label></li>
-        <li><input type="checkbox" id="t-a3" data-group="admin"><label for="t-a3"><span class="tag tag-plan">admin</span>tt prep and admin 14:30-16:30</label></li>
+        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -895,7 +894,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-06-16':[{tag:'tag-plan',label:'admin',text:'ship MSUFR 09:00-12:00'},{tag:'tag-plan',label:'admin',text:'ANOM 12:00-13:00'},{tag:'tag-mamdani',label:'mamdani',text:'ZM fup 13:00-13:30'},{tag:'tag-gw',label:'groundwork',text:'groundwork fundraising admin 13:30-14:30'},{tag:'tag-plan',label:'admin',text:'tt prep and admin 14:30-16:30'},{tag:'tag-mtg',label:'mtg',text:'House Meeting Training 19:00-20:15'}],
     '2026-06-17':[{tag:'tag-plan',label:'admin',text:'Team day MLK'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo work/prep 09:00-13:00'},{tag:'tag-mamdani',label:'mamdani',text:'ZM chapter prep 13:00-14:00'},{tag:'tag-mtg',label:'mtg',text:'Co-governance chapter mtg 14:00-14:45'},{tag:'tag-mtg',label:'mtg',text:'Liz and Micah 15:00-15:45'}],
     '2026-06-18':[{tag:'tag-mtg',label:'mtg',text:'Liz/Molly/Ellen 12:00-13:00'}],
     '2026-06-19':[{tag:'tag-im',label:'travel',text:'NO SCHOOL - JUNETEENTH'},{tag:'tag-mtg',label:'mtg',text:'Liz and Iris 16:00-16:30'}],
@@ -908,6 +906,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-06-28':[{tag:'tag-mtg',label:'mtg',text:'Cafe da Manhã Spitz 10:00-12:30'}],
     '2026-06-29':[{tag:'tag-plan',label:'admin',text:'PTCC closed for July 4 week'}],
     '2026-07-01':[{tag:'tag-im',label:'family',text:'renew Leo\'s passport (expires 12/2026)'}],
+    '2026-07-08':[{tag:'tag-dia',label:'dia',text:'MG, Liz, ESL in person DIA meeting 15:00-17:00'}],
   };
 // AUTO_SCHEDULE_END
 
