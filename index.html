@@ -390,8 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-mamdani">mamdani</span>ZM fup 14:00-15:00</label></li>
-      <li><input type="checkbox" id="t-r2" data-group="rocks"><label for="t-r2"><span class="tag tag-gw">groundwork</span>groundwork fundraising admin 15:00-16:00</label></li>
+      <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No deep work today - open day.</em></label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -401,7 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Liz/Molly/Ellen 12:00-13:00</label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Liz and Iris 16:00-16:30</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -426,8 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>ship MSUFR 09:00-12:00</label></li>
-        <li><input type="checkbox" id="t-a2" data-group="admin"><label for="t-a2"><span class="tag tag-plan">admin</span>ANOM 13:00-14:00</label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>tt prep and admin 09:00-11:00</label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -894,7 +892,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-06-18':[{tag:'tag-plan',label:'admin',text:'ship MSUFR 09:00-12:00'},{tag:'tag-mtg',label:'mtg',text:'Liz/Molly/Ellen 12:00-13:00'},{tag:'tag-plan',label:'admin',text:'ANOM 13:00-14:00'},{tag:'tag-mamdani',label:'mamdani',text:'ZM fup 14:00-15:00'},{tag:'tag-gw',label:'groundwork',text:'groundwork fundraising admin 15:00-16:00'}],
     '2026-06-19':[{tag:'tag-im',label:'travel',text:'NO SCHOOL - JUNETEENTH'},{tag:'tag-plan',label:'admin',text:'tt prep and admin 09:00-11:00'},{tag:'tag-mtg',label:'mtg',text:'Liz and Iris 16:00-16:30'}],
     '2026-06-20':[{tag:'tag-plan',label:'admin',text:'Belt cerimony 10:00-10:45'}],
     '2026-06-21':[{tag:'tag-plan',label:'admin',text:'Father\'s Day'}],
