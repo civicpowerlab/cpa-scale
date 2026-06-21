@@ -425,7 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>Belt cerimony 10:00-10:45</label></li>
+        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -892,7 +892,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-06-20':[{tag:'tag-plan',label:'admin',text:'Belt cerimony 10:00-10:45'}],
     '2026-06-21':[{tag:'tag-plan',label:'admin',text:'Father\'s Day'}],
     '2026-06-22':[{tag:'tag-plan',label:'admin',text:'Valentine\'s in June MLK'}],
     '2026-06-24':[{tag:'tag-im',label:'family',text:'Leo\'s early dismissal 11:45-16:30'},{tag:'tag-mtg',label:'mtg',text:'MGF <> Harvard Kennedy School 15:00-15:30'}],
