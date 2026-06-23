@@ -400,7 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Liz + PMOPS/MOI Team 14:00-15:00</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -892,15 +892,16 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-06-22':[{tag:'tag-plan',label:'admin',text:'Valentine\'s in June MLK'}],
+    '2026-06-23':[{tag:'tag-mtg',label:'mtg',text:'Liz + PMOPS/MOI Team 14:00-15:00'}],
     '2026-06-24':[{tag:'tag-im',label:'family',text:'Leo\'s early dismissal 11:45-16:30'},{tag:'tag-mtg',label:'mtg',text:'MGF <> Harvard Kennedy School 15:00-15:30'}],
     '2026-06-25':[{tag:'tag-mtg',label:'mtg',text:'LIZ/SEAN & JAVIER 10:30-11:00'},{tag:'tag-plan',label:'admin',text:'lunch 12:00-13:00'},{tag:'tag-plan',label:'admin',text:'Liz:Emily in person! 13:00-14:30'},{tag:'tag-mtg',label:'mtg',text:'Liz/Molly/Ellen 15:00-16:00'}],
-    '2026-06-26':[{tag:'tag-plan',label:'admin',text:'Brazil'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-im',label:'travel',text:'flight to BR 18:00-20:00'}],
+    '2026-06-26':[{tag:'tag-plan',label:'admin',text:'Brazil'},{tag:'tag-plan',label:'admin',text:'Kinder graduation 11:30-13:30'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'},{tag:'tag-im',label:'travel',text:'flight to BR 18:00-20:00'}],
     '2026-06-28':[{tag:'tag-mtg',label:'mtg',text:'Cafe da Manhã Spitz 10:00-12:30'}],
     '2026-06-29':[{tag:'tag-plan',label:'admin',text:'PTCC closed for July 4 week'}],
     '2026-07-01':[{tag:'tag-im',label:'family',text:'renew Leo\'s passport (expires 12/2026)'}],
     '2026-07-08':[{tag:'tag-dia',label:'dia',text:'MG, Liz, ESL in person DIA meeting 15:00-17:00'}],
     '2026-07-09':[{tag:'tag-mtg',label:'mtg',text:'Call: Liz McKenna | Sarah Audelo + Micaela Fernandez Allen 11:00-11:45'},{tag:'tag-mtg',label:'mtg',text:'Liz/Molly/Ellen 12:00-13:00'},{tag:'tag-mtg',label:'mtg',text:'POF Cohort Check-in 20:30-22:00'}],
+    '2026-07-14':[{tag:'tag-plan',label:'admin',text:'Liz in DC'},{tag:'tag-im',label:'family',text:'Private Appointment 09:18-10:59'},{tag:'tag-mtg',label:'mtg',text:'Lunch 12:00-13:00'},{tag:'tag-mtg',label:'mtg',text:'DPI Advisory Committee Meeting 13:00-16:30'},{tag:'tag-im',label:'family',text:'Private Appointment 20:59-22:40'}],
   };
 // AUTO_SCHEDULE_END
 
