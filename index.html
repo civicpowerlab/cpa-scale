@@ -390,7 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No deep work today - open day.</em></label></li>
+      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-trwbo">trwbo</span>trwbo 09:00-11:30</label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -400,8 +400,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Call: Liz McKenna | Sarah Audelo + Micaela Fernandez Allen 11:00-11:45</label></li>
-        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>Liz/Molly/Ellen 12:00-13:00</label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Alessandra (BCC fellow) / Liz 11:30-12:00</label></li>
+        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>DSA/HKS data call 13:00-14:00</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -426,7 +426,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>CSYP 08:00-09:00</label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>tt emails/prep 08:30-09:00</label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -893,8 +893,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-07-09':[{tag:'tag-plan',label:'admin',text:'CSYP 08:00-09:00'},{tag:'tag-mtg',label:'mtg',text:'Call: Liz McKenna | Sarah Audelo + Micaela Fernandez Allen 11:00-11:45'},{tag:'tag-mtg',label:'mtg',text:'Liz/Molly/Ellen 12:00-13:00'}],
-    '2026-07-10':[{tag:'tag-plan',label:'admin',text:'CSYHPF 07:15-08:15'},{tag:'tag-plan',label:'admin',text:'tt emails/prep 08:30-09:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-11:30'},{tag:'tag-mtg',label:'mtg',text:'Alessandra (BCC fellow) / Liz 11:30-12:00'},{tag:'tag-mtg',label:'mtg',text:'DSA/HKS data call 13:00-14:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'}],
+    '2026-07-10':[{tag:'tag-plan',label:'admin',text:'tt emails/prep 08:30-09:00'},{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-11:30'},{tag:'tag-mtg',label:'mtg',text:'Alessandra (BCC fellow) / Liz 11:30-12:00'},{tag:'tag-mtg',label:'mtg',text:'DSA/HKS data call 13:00-14:00'}],
     '2026-07-11':[{tag:'tag-plan',label:'admin',text:'CSYHPF 08:15-09:15'}],
     '2026-07-12':[{tag:'tag-plan',label:'admin',text:'HPF 09:00-10:00'}],
     '2026-07-13':[{tag:'tag-mtg',label:'mtg',text:'MGF <> Harvard Kennedy School 15:00-15:30'}],
@@ -906,6 +905,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-07-19':[{tag:'tag-plan',label:'admin',text:'HS friends get-together SM'},{tag:'tag-plan',label:'admin',text:'World Cup Final 15:00-17:00'}],
     '2026-07-20':[{tag:'tag-im',label:'travel',text:'Tahoe'}],
     '2026-07-28':[{tag:'tag-plan',label:'admin',text:'UA - L195J3 11:00-17:00'}],
+    '2026-07-31':[{tag:'tag-mtg',label:'mtg',text:'Liz and Iris 16:00-16:30'}],
   };
 // AUTO_SCHEDULE_END
 
