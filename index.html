@@ -400,7 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>MGF &lt;> Harvard Kennedy School 15:00-15:30</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -425,7 +425,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>HPF 09:00-10:00</label></li>
+        <li><label><em class="admin-placeholder">Nothing scheduled. Ad-hoc admin lands here.</em></label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -892,7 +892,6 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-07-12':[{tag:'tag-plan',label:'admin',text:'HPF 09:00-10:00'}],
     '2026-07-13':[{tag:'tag-mtg',label:'mtg',text:'MGF <> Harvard Kennedy School 15:00-15:30'}],
     '2026-07-14':[{tag:'tag-plan',label:'admin',text:'Liz in DC'},{tag:'tag-im',label:'family',text:'Private Appointment 09:18-10:59'},{tag:'tag-mtg',label:'mtg',text:'Lunch 12:00-13:00'},{tag:'tag-mtg',label:'mtg',text:'DPI Advisory Committee Meeting 13:00-16:30'},{tag:'tag-mtg',label:'mtg',text:'DPI Dinner 18:30-21:00'},{tag:'tag-im',label:'family',text:'Private Appointment 20:59-22:40'}],
     '2026-07-15':[{tag:'tag-mtg',label:'mtg',text:'DPI Annual Strategy Meeting 08:30-17:00'},{tag:'tag-plan',label:'admin',text:'UA - confirmation: L195J3 09:00-15:30'}],
@@ -904,6 +903,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-07-21':[{tag:'tag-mtg',label:'mtg',text:'Miya/ Joy 14:00-15:00'}],
     '2026-07-28':[{tag:'tag-plan',label:'admin',text:'UA - L195J3 11:00-17:00'}],
     '2026-07-31':[{tag:'tag-mtg',label:'mtg',text:'Liz and Iris 16:00-16:30'}],
+    '2026-08-03':[{tag:'tag-plan',label:'admin',text:'Raikes Foundation call 12:00-13:00'},{tag:'tag-gw',label:'groundwork',text:'Maria, Kris, and Liz - Intro Call for Raikes Foundation and Groundwork Project 12:00-13:00'}],
   };
 // AUTO_SCHEDULE_END
 
