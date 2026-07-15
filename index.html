@@ -400,7 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>DPI Annual Strategy Meeting 08:30-17:00</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -893,7 +893,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-07-15':[{tag:'tag-plan',label:'admin',text:'UA - confirmation: L195J3 09:00-15:30'},{tag:'tag-plan',label:'admin',text:'msufr 15:30-18:30'}],
+    '2026-07-15':[{tag:'tag-mtg',label:'mtg',text:'DPI Annual Strategy Meeting 08:30-17:00'},{tag:'tag-plan',label:'admin',text:'UA - confirmation: L195J3 09:00-15:30'},{tag:'tag-plan',label:'admin',text:'msufr 15:30-18:30'}],
     '2026-07-16':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-11:30'},{tag:'tag-mtg',label:'mtg',text:'Liz/Ellen/Molly 11:30-13:00'}],
     '2026-07-17':[{tag:'tag-mamdani',label:'mamdani',text:'ZM book 09:00-13:00'},{tag:'tag-gw',label:'groundwork',text:'Groundwork/DF Check-In 13:00-13:45'},{tag:'tag-cpl',label:'civic power lab',text:'Civic Power Lab/Harvard Impact Lab 14:00-14:30'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly (rescheduled) 16:00-17:00'}],
     '2026-07-18':[{tag:'tag-mtg',label:'mtg',text:'Parent Organizing Fellowship Closing 10:00-12:00'}],
@@ -902,7 +902,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-07-28':[{tag:'tag-plan',label:'admin',text:'UA - L195J3 11:00-17:00'}],
     '2026-07-30':[{tag:'tag-cpl',label:'civic power lab',text:'Aaron Tanaka, One Project | Liz McKenna, HKS, Civic Power Lab 10:00-11:00'}],
     '2026-07-31':[{tag:'tag-mtg',label:'mtg',text:'Liz and Iris 16:00-16:30'}],
-    '2026-08-03':[{tag:'tag-plan',label:'admin',text:'Raikes Foundation call 12:00-13:00'},{tag:'tag-gw',label:'groundwork',text:'Maria, Kris, and Liz - Intro Call for Raikes Foundation and Groundwork Project 12:00-13:00'}],
+    '2026-08-03':[{tag:'tag-gw',label:'groundwork',text:'Maria, Kris, and Liz - Intro Call for Raikes Foundation and Groundwork Project 12:00-13:00'},{tag:'tag-plan',label:'admin',text:'Raikes Foundation call 12:00-13:00'}],
     '2026-08-04':[{tag:'tag-im',label:'family',text:'2025 Tax Appointment - SIDNEY KAUFMAN (Spitz/McKenna) 13:30-14:30'},{tag:'tag-mtg',label:'mtg',text:'Power Research Meeting 14:00-17:00'}],
   };
 // AUTO_SCHEDULE_END
