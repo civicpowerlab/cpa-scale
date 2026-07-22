@@ -400,7 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Miya/ Joy 14:00-15:00</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -892,6 +892,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
+    '2026-07-22':[{tag:'tag-mtg',label:'mtg',text:'Miya/ Joy 14:00-15:00'}],
     '2026-07-28':[{tag:'tag-plan',label:'admin',text:'UA - L195J3 11:00-17:00'}],
     '2026-07-29':[{tag:'tag-mtg',label:'mtg',text:'Liz McKenna | Jeremy Weinstein 11:45-12:15'},{tag:'tag-mtg',label:'mtg',text:'Liz and Patrick 13:00-13:30'}],
     '2026-07-30':[{tag:'tag-cpl',label:'civic power lab',text:'Aaron Tanaka, One Project | Liz McKenna, HKS, Civic Power Lab 10:00-11:00'}],
@@ -901,6 +902,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     '2026-08-07':[{tag:'tag-mtg',label:'mtg',text:'Liz McKenna (HKS) and Angie Junck 13:30-14:00'}],
     '2026-08-10':[{tag:'tag-mtg',label:'mtg',text:'Liz and Lew 1:1 11:30-12:00'}],
     '2026-08-11':[{tag:'tag-plan',label:'admin',text:'Last day of PTCC'}],
+    '2026-08-12':[{tag:'tag-plan',label:'admin',text:'PTCC closed'},{tag:'tag-im',label:'travel',text:'White Mountains, NH trip'}],
   };
 // AUTO_SCHEDULE_END
 
