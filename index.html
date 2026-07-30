@@ -390,7 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No deep work today - open day.</em></label></li>
+      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-cpl">civic power lab</span>Aaron Tanaka, One Project | Liz McKenna, HKS, Civic Power Lab 10:00-11:00</label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -400,9 +400,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Liz McKenna | Jeremy Weinstein 11:45-12:15</label></li>
-        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>Miya &amp; Joy CP workblock 13:00-14:45</label></li>
-        <li><input type="checkbox" id="t-mtg-3" data-group="meetings"><label for="t-mtg-3"><span class="tag tag-mtg">mtg</span>Liz and Patrick 14:00-14:30</label></li>
+        <li><label><em style="color:var(--sumi-dim);font-family:'Fraunces',serif">No meetings today.</em></label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -894,12 +892,11 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-07-29':[{tag:'tag-mtg',label:'mtg',text:'Liz McKenna | Jeremy Weinstein 11:45-12:15'},{tag:'tag-mtg',label:'mtg',text:'Miya & Joy CP workblock 13:00-14:45'},{tag:'tag-mtg',label:'mtg',text:'Liz and Patrick 14:00-14:30'}],
     '2026-07-30':[{tag:'tag-cpl',label:'civic power lab',text:'Aaron Tanaka, One Project | Liz McKenna, HKS, Civic Power Lab 10:00-11:00'}],
     '2026-07-31':[{tag:'tag-mtg',label:'mtg',text:'Liz and Iris 16:00-16:30'}],
     '2026-08-03':[{tag:'tag-gw',label:'groundwork',text:'Maria, Kris, and Liz - Intro Call for Raikes Foundation and Groundwork Project 12:00-13:00'}],
     '2026-08-04':[{tag:'tag-im',label:'family',text:'2025 Tax Appointment - SIDNEY KAUFMAN (Spitz/McKenna) 13:30-14:30'},{tag:'tag-mtg',label:'mtg',text:'Power Research Meeting 14:30-17:00'}],
-    '2026-08-07':[{tag:'tag-mtg',label:'mtg',text:'Liz McKenna (HKS) and Angie Junck 13:30-14:00'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'}],
+    '2026-08-07':[{tag:'tag-mtg',label:'mtg',text:'Liz McKenna (HKS) and Angie Junck 13:30-14:00'},{tag:'tag-plan',label:'admin',text:'Liz M / Amy RDH 14:00-14:45'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'}],
     '2026-08-10':[{tag:'tag-mtg',label:'mtg',text:'Liz and Lew 1:1 11:30-12:00'}],
     '2026-08-11':[{tag:'tag-plan',label:'admin',text:'Last day of PTCC'},{tag:'tag-mtg',label:'mtg',text:'Celebrate Christina Sirois 15:30-17:00'}],
     '2026-08-12':[{tag:'tag-im',label:'travel',text:'White Mountains, NH trip'},{tag:'tag-plan',label:'admin',text:'PTCC closed'}],
