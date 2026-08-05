@@ -390,7 +390,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <h3>today</h3>
     <ul class="checks">
       <!-- AUTO_TODAY_ROCKS_START -->
-      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-trwbo">trwbo</span>trwbo 09:00-13:30</label></li>
+      <li><input type="checkbox" id="t-r1" data-group="rocks"><label for="t-r1"><span class="tag tag-trwbo">trwbo</span>trwbo 09:00-17:00</label></li>
       <!-- AUTO_TODAY_ROCKS_END -->
     </ul>
   </div>
@@ -400,8 +400,8 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="meetings-list">
         <!-- AUTO_MEETINGS_START -->
-        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-im">family</span>2025 Tax Appointment - SIDNEY KAUFMAN (Spitz/McKenna) 13:30-14:30</label></li>
-        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>Power Research Meeting 14:30-17:00</label></li>
+        <li><input type="checkbox" id="t-mtg-1" data-group="meetings"><label for="t-mtg-1"><span class="tag tag-mtg">mtg</span>Sahiti / Liz 10:00-10:30</label></li>
+        <li><input type="checkbox" id="t-mtg-2" data-group="meetings"><label for="t-mtg-2"><span class="tag tag-mtg">mtg</span>Liz McKenna | Jeremy Weinstein 17:00-17:30</label></li>
       <!-- AUTO_MEETINGS_END -->
       </ul>
     </div>
@@ -426,7 +426,7 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
     <div class="drawer-body">
       <ul class="checks" id="admin-list">
         <!-- AUTO_ADMIN_START -->
-        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-plan">admin</span>samir 10:00-10:15</label></li>
+        <li><input type="checkbox" id="t-a1" data-group="admin"><label for="t-a1"><span class="tag tag-im">family</span>LANA 17:30-19:00</label></li>
       <!-- AUTO_ADMIN_END -->
         <li><label><input type="checkbox" id="admin-cpl-mailto" checked> ✓ Done May 12: CPL mailto on site now points to live civicpowerlab@hks inbox</label></li>
       </ul>
@@ -893,15 +893,14 @@ button:hover{background:var(--sumi);color:var(--washi);border-color:var(--sumi)}
   // Between the AUTO markers, contents are rewritten daily by .github/workflows/sync.yml
   // AUTO_SCHEDULE_START
   const SCHEDULE = {
-    '2026-08-04':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-13:30'},{tag:'tag-plan',label:'admin',text:'samir 10:00-10:15'},{tag:'tag-im',label:'family',text:'2025 Tax Appointment - SIDNEY KAUFMAN (Spitz/McKenna) 13:30-14:30'},{tag:'tag-mtg',label:'mtg',text:'Power Research Meeting 14:30-17:00'}],
     '2026-08-05':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-17:00'},{tag:'tag-mtg',label:'mtg',text:'Sahiti / Liz 10:00-10:30'},{tag:'tag-mtg',label:'mtg',text:'Liz McKenna | Jeremy Weinstein 17:00-17:30'},{tag:'tag-im',label:'family',text:'LANA 17:30-19:00'}],
     '2026-08-06':[{tag:'tag-trwbo',label:'trwbo',text:'trwbo 09:00-17:00'}],
     '2026-08-07':[{tag:'tag-mamdani',label:'mamdani',text:'mamdani 09:00-11:00'},{tag:'tag-agency',label:'agency',text:'Agency Instrument Workplanning 11:00-12:00'},{tag:'tag-plan',label:'admin',text:'Idiotic Politics CUP review 12:00-13:00'},{tag:'tag-mtg',label:'mtg',text:'Liz McKenna (HKS) and Angie Junck 13:30-14:00'},{tag:'tag-plan',label:'admin',text:'Liz M / Amy RDH 14:00-14:45'},{tag:'tag-mamdani',label:'mamdani',text:'Mamdani Research Team Biweekly 15:00-16:00'}],
-    '2026-08-10':[{tag:'tag-plan',label:'admin',text:'TT prep/p&p planning 09:00-16:00'}],
+    '2026-08-10':[{tag:'tag-plan',label:'admin',text:'TT prep/p&p planning 09:00-16:00'},{tag:'tag-mtg',label:'mtg',text:'Liz McKenna and Jacqueline Claudia 11:00-11:30'}],
     '2026-08-11':[{tag:'tag-plan',label:'admin',text:'Last day of PTCC'},{tag:'tag-plan',label:'admin',text:'TT prep/p&p planning 09:00-16:00'}],
-    '2026-08-12':[{tag:'tag-im',label:'travel',text:'White Mountains, NH trip'},{tag:'tag-plan',label:'admin',text:'PTCC closed'}],
+    '2026-08-12':[{tag:'tag-plan',label:'admin',text:'PTCC closed'},{tag:'tag-im',label:'travel',text:'White Mountains, NH trip'}],
     '2026-08-16':[{tag:'tag-plan',label:'admin',text:'PTCC Closed — Staff Work Week (no children) 20:00-20:00'}],
-    '2026-08-20':[{tag:'tag-im',label:'family',text:'prep Leo passport docs 16:00-16:30'}],
+    '2026-08-20':[{tag:'tag-mtg',label:'mtg',text:'Molly, Ellen, Liz 14:00-15:00'},{tag:'tag-mtg',label:'mtg',text:'Teams Discussion (PICO/DPI/HKS) 15:00-16:00'},{tag:'tag-im',label:'family',text:'prep Leo passport docs 16:00-16:30'}],
     '2026-08-21':[{tag:'tag-im',label:'family',text:'Leo\'s US Passport Appt 15:45-16:15'}],
     '2026-08-23':[{tag:'tag-plan',label:'admin',text:'PTCC First Day of 26/27 Year 20:00-20:00'}],
     '2026-08-24':[{tag:'tag-plan',label:'admin',text:'First day of PTCC'}],
