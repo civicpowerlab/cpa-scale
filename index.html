@@ -143,7 +143,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.3 · pilot</span>
+  <span class="badge">Draft v0.4 · pilot</span>
 </header>
 
 <div class="tabs">
@@ -154,13 +154,13 @@
 <!-- ============ VIEW 1: INSTRUMENT ============ -->
 <section class="view active" id="view-instrument">
   <h1>Recent Experiences Survey</h1>
-  <p class="intro">The questions below ask about your feelings and experiences during the last 3 months. For each one, indicate how often you felt that way. Some questions are similar, but treat each as its own question. (Answer quickly, with your best estimate, rather than trying to count occasions.)</p>
+  <p class="intro">The questions below ask about your feelings and experiences during the last 3 months. For each one, indicate to what extent you felt that way. Some questions are similar, but treat each as its own question. (Answer quickly, with your first impression, rather than deliberating over each one.)</p>
 
-  <div class="stem-big"><div>Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action):</div><div style="margin-top:14px">In the last 3 months, how often have you felt&hellip;</div></div>
+  <div class="stem-big"><div>Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action):</div><div style="margin-top:14px">In the last 3 months, to what extent have you felt&hellip;</div></div>
 
   <div class="stickybar" id="stickybar">
     <div class="meta">
-      <span class="stem-line">In the last 3 months, how often have you felt&hellip;</span>
+      <span class="stem-line">In the last 3 months, to what extent have you felt&hellip;</span>
       <span class="count" id="progress">0 / 20</span>
     </div>
     <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
@@ -268,7 +268,7 @@ const ITEMS = [
 
 const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r1","c3","i4","m4","s3","r2","c4","i2","m5","s4","r3","c1","i3"];
 const REVIEW_ORDER = ["c2","m4","i4","r1","s3","m1","c4","r3","s1","m5","c1","i2","r4","s2","i3","i1","r2","s4","m3","c3"];
-const ANCHORS = [ ["0","Never"], ["1","Almost never"], ["2","Sometimes"], ["3","Fairly often"], ["4","Very often"] ];
+const ANCHORS = [ ["0","Not at all"], ["1","A little"], ["2","Somewhat"], ["3","Quite a bit"], ["4","A great deal"] ];
 const byId = Object.fromEntries(ITEMS.map(it => [it.id, it]));
 const answers = {};
 
@@ -321,7 +321,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
   btn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
   try {
     await saveToBackend({
-      instrument: "cpa", version: "v0.3-pool20",
+      instrument: "cpa", version: "v0.4-pool20",
       field_order: FIELD_ORDER,
       answers,
       startedAt: PAGE_LOADED_AT, submittedAt: new Date().toISOString(),
@@ -429,7 +429,7 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
   try {
     await saveToBackend({
       channel: "CPA Expert Review",
-      instrument: "cpa", version: "v0.3-pool20",
+      instrument: "cpa", version: "v0.4-pool20",
       reviewer: document.getElementById('reviewer-name').value || null,
       affiliation: document.getElementById('reviewer-aff').value || null,
       respondent: document.getElementById('reviewer-name').value || null,
