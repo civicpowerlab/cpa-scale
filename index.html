@@ -12,7 +12,7 @@
   :root {
     --bg:#fafafa; --surface:#ffffff; --border:#e5e7eb; --border-strong:#d4d4d8;
     --text:#18181b; --text-2:#3f3f46; --muted:#71717a;
-    --accent:#5e6ad2; --accent-soft:#eef0fb; --accent-deep:#4b55b8;
+    --accent:#5371ff; --accent-soft:#eef1ff; --accent-deep:#3f57d6;
     --green:#1a8a5c; --red:#c04437;
     --radius:8px;
     --shadow:0 1px 2px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.04);
@@ -107,6 +107,12 @@
   .rev-block select, .rev-item textarea { width:100%; padding:9px 11px; background:var(--surface);
     border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px; color:var(--text); }
   .rev-item textarea { margin-top:14px; resize:vertical; min-height:40px; }
+  /* Relevance (blue) vs clarity (green) distinction */
+  .rev-block.rel .head { color:var(--accent-deep); }
+  .rev-block.clar .head { color:var(--green); }
+  .seg4[data-kind-style="clar"] .opt:hover { border-color:var(--green); background:#e9f6f0; }
+  .seg4[data-kind-style="clar"] .opt.sel { background:var(--green); border-color:var(--green); }
+  .status.thanks { color:var(--green); font-weight:600; font-size:15px; }
   footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--border);
     font-size:12.5px; color:var(--muted); display:flex; justify-content:space-between; }
 </style>
@@ -127,14 +133,14 @@
 <!-- ============ VIEW 1: INSTRUMENT ============ -->
 <section class="view active" id="view-instrument">
   <h1>Recent Experiences Survey</h1>
-  <p class="intro">The questions below ask about your feelings and experiences during the last 3 months. In each case, you will be asked to indicate how often you felt a certain way. Although some of the questions are similar, there are differences between them and you should treat each one as a separate question. The best approach is to answer fairly quickly. That is, do not try to count up the number of times you felt a particular way, but indicate the alternative that seems like a reasonable estimate.</p>
+  <p class="intro">The questions below ask about your feelings and experiences during the last 3 months. For each one, indicate how often you felt that way. Some questions are similar, but treat each as its own question. (Answer quickly, with your best estimate, rather than trying to count occasions.)</p>
 
-  <div class="stem-big">Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action):<br>In the last 3 months, how often have you felt that&hellip;</div>
+  <div class="stem-big">Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action):<br>In the last 3 months, how often have you felt&hellip;</div>
 
   <div class="stickybar" id="stickybar">
     <div class="meta">
-      <span class="stem-line">In the last 3 months, how often have you felt that&hellip;</span>
-      <span class="count" id="progress">0 / 22</span>
+      <span class="stem-line">In the last 3 months, how often have you felt&hellip;</span>
+      <span class="count" id="progress">0 / 18</span>
     </div>
     <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   </div>
@@ -150,13 +156,13 @@
 <!-- ============ VIEW 2: EXPERT REVIEW ============ -->
 <section class="view" id="view-review">
   <h1>Expert content review</h1>
-  <p class="intro full">You are rating candidate items for a new instrument, the Collective Political Agency scale (CPA). The scale measures an individually held perception of collective capacity: how the <em>we</em> looks from where each member stands. It is a state measure with a 3-month reference window.</p>
+  <p class="intro full">You are rating candidate items for a new instrument, the Collective Political Agency scale (CPA). The scale measures an individually held perception of collective capacity: how the <em>us</em> is experienced from the individual's point of view. It is a state measure with a 3-month reference window.</p>
 
   <h2>Construct definitions</h2>
   <div class="defs-grid" id="construct-defs"></div>
 
   <div class="method-note">
-    <strong>Your three tasks per item.</strong> (1) <em>Relevance</em>: how relevant is this item to the construct system as a whole? (2) <em>Clarity</em>: how clearly would a community member understand it? (3) <em>Sorting</em>: which construct does the item belong to? Items are presented in shuffled order without their intended labels. A comment box is provided for suggested rewording. Item-level content validity (I-CVI) will be computed as the proportion of experts rating relevance 3 or 4; items below .78 will be revised or dropped (Polit &amp; Beck). Sorting agreement assesses substantive validity (Anderson &amp; Gerbing).
+    <strong>Your three tasks per item.</strong> (1) <em>Relevance</em>: how relevant is this item to the construct system as a whole? (2) <em>Clarity</em>: how clearly would you expect a community member to understand it? (3) <em>Sorting</em>: to which construct does the item belong? Items are presented in shuffled order without their intended labels. A comment box is provided for suggested rewording or comments. Item-level content validity (I-CVI) will be computed as the proportion of experts rating relevance 3 or 4; items below .78 will be revised or dropped (<a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>). Sorting agreement assesses substantive validity (<a href="https://doi.org/10.1037/0021-9010.76.5.732" target="_blank" rel="noopener">Anderson &amp; Gerbing, 1991</a>).
   </div>
 
   <div class="reviewer-row">
@@ -167,9 +173,11 @@
   <div id="review-list"></div>
 
   <div class="submitrow">
-    <button class="btn btn-primary" id="export-btn">Export review as JSON</button>
-    <span class="status" id="rev-progress">0 of 22 items rated</span>
+    <button class="btn btn-primary" id="rev-submit-btn">Submit review</button>
+    <button class="btn btn-ghost" id="export-btn">Export as JSON</button>
+    <span class="status" id="rev-progress">0 of 18 items rated</span>
   </div>
+  <div class="status thanks" id="rev-thanks" style="display:none; margin-top:14px;">Thank you so much for your time! We look forward to reporting back the results.</div>
 </section>
 
 <footer>
@@ -192,7 +200,7 @@ async function saveToBackend(payload) {
     body: JSON.stringify({
       snapshot_date: new Date().toISOString().slice(0,10),
       filled_out_by: payload.respondent || null,
-      org_name: "CPA Scale Pilot",
+      org_name: payload.channel || "CPA Scale Pilot",
       source: "demo",
       payload,
     }),
@@ -203,44 +211,40 @@ async function saveToBackend(payload) {
 /* ========= Item pool v0.2 — 22 candidates, 5 constructs ========= */
 const CONSTRUCTS = [
   { key:"ma", name:"Moral-affective orientation",
-    def:"The values and emotions that motivate or inhibit group action: hope, energy, action-coupled anger; isolation and burnout as inhibitors." },
+    def:"The values and emotions that motivate or inhibit acting with others." },
   { key:"cs", name:"Cognitive-strategic competence",
-    def:"The group's perceived ability to read power and act effectively: knowing who holds power, sizing up situations, connecting present action to what it wants to win, knowing who to call." },
+    def:"The group's perceived ability to read power and choose effective courses of action." },
   { key:"re", name:"Relational embeddedness",
-    def:"Being woven into networks of mutual commitment: people who show up for one another, keep commitments, and can absorb a member stepping back." },
+    def:"The degree to which a person is woven into networks of mutual commitment." },
   { key:"cc", name:"Collective capacity",
-    def:"The perceived conjoint capability of the group: able to mobilize who it needs, act rather than only talk, accomplish together what no member could alone." },
+    def:"The perceived conjoint capability of the group to organize and carry out collective action." },
   { key:"ir", name:"Institutional responsiveness",
-    def:"The belief that institutions and decision-makers must respond to organized collective action: responsiveness, access to decision-making tables, the power to change what is considered possible." },
+    def:"The belief that institutions and decision-makers respond to organized collective action." },
 ];
 
 const ITEMS = [
   { id:"m1", c:"ma", rev:false, t:"hopeful about what people like you can build together?" },
-  { id:"m2", c:"ma", rev:false, t:"energized after spending time working with others on something public?" },
-  { id:"m3", c:"ma", rev:true,  t:"alone in caring about the things you care about?" },
+  { id:"m3", c:"ma", rev:true,  t:"that you were alone in caring about the issues that matter to you?" },
   { id:"m4", c:"ma", rev:true,  t:"worn down by the work of trying to make change?" },
   { id:"m5", c:"ma", rev:false, t:"angry about an injustice in a way that made you want to act with others?" },
-  { id:"s1", c:"cs", rev:false, t:"your group knows who actually holds power over the decisions you care about?" },
-  { id:"s2", c:"cs", rev:false, t:"your group can size up a situation and choose an action likely to work?" },
-  { id:"s3", c:"cs", rev:false, t:"your group has a strategy connecting what you do this month to what you want to win?" },
-  { id:"s4", c:"cs", rev:true,  t:"your group was scrambling to react to each new crisis?" },
-  { id:"s5", c:"cs", rev:false, t:"your group knows who to call to get something moving?" },
-  { id:"r1", c:"re", rev:false, t:"there are people who would show up for you if you asked, and you for them?" },
-  { id:"r2", c:"re", rev:false, t:"people in your group keep the commitments they make to one another?" },
-  { id:"r3", c:"re", rev:false, t:"others in your group would step up if you had to step back?" },
-  { id:"r4", c:"re", rev:true,  t:"your group is a collection of individuals rather than a team that depends on one another?" },
-  { id:"c1", c:"cc", rev:false, t:"the people you might take public action with could accomplish something together that none of you could alone?" },
-  { id:"c2", c:"cc", rev:false, t:"when your group decides to act, it can mobilize the people it needs?" },
-  { id:"c3", c:"cc", rev:false, t:"your group can turn its plans into public action, not just talk?" },
-  { id:"c4", c:"cc", rev:true,  t:"your group's power depended on the same handful of people doing everything?" },
-  { id:"i1", c:"ir", rev:false, t:"when people like you act together, institutions and leaders have to respond?" },
-  { id:"i2", c:"ir", rev:false, t:"your group can get a seat at the tables where decisions are made?" },
-  { id:"i3", c:"ir", rev:false, t:"organized people can change what those in power consider possible?" },
-  { id:"i4", c:"ir", rev:true,  t:"the people who run things will do what they want regardless of what groups like yours do?" },
+  { id:"s1", c:"cs", rev:false, t:"that your group knows who actually holds power over the decisions you care about?" },
+  { id:"s2", c:"cs", rev:false, t:"that your group can size up a situation and choose an action likely to work?" },
+  { id:"s3", c:"cs", rev:false, t:"that your group has a strategy connecting what you do this month to what you want to win?" },
+  { id:"s4", c:"cs", rev:true,  t:"that your group was scrambling to react to each new crisis?" },
+  { id:"r1", c:"re", rev:false, t:"that there are people who would show up for you if you asked, and you for them?" },
+  { id:"r2", c:"re", rev:false, t:"that people in your group keep the commitments they make to one another?" },
+  { id:"r3", c:"re", rev:false, t:"that others in your group would step up if you had to step back?" },
+  { id:"r4", c:"re", rev:true,  t:"that your group is a collection of individuals rather than a team that depends on one another?" },
+  { id:"c2", c:"cc", rev:false, t:"that when your group decides to act, it can mobilize the people it needs?" },
+  { id:"c3", c:"cc", rev:false, t:"that your group can turn its plans into public action, not just talk?" },
+  { id:"c4", c:"cc", rev:true,  t:"that your group's power depended on the same handful of people doing everything?" },
+  { id:"i1", c:"ir", rev:false, t:"that when people like you act together, institutions and leaders have to respond?" },
+  { id:"i2", c:"ir", rev:false, t:"that your group can get a seat at the tables where decisions are made?" },
+  { id:"i4", c:"ir", rev:true,  t:"that the people who run things will do what they want regardless of what groups like yours do?" },
 ];
 
-const FIELD_ORDER = ["m1","s1","r1","c1","i1","m2","s2","r2","c2","i2","m3","s3","r3","c3","i3","m4","s4","r4","c4","i4","m5","s5"];
-const REVIEW_ORDER = ["c2","m4","i3","r1","s3","m1","i4","c4","r3","s1","m5","c1","i2","r4","s5","m2","i1","c3","r2","s4","m3","s2"];
+const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r1","c3","i4","m4","s3","r2","c4","i2","m5","s4","r3"];
+const REVIEW_ORDER = ["c2","m4","i4","r1","s3","m1","c4","r3","s1","m5","i2","r4","s2","i1","r2","s4","m3","c3"];
 const ANCHORS = [ ["0","Never"], ["1","Almost never"], ["2","Sometimes"], ["3","Fairly often"], ["4","Very often"] ];
 const byId = Object.fromEntries(ITEMS.map(it => [it.id, it]));
 const answers = {};
@@ -325,15 +329,15 @@ REVIEW_ORDER.forEach((id, idx) => {
   card.innerHTML = `
     <div class="text"><span class="num">${idx+1}</span>&hellip;${it.t}</div>
     <div class="rev-grid">
-      <div class="rev-block">
+      <div class="rev-block rel">
         <label class="head">Relevance</label>
-        <div class="seg4">${[1,2,3,4].map(v =>
+        <div class="seg4" data-kind-style="rel">${[1,2,3,4].map(v =>
           `<div class="opt" data-kind="rel" data-item="${id}" data-val="${v}"><span class="n">${v}</span></div>`).join('')}</div>
         <div class="hintline">1 not relevant &rarr; 4 highly relevant</div>
       </div>
-      <div class="rev-block">
+      <div class="rev-block clar">
         <label class="head">Clarity</label>
-        <div class="seg4">${[1,2,3,4].map(v =>
+        <div class="seg4" data-kind-style="clar">${[1,2,3,4].map(v =>
           `<div class="opt" data-kind="clar" data-item="${id}" data-val="${v}"><span class="n">${v}</span></div>`).join('')}</div>
         <div class="hintline">1 unclear &rarr; 4 very clear</div>
       </div>
@@ -387,6 +391,37 @@ document.getElementById('export-btn').addEventListener('click', () => {
   a.click();
   URL.revokeObjectURL(a.href);
 });
+
+document.getElementById('rev-submit-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('rev-submit-btn');
+  const prog = document.getElementById('rev-progress');
+  const ratings = REVIEW_ORDER.map(id => ({
+    item: id, text: byId[id].t, intended_construct: byId[id].c,
+    relevance: (revRatings[id] || {}).rel || null,
+    clarity: (revRatings[id] || {}).clar || null,
+    sorted_to: document.querySelector(`select[name="sort-${id}"]`).value || null,
+    comment: document.querySelector(`textarea[name="cmt-${id}"]`).value || null,
+  }));
+  btn.disabled = true; prog.className = 'status'; prog.textContent = 'Saving\u2026';
+  try {
+    await saveToBackend({
+      channel: "CPA Expert Review",
+      instrument: "cpa", version: "v0.2-pool18",
+      reviewer: document.getElementById('reviewer-name').value || null,
+      affiliation: document.getElementById('reviewer-aff').value || null,
+      respondent: document.getElementById('reviewer-name').value || null,
+      ratings,
+      submittedAt: new Date().toISOString(),
+    });
+    prog.textContent = '';
+    document.getElementById('rev-thanks').style.display = 'block';
+  } catch (err) {
+    btn.disabled = false;
+    prog.className = 'status err';
+    prog.textContent = err.message;
+  }
+});
+
 </script>
 </body>
 </html>
