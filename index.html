@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collective Political Agency Scale</title>
+<link rel="icon" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#efe6d1; --paper-tint:#f5eedb; --cream-2:#e6dcc2; --rule:#cec2a8;
+    --ink:#171514; --ink-2:#332f2b; --mute:#6a6256;
+    --cobalt:#13306b; --cobalt-deep:#0a204e; --terracotta:#b7432b; --olive:#6b7a3a;
+    --serif:"Source Serif 4",Georgia,serif;
+    --sans:"Work Sans",-apple-system,system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--paper); color:var(--ink); font-family:var(--sans); font-weight:300; font-size:15px; line-height:1.5; }
+  .shell { max-width: 860px; margin: 0 auto; padding: 28px 22px 80px; }
+
+  header.top { display:flex; align-items:center; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid var(--rule); margin-bottom:8px; }
+  .wordmark { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--cobalt); }
+  .badge { font-family:var(--mono); font-size:9.5px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; background:var(--terracotta); color:var(--paper); padding:3px 8px; border-radius:2px; }
+  header.top img { height:22px; }
+
+  .tabs { display:flex; gap:0; border-bottom:1px solid var(--rule); margin-bottom:26px; }
+  .tab { font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:0.13em; text-transform:uppercase;
+    color:var(--mute); padding:13px 18px; background:transparent; border:none; cursor:pointer;
+    border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .tab:hover { color:var(--ink-2); }
+  .tab.active { color:var(--cobalt); border-bottom-color:var(--cobalt); }
+  .view { display:none; }
+  .view.active { display:block; }
+
+  h1 { font-family:var(--serif); font-weight:400; font-size:26px; line-height:1.15; margin-bottom:10px; }
+  h2 { font-family:var(--serif); font-weight:400; font-size:20px; margin:26px 0 10px; }
+  .intro { font-family:var(--serif); font-size:15.5px; color:var(--ink-2); max-width:64ch; margin-bottom:6px; }
+  .note { font-size:13px; color:var(--mute); max-width:66ch; }
+
+  /* ===== Instrument ===== */
+  .anchors { display:flex; gap:8px; flex-wrap:wrap; margin:18px 0 6px; }
+  .anchor { font-family:var(--mono); font-size:10.5px; color:var(--ink-2);
+    background:var(--cream-2); border:1px solid var(--rule); border-radius:2px; padding:4px 9px; }
+  .anchor b { color:var(--cobalt); font-weight:500; margin-right:4px; }
+  .stem { font-family:var(--serif); font-style:italic; font-size:15.5px; color:var(--ink-2);
+    border-left:3px solid var(--cobalt); padding:6px 0 6px 14px; margin:16px 0 22px; max-width:66ch; }
+  .item { display:flex; gap:14px; align-items:flex-start; padding:13px 0; border-bottom:1px solid rgba(206,194,168,0.55); }
+  .item .num { font-family:var(--mono); font-size:11px; color:var(--mute); min-width:22px; padding-top:3px; }
+  .item .text { flex:1; font-family:var(--serif); font-size:15.5px; color:var(--ink); max-width:56ch; }
+  .scale5 { display:flex; gap:4px; flex-shrink:0; }
+  .scale5 label { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer;
+    font-family:var(--mono); font-size:10px; color:var(--mute); width:34px; }
+  .scale5 input { accent-color: var(--cobalt); width:16px; height:16px; cursor:pointer; }
+  .submitrow { margin-top:26px; display:flex; align-items:center; gap:14px; }
+  .btn { font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
+    padding:9px 18px; border-radius:2px; cursor:pointer; border:1px solid; }
+  .btn-primary { background:var(--cobalt); color:var(--paper); border-color:var(--cobalt); }
+  .btn-primary:hover { background:var(--cobalt-deep); }
+  .btn-ghost { background:transparent; color:var(--cobalt); border-color:var(--rule); }
+  .btn-ghost:hover { background:var(--cream-2); }
+  .done-msg { font-family:var(--serif); font-size:15px; color:var(--olive); display:none; }
+  .progress { font-family:var(--mono); font-size:10.5px; color:var(--mute); }
+
+  /* ===== CVI review ===== */
+  .construct-card { background:var(--paper-tint); border:1px solid var(--rule); border-radius:3px; padding:14px 16px; margin-bottom:10px; }
+  .construct-card .cname { font-family:var(--sans); font-weight:500; font-size:14px; color:var(--cobalt); }
+  .construct-card .cdef { font-family:var(--serif); font-size:13.5px; color:var(--ink-2); margin-top:3px; }
+  .method-note { background:var(--cream-2); border:1px solid var(--rule); border-radius:3px; padding:12px 16px; font-size:13px; color:var(--ink-2); margin:14px 0 22px; max-width:72ch; }
+  .rev-item { border:1px solid var(--rule); border-radius:3px; background:var(--paper-tint); padding:14px 16px; margin-bottom:14px; }
+  .rev-item .text { font-family:var(--serif); font-size:15.5px; margin-bottom:12px; max-width:60ch; }
+  .rev-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:14px; }
+  @media (max-width:720px){ .rev-grid { grid-template-columns:1fr; } .item{flex-wrap:wrap} }
+  .rev-block label.head { display:block; font-family:var(--mono); font-size:9.5px; font-weight:500;
+    letter-spacing:0.11em; text-transform:uppercase; color:var(--mute); margin-bottom:6px; }
+  .likert4 { display:flex; gap:6px; }
+  .likert4 label { display:flex; flex-direction:column; align-items:center; gap:2px; font-family:var(--mono); font-size:9.5px; color:var(--mute); cursor:pointer; }
+  .likert4 input { accent-color:var(--cobalt); }
+  .rev-block select, .rev-item textarea { width:100%; padding:6px 8px; background:var(--paper);
+    border:1px solid var(--rule); border-radius:2px; font-family:var(--sans); font-size:13px; color:var(--ink); }
+  .rev-item textarea { margin-top:10px; resize:vertical; min-height:34px; }
+  .reviewer-row { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .reviewer-row input { padding:7px 10px; background:var(--paper-tint); border:1px solid var(--rule); border-radius:2px;
+    font-family:var(--sans); font-size:13.5px; min-width:220px; }
+  footer { margin-top:48px; padding-top:14px; border-top:1px solid var(--rule);
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono); font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--mute); }
+  footer img { height:18px; filter:brightness(0.45); }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="top">
+  <span class="wordmark">Civic Power Lab</span>
+  <span style="display:flex; align-items:center; gap:12px;">
+    <span class="badge">Draft v0.2 · demo, data not saved</span>
+    <img src="assets/logo-email-cream.png" alt="Civic Power Lab">
+  </span>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-view="instrument">Instrument</button>
+  <button class="tab" data-view="review">Expert review (CVI)</button>
+</div>
+
+<!-- ============ VIEW 1: PUBLIC-FACING INSTRUMENT ============ -->
+<section class="view active" id="view-instrument">
+  <h1>How your group is feeling and working</h1>
+  <p class="intro">The questions below ask about your recent experience acting with others. There are no right or wrong answers. Answer fairly quickly; give the estimate that feels reasonable rather than counting occasions.</p>
+
+  <div class="anchors">
+    <span class="anchor"><b>0</b> never</span>
+    <span class="anchor"><b>1</b> almost never</span>
+    <span class="anchor"><b>2</b> sometimes</span>
+    <span class="anchor"><b>3</b> fairly often</span>
+    <span class="anchor"><b>4</b> very often</span>
+  </div>
+
+  <div class="stem">Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action): in the last 3 months, how often have you felt that&hellip;</div>
+
+  <div id="item-list"></div>
+
+  <div class="submitrow">
+    <button class="btn btn-primary" id="submit-btn">Submit</button>
+    <span class="progress" id="progress">0 of 22 answered</span>
+    <span class="done-msg" id="done-msg">Thank you. Your responses have been recorded (demo: not saved).</span>
+  </div>
+</section>
+
+<!-- ============ VIEW 2: EXPERT REVIEW (CVI) ============ -->
+<section class="view" id="view-review">
+  <h1>Expert content review</h1>
+  <p class="intro">You are rating candidate items for a new instrument, the Collective Political Agency scale (CPA). The scale measures an individually held perception of collective capacity: how the <em>we</em> looks from where each member stands. It is a state measure with a 3-month window, designed to move when organizing works.</p>
+
+  <h2>Construct definitions</h2>
+  <div id="construct-defs"></div>
+
+  <div class="method-note">
+    <strong>Your three tasks per item.</strong> (1) <em>Relevance</em>: how relevant is this item to the construct system as a whole? (2) <em>Clarity</em>: how clearly would a community member understand it? (3) <em>Sorting</em>: which construct does the item belong to? Items are presented in shuffled order without their intended labels; your independent sort is the test. A comment box is provided for suggested rewording. Item-level content validity (I-CVI) will be computed as the proportion of experts rating relevance 3 or 4; items below .78 will be revised or dropped (Polit &amp; Beck). Sorting agreement assesses substantive validity (Anderson &amp; Gerbing).
+  </div>
+
+  <div class="reviewer-row">
+    <input id="reviewer-name" placeholder="Your name">
+    <input id="reviewer-aff" placeholder="Affiliation / expertise">
+  </div>
+
+  <div id="review-list"></div>
+
+  <div class="submitrow">
+    <button class="btn btn-primary" id="export-btn">Export review as JSON</button>
+    <span class="progress" id="rev-progress">0 of 22 items rated</span>
+  </div>
+</section>
+
+<footer>
+  <span>Collective Political Agency scale · draft for expert review</span>
+  <img src="assets/logo-email-cream.png" alt="">
+</footer>
+</div>
+
+<script>
+/* ========= Item pool v0.2 — 22 candidates, 5 constructs ========= */
+const CONSTRUCTS = [
+  { key:"ma", name:"Moral-affective orientation",
+    def:"The values and emotions that motivate or inhibit group action: hope, energy, action-coupled anger; isolation and burnout as inhibitors." },
+  { key:"cs", name:"Cognitive-strategic competence",
+    def:"The group's perceived ability to read power and act effectively: knowing who holds power, sizing up situations, connecting present action to what it wants to win, knowing who to call." },
+  { key:"re", name:"Relational embeddedness",
+    def:"Being woven into networks of mutual commitment: people who show up for one another, keep commitments, and can absorb a member stepping back." },
+  { key:"cc", name:"Collective capacity",
+    def:"The perceived conjoint capability of the group: able to mobilize who it needs, act rather than only talk, accomplish together what no member could alone." },
+  { key:"ir", name:"Institutional responsiveness",
+    def:"The belief that institutions and decision-makers must respond to organized collective action: responsiveness, access to decision-making tables, the power to change what is considered possible." },
+];
+
+const ITEMS = [
+  { id:"m1", c:"ma", rev:false, t:"hopeful about what people like you can build together?" },
+  { id:"m2", c:"ma", rev:false, t:"energized after spending time working with others on something public?" },
+  { id:"m3", c:"ma", rev:true,  t:"alone in caring about the things you care about?" },
+  { id:"m4", c:"ma", rev:true,  t:"worn down by the work of trying to make change?" },
+  { id:"m5", c:"ma", rev:false, t:"angry about an injustice in a way that made you want to act with others?" },
+  { id:"s1", c:"cs", rev:false, t:"your group knows who actually holds power over the decisions you care about?" },
+  { id:"s2", c:"cs", rev:false, t:"your group can size up a situation and choose an action likely to work?" },
+  { id:"s3", c:"cs", rev:false, t:"your group has a strategy connecting what you do this month to what you want to win?" },
+  { id:"s4", c:"cs", rev:true,  t:"your group was scrambling to react to each new crisis?" },
+  { id:"s5", c:"cs", rev:false, t:"your group knows who to call to get something moving?" },
+  { id:"r1", c:"re", rev:false, t:"there are people who would show up for you if you asked, and you for them?" },
+  { id:"r2", c:"re", rev:false, t:"people in your group keep the commitments they make to one another?" },
+  { id:"r3", c:"re", rev:false, t:"others in your group would step up if you had to step back?" },
+  { id:"r4", c:"re", rev:true,  t:"your group is a collection of individuals rather than a team that depends on one another?" },
+  { id:"c1", c:"cc", rev:false, t:"the people you might take public action with could accomplish something together that none of you could alone?" },
+  { id:"c2", c:"cc", rev:false, t:"when your group decides to act, it can mobilize the people it needs?" },
+  { id:"c3", c:"cc", rev:false, t:"your group can turn its plans into public action, not just talk?" },
+  { id:"c4", c:"cc", rev:true,  t:"your group's power depended on the same handful of people doing everything?" },
+  { id:"i1", c:"ir", rev:false, t:"when people like you act together, institutions and leaders have to respond?" },
+  { id:"i2", c:"ir", rev:false, t:"your group can get a seat at the tables where decisions are made?" },
+  { id:"i3", c:"ir", rev:false, t:"organized people can change what those in power consider possible?" },
+  { id:"i4", c:"ir", rev:true,  t:"the people who run things will do what they want regardless of what groups like yours do?" },
+];
+
+/* Fixed interleaved order for the fielded page: constructs rotated, reversed items scattered.
+   Same order for every respondent, so responses stay comparable. */
+const FIELD_ORDER = ["m1","s1","r1","c1","i1","m2","s2","r2","c2","i2","m3","s3","r3","c3","i3","m4","s4","r4","c4","i4","m5","s5"];
+
+/* Fixed shuffle for the review page (different from field order, stable across reviewers). */
+const REVIEW_ORDER = ["c2","m4","i3","r1","s3","m1","i4","c4","r3","s1","m5","c1","i2","r4","s5","m2","i1","c3","r2","s4","m3","s2"];
+
+const byId = Object.fromEntries(ITEMS.map(it => [it.id, it]));
+
+/* ===== Tabs ===== */
+document.querySelectorAll('.tab').forEach(tb => tb.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tb));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + tb.dataset.view));
+}));
+
+/* ===== Instrument view ===== */
+const list = document.getElementById('item-list');
+FIELD_ORDER.forEach((id, idx) => {
+  const it = byId[id];
+  const row = document.createElement('div');
+  row.className = 'item';
+  row.innerHTML = `
+    <span class="num">${idx+1}.</span>
+    <span class="text">&hellip;${it.t}</span>
+    <span class="scale5">${[0,1,2,3,4].map(v =>
+      `<label><input type="radio" name="q-${id}" value="${v}"><span>${v}</span></label>`).join('')}
+    </span>`;
+  list.appendChild(row);
+});
+function updateProgress() {
+  const n = FIELD_ORDER.filter(id => document.querySelector(`input[name="q-${id}"]:checked`)).length;
+  document.getElementById('progress').textContent = `${n} of ${FIELD_ORDER.length} answered`;
+}
+list.addEventListener('change', updateProgress);
+document.getElementById('submit-btn').addEventListener('click', () => {
+  document.getElementById('done-msg').style.display = 'inline';
+});
+
+/* ===== Review view ===== */
+const defs = document.getElementById('construct-defs');
+CONSTRUCTS.forEach(c => {
+  const d = document.createElement('div');
+  d.className = 'construct-card';
+  d.innerHTML = `<div class="cname">${c.name}</div><div class="cdef">${c.def}</div>`;
+  defs.appendChild(d);
+});
+
+const rlist = document.getElementById('review-list');
+REVIEW_ORDER.forEach((id, idx) => {
+  const it = byId[id];
+  const card = document.createElement('div');
+  card.className = 'rev-item';
+  card.dataset.itemId = id;
+  card.innerHTML = `
+    <div class="text"><span style="font-family:var(--mono); font-size:11px; color:var(--mute); margin-right:8px;">${idx+1}.</span>&hellip;${it.t}</div>
+    <div class="rev-grid">
+      <div class="rev-block">
+        <label class="head">Relevance</label>
+        <div class="likert4">${[1,2,3,4].map(v =>
+          `<label><input type="radio" name="rel-${id}" value="${v}"><span>${v}</span></label>`).join('')}</div>
+        <div style="font-size:10px; color:var(--mute); margin-top:4px;">1 not relevant &rarr; 4 highly relevant</div>
+      </div>
+      <div class="rev-block">
+        <label class="head">Clarity</label>
+        <div class="likert4">${[1,2,3,4].map(v =>
+          `<label><input type="radio" name="clar-${id}" value="${v}"><span>${v}</span></label>`).join('')}</div>
+        <div style="font-size:10px; color:var(--mute); margin-top:4px;">1 unclear &rarr; 4 very clear</div>
+      </div>
+      <div class="rev-block">
+        <label class="head">Which construct?</label>
+        <select name="sort-${id}">
+          <option value="">&mdash; select &mdash;</option>
+          ${CONSTRUCTS.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}
+          <option value="none">None of these / unsure</option>
+        </select>
+      </div>
+    </div>
+    <textarea name="cmt-${id}" placeholder="Suggested rewording or comment (optional)"></textarea>`;
+  rlist.appendChild(card);
+});
+function updateRevProgress() {
+  const n = REVIEW_ORDER.filter(id =>
+    document.querySelector(`input[name="rel-${id}"]:checked`) &&
+    document.querySelector(`input[name="clar-${id}"]:checked`) &&
+    document.querySelector(`select[name="sort-${id}"]`).value
+  ).length;
+  document.getElementById('rev-progress').textContent = `${n} of ${REVIEW_ORDER.length} items rated`;
+}
+rlist.addEventListener('change', updateRevProgress);
+
+document.getElementById('export-btn').addEventListener('click', () => {
+  const out = {
+    reviewer: document.getElementById('reviewer-name').value || null,
+    affiliation: document.getElementById('reviewer-aff').value || null,
+    instrument: "CPA candidate pool v0.2",
+    exportedAt: new Date().toISOString(),
+    ratings: REVIEW_ORDER.map(id => ({
+      item: id,
+      text: byId[id].t,
+      intended_construct: byId[id].c,
+      relevance: (document.querySelector(`input[name="rel-${id}"]:checked`) || {}).value || null,
+      clarity: (document.querySelector(`input[name="clar-${id}"]:checked`) || {}).value || null,
+      sorted_to: document.querySelector(`select[name="sort-${id}"]`).value || null,
+      comment: document.querySelector(`textarea[name="cmt-${id}"]`).value || null,
+    })),
+  };
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type:"application/json" });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `cpa-review-${(out.reviewer || "anonymous").toLowerCase().replace(/[^a-z0-9]+/g,"-")}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+</script>
+</body>
+</html>
