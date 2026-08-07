@@ -140,7 +140,7 @@
   <div class="stickybar" id="stickybar">
     <div class="meta">
       <span class="stem-line">In the last 3 months, how often have you felt&hellip;</span>
-      <span class="count" id="progress">0 / 18</span>
+      <span class="count" id="progress">0 / 20</span>
     </div>
     <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   </div>
@@ -175,7 +175,7 @@
   <div class="submitrow">
     <button class="btn btn-primary" id="rev-submit-btn">Submit review</button>
     <button class="btn btn-ghost" id="export-btn">Export as JSON</button>
-    <span class="status" id="rev-progress">0 of 18 items rated</span>
+    <span class="status" id="rev-progress">0 of 20 items rated</span>
   </div>
   <div class="status thanks" id="rev-thanks" style="display:none; margin-top:14px;">Thank you so much for your time! We look forward to reporting back the results.</div>
 </section>
@@ -230,21 +230,23 @@ const ITEMS = [
   { id:"s1", c:"cs", rev:false, t:"that your group knows who actually holds power over the decisions you care about?" },
   { id:"s2", c:"cs", rev:false, t:"that your group can size up a situation and choose an action likely to work?" },
   { id:"s3", c:"cs", rev:false, t:"that your group has a strategy connecting what you do this month to what you want to win?" },
-  { id:"s4", c:"cs", rev:true,  t:"that your group was scrambling to react to each new crisis?" },
+  { id:"s4", c:"cs", rev:true,  t:"that your group was reacting to events without a plan of its own?" },
   { id:"r1", c:"re", rev:false, t:"that there are people who would show up for you if you asked, and you for them?" },
   { id:"r2", c:"re", rev:false, t:"that people in your group keep the commitments they make to one another?" },
   { id:"r3", c:"re", rev:false, t:"that others in your group would step up if you had to step back?" },
   { id:"r4", c:"re", rev:true,  t:"that your group is a collection of individuals rather than a team that depends on one another?" },
+  { id:"c1", c:"cc", rev:false, t:"that the people you might take public action with could accomplish something together that none of you could alone?" },
   { id:"c2", c:"cc", rev:false, t:"that when your group decides to act, it can mobilize the people it needs?" },
   { id:"c3", c:"cc", rev:false, t:"that your group can turn its plans into public action, not just talk?" },
   { id:"c4", c:"cc", rev:true,  t:"that your group's power depended on the same handful of people doing everything?" },
   { id:"i1", c:"ir", rev:false, t:"that when people like you act together, institutions and leaders have to respond?" },
   { id:"i2", c:"ir", rev:false, t:"that your group can get a seat at the tables where decisions are made?" },
+  { id:"i3", c:"ir", rev:false, t:"that organized people can change what those in power consider possible?" },
   { id:"i4", c:"ir", rev:true,  t:"that the people who run things will do what they want regardless of what groups like yours do?" },
 ];
 
-const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r1","c3","i4","m4","s3","r2","c4","i2","m5","s4","r3"];
-const REVIEW_ORDER = ["c2","m4","i4","r1","s3","m1","c4","r3","s1","m5","i2","r4","s2","i1","r2","s4","m3","c3"];
+const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r1","c3","i4","m4","s3","r2","c4","i2","m5","s4","r3","c1","i3"];
+const REVIEW_ORDER = ["c2","m4","i4","r1","s3","m1","c4","r3","s1","m5","c1","i2","r4","s2","i3","i1","r2","s4","m3","c3"];
 const ANCHORS = [ ["0","Never"], ["1","Almost never"], ["2","Sometimes"], ["3","Fairly often"], ["4","Very often"] ];
 const byId = Object.fromEntries(ITEMS.map(it => [it.id, it]));
 const answers = {};
@@ -298,7 +300,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
   btn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
   try {
     await saveToBackend({
-      instrument: "cpa", version: "v0.2-pool22",
+      instrument: "cpa", version: "v0.3-pool20",
       field_order: FIELD_ORDER,
       answers,
       startedAt: PAGE_LOADED_AT, submittedAt: new Date().toISOString(),
@@ -406,7 +408,7 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
   try {
     await saveToBackend({
       channel: "CPA Expert Review",
-      instrument: "cpa", version: "v0.2-pool18",
+      instrument: "cpa", version: "v0.3-pool20",
       reviewer: document.getElementById('reviewer-name').value || null,
       affiliation: document.getElementById('reviewer-aff').value || null,
       respondent: document.getElementById('reviewer-name').value || null,
