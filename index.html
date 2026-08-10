@@ -183,7 +183,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.6 · pilot</span>
+  <span class="badge">Draft v0.6.1 · pilot</span>
 </header>
 
 <div class="tabs">
@@ -404,13 +404,15 @@ function updateInstChrome() {
   document.getElementById('progress').textContent = `${n} / ${FIELD_ORDER.length}`;
   document.getElementById('progress-fill').style.width = (100 * n / FIELD_ORDER.length) + '%';
   const next = document.getElementById('next-btn');
-  next.disabled = !screenDone(instPage);
-  next.innerHTML = (fromReview ? 'Back to review' : (instPage === SCREENS - 1 ? 'Review answers' : 'Continue')) + ' &rarr;';
+  const remaining = screenIds(instPage).filter(id => !(id in answers)).length;
+  next.disabled = remaining > 0;
+  next.innerHTML = remaining > 0
+    ? `Answer ${remaining} more to continue`
+    : (fromReview ? 'Back to review' : (instPage === SCREENS - 1 ? 'Review answers' : 'Continue')) + ' &rarr;';
 }
 
 function selectOpt(el) {
   const id = el.dataset.item;
-  const wasDone = screenDone(instPage);
   answers[id] = Number(el.dataset.val);
   saveLocal();
   document.querySelectorAll(`.opt[data-item="${id}"]`).forEach(o => {
@@ -418,11 +420,6 @@ function selectOpt(el) {
     o.setAttribute('aria-checked', String(o === el));
   });
   updateInstChrome();
-  if (screenDone(instPage) && !wasDone) {
-    clearTimeout(advanceTimer);
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    advanceTimer = setTimeout(goNextScreen, reduced ? 150 : 450);
-  }
 }
 list.addEventListener('click', e => { const o = e.target.closest('.opt'); if (o) selectOpt(o); });
 list.addEventListener('keydown', e => {
