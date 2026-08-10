@@ -32,7 +32,8 @@
   .tabs { display:flex; gap:4px; background:#efeff1; border-radius:10px; padding:3px; width:max-content; margin-bottom:34px; }
   .tab { font-size:13.5px; font-weight:500; color:var(--muted); padding:7px 16px; border:none; cursor:pointer;
     background:transparent; border-radius:8px; transition:all .12s; }
-  .tab.active { background:var(--surface); color:var(--text); box-shadow:var(--shadow); }
+  .tab.active { background:var(--surface); color:var(--accent-deep); box-shadow:var(--shadow); border:1px solid #dfe3f7; font-weight:600; }
+  .tab.active::before { content:"● "; font-size:8px; vertical-align:2px; }
   .view { display:none; } .view.active { display:block; }
 
   h1 { font-size:26px; font-weight:600; letter-spacing:-0.02em; margin-bottom:14px; }
@@ -42,12 +43,31 @@
 
   /* ===== Sticky stem bar ===== */
   .stickybar { position:sticky; top:0; z-index:20; background:rgba(250,250,250,0.96); backdrop-filter:blur(6px);
-    border-bottom:1px solid var(--border); margin:0 -24px; padding:10px 24px; }
-  .stickybar .stem-line { font-size:15px; font-weight:600; color:var(--text); }
-  .stickybar .progress-track { height:3px; background:var(--border); border-radius:2px; margin-top:8px; overflow:hidden; }
+    border-bottom:1px solid var(--border); margin:0 -24px; padding:10px 24px 12px; }
+  .stickybar .stem-line { font-size:19px; font-weight:600; letter-spacing:-0.015em; line-height:1.3; color:var(--text); }
+  .stickybar .stem-line em { font-style:normal; color:var(--accent-deep); }
+  .stickybar .sub { font-size:12px; color:var(--muted); margin-top:2px; }
+  .stickybar .progress-track { height:3px; background:var(--border); border-radius:2px; margin-top:9px; overflow:hidden; }
   .stickybar .progress-fill { height:100%; width:0%; background:var(--accent); transition:width .2s; }
-  .stickybar .meta { display:flex; justify-content:space-between; align-items:baseline; }
-  .stickybar .count { font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .stickybar .meta { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .stickybar .count { font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  /* ===== Pager ===== */
+  .navrow { display:flex; align-items:center; gap:14px; margin-top:22px; }
+  .navrow .hint { font-size:12.5px; color:var(--muted); margin-right:auto; }
+  .backbtn { width:38px; height:38px; display:grid; place-items:center; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; color:var(--muted); font-size:15px; cursor:pointer; }
+  .backbtn:hover { border-color:var(--accent); color:var(--accent-deep); }
+  .backbtn[disabled] { opacity:0; pointer-events:none; }
+  .sumline { display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--surface);
+    border:1px solid var(--border); border-bottom:none; padding:10px 14px; cursor:pointer; font-family:inherit; }
+  .sumline:first-child { border-radius:8px 8px 0 0; }
+  .sumline:last-child { border-radius:0 0 8px 8px; border-bottom:1px solid var(--border); }
+  .sumline:hover { background:var(--accent-soft); }
+  .sumline .n { font-size:12px; color:var(--muted); min-width:22px; font-variant-numeric:tabular-nums; }
+  .sumline .t { flex:1; font-size:13.5px; line-height:1.35; }
+  .sumline .v { font-size:12px; font-weight:600; color:var(--accent-deep); background:var(--accent-soft);
+    padding:3px 9px; border-radius:999px; white-space:nowrap; }
 
   .stem-big { font-size:21px; font-weight:600; letter-spacing:-0.015em; line-height:1.45; color:var(--text);
     background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
@@ -116,14 +136,34 @@
   .rev-block.rel .opt, .rev-block.clar .opt { background:var(--surface); }
   .seg4[data-kind-style="clar"] .opt:hover { border-color:var(--green); background:#e9f6f0; }
   .seg4[data-kind-style="clar"] .opt.sel { background:var(--green); border-color:var(--green); }
+  /* Fix: these need to outrank `.rev-block.rel .opt { background:var(--surface) }`,
+     which silently beat the generic `.opt.sel` on specificity. */
+  .seg4[data-kind-style="rel"] .opt:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .seg4[data-kind-style="rel"] .opt.sel { background:var(--accent); border-color:var(--accent); }
+  /* ===== Coverage / deficiency check (expert task; Colquitt et al., 2019) ===== */
+  .cov-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:16px 18px; margin-bottom:14px; }
+  .cov-card .cname { font-size:15px; font-weight:600; color:var(--accent-deep); }
+  .cov-card .cdef { font-size:13.5px; color:var(--text-2); margin:4px 0 12px; }
+  .cov-chips { display:flex; gap:6px; max-width:420px; }
+  .cov-chip { flex:1; min-width:30px; height:36px; display:grid; place-items:center; font-size:13px;
+    font-weight:600; color:var(--text-2); background:var(--surface); border:1px solid var(--border);
+    border-radius:7px; cursor:pointer; transition:all .1s; }
+  .cov-chip:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .cov-chip.sel { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .cov-anchors { display:flex; justify-content:space-between; max-width:420px;
+    font-size:11px; color:var(--muted); margin-top:5px; }
+  .cov-card textarea { width:100%; margin-top:12px; padding:9px 11px; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px;
+    color:var(--text); resize:vertical; min-height:52px; }
   .status.thanks { color:var(--green); font-weight:600; font-size:15px; }
   /* Mobile */
   @media (max-width:640px){
     .shell { padding:16px 14px 80px; }
     h1 { font-size:22px; }
     .stem-big { font-size:17.5px; padding:14px 16px; }
-    .stickybar { margin:0 -14px; padding:8px 14px; }
-    .stickybar .stem-line { font-size:13px; }
+    .stickybar { margin:0 -14px; padding:8px 14px 10px; }
+    .stickybar .stem-line { font-size:16.5px; }
     .item { padding:14px; }
     .item .text { font-size:16px; }
     .opts { gap:5px; }
@@ -143,7 +183,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.4 · pilot</span>
+  <span class="badge">Draft v0.6 · pilot</span>
 </header>
 
 <div class="tabs">
@@ -153,37 +193,62 @@
 
 <!-- ============ VIEW 1: INSTRUMENT ============ -->
 <section class="view active" id="view-instrument">
-  <h1>Working With Others: A Short Survey</h1>
-  <p class="intro">The questions below ask about your feelings and experiences during the last 3 months. For each one, indicate to what extent you felt that way. Some questions are similar, but treat each as its own question. (Answer quickly, with your first impression, rather than deliberating over each one.)</p>
 
-  <div class="stem-big"><div>Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action):</div><div style="margin-top:14px">In the last 3 months, to what extent have you felt&hellip;</div></div>
+  <div id="inst-start">
+    <h1>Working With Others: A Short Survey</h1>
+    <p class="intro">The questions below ask about your feelings and experiences during the last month. For each one, indicate to what extent you felt that way. Some questions are similar, but treat each as its own question. (Answer quickly, with your first impression, rather than deliberating over each one.)</p>
 
-  <div class="stickybar" id="stickybar">
-    <div class="meta">
-      <span class="stem-line">In the last 3 months, to what extent have you felt&hellip;</span>
-      <span class="count" id="progress">0 / 20</span>
+    <div class="stem-big"><div>Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action):</div><div style="margin-top:14px">In the last month, to what extent have you felt&hellip;</div></div>
+
+    <div class="submitrow" style="margin-top:22px">
+      <button class="btn btn-primary" id="start-btn">Start</button>
+      <span class="status" id="start-status"></span>
     </div>
-    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   </div>
 
-  <div id="item-list" style="margin-top:16px"></div>
+  <div id="inst-run" style="display:none">
+    <div class="stickybar" id="stickybar">
+      <div class="meta">
+        <div>
+          <div class="stem-line"><em>In the last month,</em> to what extent have you felt&hellip;</div>
+          <div class="sub">about the group you're most involved with</div>
+        </div>
+        <span class="count" id="progress">0 / 20</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
 
-  <div class="submitrow">
-    <button class="btn btn-primary" id="submit-btn">Submit responses</button>
-    <span class="status" id="submit-status"></span>
+    <div id="item-list" style="margin-top:16px"></div>
+
+    <div class="navrow">
+      <button class="backbtn" id="back-btn" aria-label="Previous screen">&larr;</button>
+      <span class="hint" id="screen-hint"></span>
+      <button class="btn btn-primary" id="next-btn" disabled>Continue &rarr;</button>
+    </div>
   </div>
+
+  <div id="inst-review" style="display:none">
+    <h1>Check your answers</h1>
+    <p class="intro">Tap any row to change an answer, then submit.</p>
+    <div id="review-summary" style="margin-top:18px"></div>
+    <div class="submitrow">
+      <button class="btn btn-primary" id="submit-btn">Submit responses</button>
+      <span class="status" id="submit-status"></span>
+    </div>
+  </div>
+
 </section>
 
 <!-- ============ VIEW 2: EXPERT REVIEW ============ -->
 <section class="view" id="view-review">
   <h1>Expert content review</h1>
-  <p class="intro full">You are rating candidate items for a new instrument, the Collective Political Agency scale (CPA). The scale measures an individually held perception of collective capacity: how the <em>us</em> is experienced from the individual's point of view. It is a state measure with a 3-month reference window.</p>
+  <p class="intro full">You are rating candidate items for a new instrument, the Collective Political Agency scale (CPA). The scale measures an individually held perception of collective capacity: how the <em>us</em> is experienced from the individual's point of view. It is a state measure with a 1-month reference window.</p>
 
   <h2>Construct definitions</h2>
   <div class="defs-grid" id="construct-defs"></div>
 
   <div class="method-note">
-    <strong>Your three tasks per item.</strong> (1) <em>Relevance</em>: how relevant is this item to the construct system as a whole? (2) <em>Clarity</em>: how clearly would you expect a community member to understand it? (3) <em>Sorting</em>: to which construct does the item belong? Items are presented in shuffled order without their intended labels. A comment box is provided for suggested rewording or comments. Item-level content validity (I-CVI) will be computed as the proportion of experts rating relevance 3 or 4; items below .78 will be revised or dropped (<a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>). Sorting agreement assesses substantive validity (<a href="https://doi.org/10.1037/0021-9010.76.5.732" target="_blank" rel="noopener">Anderson &amp; Gerbing, 1991</a>).
+    <strong>Your three tasks per item.</strong> (1) <em>Relevance</em>: how relevant is this item to the construct system as a whole? (2) <em>Clarity</em>: how clearly would you expect a community member to understand it? (3) <em>Sorting</em>: to which construct does the item read as belonging? Items are presented in shuffled order without their intended labels. A comment box is provided for suggested rewording or comments. Item-level content validity (I-CVI) will be computed as the proportion of experts rating relevance 3 or 4; items below .78 will be revised or dropped (<a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>; Lynn, 1986). Your sort assignments are used <em>diagnostically</em> — to identify which construct an item is read as reflecting — rather than scored against published benchmarks, which are normed on large panels of raters drawn from the general respondent population (<a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al., 2019</a>). A separate definitional-correspondence study with raters drawn from the instrument's intended respondent population will follow (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>). <strong>A final section following the items assesses the content coverage of the item pool</strong> — a judgment for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019).
   </div>
 
   <div class="reviewer-row">
@@ -192,6 +257,10 @@
   </div>
 
   <div id="review-list"></div>
+
+  <h2>Assessment of content coverage</h2>
+  <p class="intro full">For each construct, rate the extent to which the 20 items, considered as a set, sample the full content domain of the definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). This judgment concerns the adequacy of the pool as a whole rather than the quality of individual items. Where sampling appears incomplete, please describe the unrepresented aspects of the domain and, where possible, suggest candidate items.</p>
+  <div id="coverage-list"></div>
 
   <div class="submitrow">
     <button class="btn btn-primary" id="rev-submit-btn">Submit review</button>
@@ -278,56 +347,150 @@ document.querySelectorAll('.tab').forEach(tb => tb.addEventListener('click', () 
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + tb.dataset.view));
 }));
 
-/* ===== Instrument ===== */
+/* ===== Instrument (paged: 3 items per screen) ===== */
+const PER_SCREEN = 3;
+const SCREENS = Math.ceil(FIELD_ORDER.length / PER_SCREEN);
+const INST_STORE = "cpa_v05_answers";
+let instPage = 0;
+let fromReview = false;
+let advanceTimer = null;
+
+try {
+  const saved = JSON.parse(localStorage.getItem(INST_STORE) || "null");
+  if (saved && typeof saved === "object") Object.assign(answers, saved);
+} catch (e) {}
+
+const elStart = document.getElementById('inst-start');
+const elRun = document.getElementById('inst-run');
+const elReview = document.getElementById('inst-review');
 const list = document.getElementById('item-list');
-FIELD_ORDER.forEach((id, idx) => {
-  const it = byId[id];
-  const card = document.createElement('div');
-  card.className = 'item';
-  card.id = 'card-' + id;
-  card.innerHTML = `
-    <div class="qrow"><span class="num">${idx+1}</span><span class="text">&hellip;${it.t}</span></div>
-    <div class="opts">${ANCHORS.map(([n,l]) =>
-      `<div class="opt" data-item="${id}" data-val="${n}" role="radio" tabindex="0" aria-label="${l}">
-        <span class="n">${n}</span><span class="l">${l}</span></div>`).join('')}
-    </div>`;
-  list.appendChild(card);
-});
-function selectOpt(el) {
-  const id = el.dataset.item, val = el.dataset.val;
-  answers[id] = Number(val);
-  document.querySelectorAll(`.opt[data-item="${id}"]`).forEach(o => o.classList.toggle('sel', o === el));
-  document.getElementById('card-' + id).classList.remove('missing');
-  const n = Object.keys(answers).length;
+
+const screenIds = p => FIELD_ORDER.slice(p * PER_SCREEN, p * PER_SCREEN + PER_SCREEN);
+const screenDone = p => screenIds(p).every(id => id in answers);
+const answeredCount = () => FIELD_ORDER.filter(id => id in answers).length;
+const saveLocal = () => { try { localStorage.setItem(INST_STORE, JSON.stringify(answers)); } catch (e) {} };
+
+function showInst(which) {
+  elStart.style.display = which === 'start' ? '' : 'none';
+  elRun.style.display = which === 'run' ? '' : 'none';
+  elReview.style.display = which === 'review' ? '' : 'none';
+  window.scrollTo(0, 0);
+}
+
+function renderScreen() {
+  clearTimeout(advanceTimer);
+  list.innerHTML = '';
+  screenIds(instPage).forEach(id => {
+    const idx = FIELD_ORDER.indexOf(id);
+    const it = byId[id];
+    const card = document.createElement('div');
+    card.className = 'item';
+    card.id = 'card-' + id;
+    card.innerHTML = `
+      <div class="qrow"><span class="num">${idx+1}</span><span class="text">&hellip;${it.t}</span></div>
+      <div class="opts">${ANCHORS.map(([n,l]) =>
+        `<div class="opt${answers[id] === Number(n) ? ' sel' : ''}" data-item="${id}" data-val="${n}" role="radio" tabindex="0" aria-checked="${answers[id] === Number(n)}" aria-label="${l}">
+          <span class="n">${n}</span><span class="l">${l}</span></div>`).join('')}
+      </div>`;
+    list.appendChild(card);
+  });
+  document.getElementById('screen-hint').textContent = `Screen ${instPage + 1} of ${SCREENS}`;
+  document.getElementById('back-btn').disabled = instPage === 0 && !fromReview;
+  updateInstChrome();
+}
+
+function updateInstChrome() {
+  const n = answeredCount();
   document.getElementById('progress').textContent = `${n} / ${FIELD_ORDER.length}`;
   document.getElementById('progress-fill').style.width = (100 * n / FIELD_ORDER.length) + '%';
+  const next = document.getElementById('next-btn');
+  next.disabled = !screenDone(instPage);
+  next.innerHTML = (fromReview ? 'Back to review' : (instPage === SCREENS - 1 ? 'Review answers' : 'Continue')) + ' &rarr;';
+}
+
+function selectOpt(el) {
+  const id = el.dataset.item;
+  const wasDone = screenDone(instPage);
+  answers[id] = Number(el.dataset.val);
+  saveLocal();
+  document.querySelectorAll(`.opt[data-item="${id}"]`).forEach(o => {
+    o.classList.toggle('sel', o === el);
+    o.setAttribute('aria-checked', String(o === el));
+  });
+  updateInstChrome();
+  if (screenDone(instPage) && !wasDone) {
+    clearTimeout(advanceTimer);
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    advanceTimer = setTimeout(goNextScreen, reduced ? 150 : 450);
+  }
 }
 list.addEventListener('click', e => { const o = e.target.closest('.opt'); if (o) selectOpt(o); });
 list.addEventListener('keydown', e => {
   if ((e.key === ' ' || e.key === 'Enter')) { const o = e.target.closest('.opt'); if (o) { e.preventDefault(); selectOpt(o); } }
 });
 
-document.getElementById('submit-btn').addEventListener('click', async () => {
-  const missing = FIELD_ORDER.filter(id => !(id in answers));
-  const status = document.getElementById('submit-status');
-  if (missing.length) {
-    missing.forEach(id => document.getElementById('card-' + id).classList.add('missing'));
-    status.className = 'status err';
-    status.textContent = `${missing.length} unanswered — highlighted in red.`;
-    document.getElementById('card-' + missing[0]).scrollIntoView({ block:'center' });
-    return;
+function goNextScreen() {
+  clearTimeout(advanceTimer);
+  if (!screenDone(instPage)) return;
+  if (fromReview || instPage >= SCREENS - 1) { fromReview = false; renderReview(); showInst('review'); return; }
+  instPage += 1; renderScreen(); window.scrollTo(0, 0);
+}
+document.getElementById('next-btn').addEventListener('click', goNextScreen);
+document.getElementById('back-btn').addEventListener('click', () => {
+  clearTimeout(advanceTimer);
+  if (fromReview) { fromReview = false; renderReview(); showInst('review'); return; }
+  if (instPage === 0) return;
+  instPage -= 1; renderScreen(); window.scrollTo(0, 0);
+});
+
+document.getElementById('start-btn').addEventListener('click', () => {
+  const firstBlank = FIELD_ORDER.findIndex(id => !(id in answers));
+  if (firstBlank < 0) { renderReview(); showInst('review'); return; }
+  instPage = Math.floor(firstBlank / PER_SCREEN);
+  renderScreen(); showInst('run');
+});
+(function initStart() {
+  const n = answeredCount();
+  if (n > 0) {
+    document.getElementById('start-btn').textContent =
+      n >= FIELD_ORDER.length ? 'Review your answers' : `Continue · ${n} of ${FIELD_ORDER.length} answered`;
   }
+})();
+
+function renderReview() {
+  const wrap = document.getElementById('review-summary');
+  wrap.innerHTML = '';
+  FIELD_ORDER.forEach((id, idx) => {
+    const it = byId[id];
+    const a = answers[id];
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'sumline';
+    row.innerHTML = `<span class="n">${idx+1}</span><span class="t">&hellip;${it.t}</span>
+      <span class="v">${a} · ${ANCHORS[a][1]}</span>`;
+    row.addEventListener('click', () => {
+      instPage = Math.floor(idx / PER_SCREEN);
+      fromReview = true;
+      renderScreen(); showInst('run');
+    });
+    wrap.appendChild(row);
+  });
+}
+
+document.getElementById('submit-btn').addEventListener('click', async () => {
+  const status = document.getElementById('submit-status');
   const btn = document.getElementById('submit-btn');
   btn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
   try {
     await saveToBackend({
-      instrument: "cpa", version: "v0.4-pool20",
+      instrument: "cpa", version: "v0.5-pool20",
       field_order: FIELD_ORDER,
       answers,
       startedAt: PAGE_LOADED_AT, submittedAt: new Date().toISOString(),
     });
     status.className = 'status ok';
     status.textContent = 'Saved. Thank you — your responses have been recorded.';
+    try { localStorage.removeItem(INST_STORE); } catch (e) {}
   } catch (err) {
     btn.disabled = false;
     status.className = 'status err';
@@ -376,6 +539,35 @@ REVIEW_ORDER.forEach((id, idx) => {
     <textarea name="cmt-${id}" placeholder="Suggested rewording or comment (optional)"></textarea>`;
   rlist.appendChild(card);
 });
+/* Coverage / deficiency check — expert judgment of what the pool misses */
+const covRatings = {};
+const covList = document.getElementById('coverage-list');
+CONSTRUCTS.forEach(c => {
+  const card = document.createElement('div');
+  card.className = 'cov-card';
+  card.innerHTML = `
+    <div class="cname">${c.name}</div>
+    <div class="cdef">${c.def}</div>
+    <div class="cov-chips">${[1,2,3,4,5,6,7].map(v =>
+      `<div class="cov-chip" data-c="${c.key}" data-val="${v}">${v}</div>`).join('')}</div>
+    <div class="cov-anchors"><span>1 = the item set samples this content domain very incompletely</span><span>7 = very completely</span></div>
+    <textarea name="cov-${c.key}" placeholder="Unrepresented aspects of this construct's domain; suggested candidate items (optional)"></textarea>`;
+  covList.appendChild(card);
+});
+covList.addEventListener('click', e => {
+  const ch = e.target.closest('.cov-chip'); if (!ch) return;
+  const { c, val } = ch.dataset;
+  covRatings[c] = Number(val);
+  document.querySelectorAll(`.cov-chip[data-c="${c}"]`).forEach(x => x.classList.toggle('sel', x === ch));
+});
+function coverage() {
+  return CONSTRUCTS.map(c => ({
+    construct: c.key, name: c.name,
+    coverage_1to7: covRatings[c.key] || null,
+    missing: document.querySelector(`textarea[name="cov-${c.key}"]`).value || null,
+  }));
+}
+
 const revRatings = {};
 rlist.addEventListener('click', e => {
   const o = e.target.closest('.opt'); if (!o) return;
@@ -406,6 +598,7 @@ document.getElementById('export-btn').addEventListener('click', () => {
       sorted_to: document.querySelector(`select[name="sort-${id}"]`).value || null,
       comment: document.querySelector(`textarea[name="cmt-${id}"]`).value || null,
     })),
+    coverage: coverage(),
   };
   const blob = new Blob([JSON.stringify(out, null, 2)], { type:"application/json" });
   const a = document.createElement('a');
@@ -434,6 +627,7 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
       affiliation: document.getElementById('reviewer-aff').value || null,
       respondent: document.getElementById('reviewer-name').value || null,
       ratings,
+      coverage: coverage(),
       submittedAt: new Date().toISOString(),
     });
     prog.textContent = '';
