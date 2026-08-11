@@ -108,6 +108,22 @@
     box-shadow:var(--shadow); padding:16px 18px; }
   .construct-card .cname { font-size:14.5px; font-weight:600; color:var(--accent-deep); }
   .construct-card .cdef { font-size:14.5px; color:var(--text-2); margin-top:5px; }
+  .defs-fab { position:fixed; right:18px; bottom:18px; z-index:60; padding:10px 16px;
+    background:var(--accent); color:#fff; border:0; border-radius:999px; font-family:inherit;
+    font-size:13.5px; font-weight:600; cursor:pointer; box-shadow:0 4px 14px rgba(63,87,214,.35); }
+  .defs-fab:hover { background:var(--accent-deep); }
+  .defs-overlay { position:fixed; inset:0; z-index:70; background:rgba(20,22,40,.45); display:none;
+    align-items:flex-end; justify-content:flex-end; padding:18px; }
+  .defs-overlay.open { display:flex; }
+  .defs-panel { background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:0 12px 40px rgba(20,22,40,.25); max-width:430px; width:100%;
+    max-height:min(78vh, 640px); overflow-y:auto; padding:18px 20px; }
+  .defs-panel h3 { font-size:15px; margin:0 0 4px; }
+  .defs-panel .dp-item { padding:9px 0; border-top:1px solid var(--border); }
+  .defs-panel .dp-item:first-of-type { border-top:0; margin-top:6px; }
+  .defs-panel .dp-name { font-size:13.5px; font-weight:600; color:var(--accent-deep); }
+  .defs-panel .dp-def { font-size:13.5px; color:var(--text-2); margin-top:3px; }
+  .defs-panel .dp-close { margin-top:12px; }
   .method-note { background:var(--accent-soft); border:1px solid #dfe3f7; border-radius:var(--radius);
     padding:16px 20px; font-size:15px; color:var(--text-2); margin:20px 0 26px; }
   .method-note p + p { margin-top:13px; }
@@ -117,8 +133,11 @@
   .note-plain p + p { margin-top:13px; }
   .note-plain .lead { color:var(--text); }
   .reviewer-row { display:flex; gap:12px; margin-bottom:22px; flex-wrap:wrap; }
-  .reviewer-row input { padding:10px 13px; background:var(--surface); border:1px solid var(--border);
-    border-radius:8px; font-family:inherit; font-size:14.5px; min-width:260px; }
+  .reviewer-row input, .reviewer-row select { padding:10px 13px; background:var(--surface); border:1px solid var(--border);
+    border-radius:8px; font-family:inherit; font-size:14.5px; min-width:260px; color:var(--text); }
+  .reviewer-row input.short { min-width:130px; }
+  .consent { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:var(--radius); padding:14px 18px; font-size:13.5px; color:var(--text-2); margin:0 0 22px; }
   .rev-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
     box-shadow:var(--shadow); padding:18px 20px; margin-bottom:14px; }
   .rev-item .text { font-size:16.5px; font-weight:500; margin-bottom:16px; }
@@ -129,6 +148,7 @@
     letter-spacing:0.05em; color:var(--muted); margin-bottom:8px; }
   .seg4 { display:flex; gap:6px; }
   .seg4 .opt { flex:1; padding:8px 4px; }
+  .seg4 .l { font-size:10px; }
   .hintline { font-size:12px; color:var(--muted); margin-top:6px; }
   .rev-block select, .rev-item textarea { width:100%; padding:9px 11px; background:var(--surface);
     border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px; color:var(--text); }
@@ -152,18 +172,24 @@
   .cov-card .cname { font-size:15px; font-weight:600; color:var(--accent-deep); }
   .cov-card .cdef { font-size:13.5px; color:var(--text-2); margin:4px 0 12px; }
   .cov-card .covq { font-size:14px; color:var(--text); font-weight:500; margin-bottom:9px; max-width:62ch; }
-  /* Chips and their anchors share one 7-column grid so each label lands under the point it names. */
-  .cov-chips { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px; }
-  .cov-chip { height:38px; display:grid; place-items:center; font-size:13px;
+  .cov-chips { display:flex; gap:6px; max-width:420px; }
+  .cov-chip { flex:1; min-width:30px; height:36px; display:grid; place-items:center; font-size:13px;
     font-weight:600; color:var(--text-2); background:var(--surface); border:1px solid var(--border);
     border-radius:7px; cursor:pointer; transition:all .1s; }
   .cov-chip:hover { border-color:var(--accent); background:var(--accent-soft); }
   .cov-chip.sel { background:var(--accent); border-color:var(--accent); color:#fff; }
-  .cov-anchors { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px;
+  .cov-anchors { display:flex; justify-content:space-between; max-width:420px;
+    font-size:11px; color:var(--muted); margin-top:5px; }
+  /* Coverage uses a 7-point scale: chips and legend share one 7-column grid so each
+     label lands under the point it names. (The element cards below keep .cov-chips /
+     .cov-anchors, which are a 4-point flex row.) */
+  .cov-scale { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px; }
+  .cov-scale .cov-chip { height:38px; }
+  .cov-legend { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px;
     font-size:11px; line-height:1.3; color:var(--muted); margin-top:6px; }
-  .cov-anchors .a1 { grid-column:1 / 3; text-align:left; }
-  .cov-anchors .a4 { grid-column:3 / 6; text-align:center; }
-  .cov-anchors .a7 { grid-column:6 / 8; text-align:right; }
+  .cov-legend .a1 { grid-column:1 / 3; text-align:left; }
+  .cov-legend .a4 { grid-column:3 / 6; text-align:center; }
+  .cov-legend .a7 { grid-column:6 / 8; text-align:right; }
   .cov-card textarea { width:100%; margin-top:12px; padding:9px 11px; background:var(--surface);
     border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px;
     color:var(--text); resize:vertical; min-height:52px; }
@@ -224,7 +250,7 @@
           <div class="stem-line"><em>In the last month,</em> to what extent have you felt&hellip;</div>
           <div class="sub">about the group you're most involved with</div>
         </div>
-        <span class="count" id="progress">0 / 20</span>
+        <span class="count" id="progress">0 / 21</span>
       </div>
       <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
     </div>
@@ -259,38 +285,64 @@
   <div class="defs-grid" id="construct-defs"></div>
 
   <div class="method-note">
-    <p class="lead"><strong>Your three tasks per item.</strong> Items are presented in shuffled order without their intended construct labels, and a comment box is provided on each for suggested rewording.</p>
-    <p><strong>1 · Relevance — to Collective Political Agency as a whole.</strong> Rate how relevant the item is to the overarching construct described above, <em>not</em> to any one of the five components. The component-level question is task 3, and asking it twice would give the answer away: an item can only be rated for relevance to <em>Relational embeddedness</em> by someone who has already decided that is where it belongs. Keeping the two judgments separate lets them do different work — relevance asks whether the item belongs in this instrument at all, the sort asks where inside it the item lands.</p>
-    <p><strong>2 · Clarity — for a community member, not for you.</strong> Rate how clearly you would expect someone with no organizing vocabulary and no knowledge of this framework to understand what is being asked. You are not being asked to certify that respondents comprehend the item; only respondents can establish that, and cognitive interviews with the intended population are planned for the next round (Willis, 2005). What an expert panel is good for here is spotting the failures that are visible on the page — double-barrelled wording, undefined abstractions, ambiguous referents, and readings we did not intend. If an item is clear to you but you can see how it would be misread, that is the comment box's best use.</p>
-    <p><strong>3 · Sorting.</strong> To which construct does the item read as belonging? &ldquo;None of these / unsure&rdquo; is a substantive answer, not a skip.</p>
+    <p class="lead"><strong>Thank you for lending your time and expertise to this review.</strong> For each item we ask three brief judgments. Items appear without their intended construct labels, in an order randomized for each reviewer, and every item has a comment box for suggested rewording.</p>
+    <p><strong>1 &middot; Relevance — to Collective Political Agency as a whole.</strong> Rate how relevant the item is to the overarching construct, <em>not</em> to any one of the six components. The component-level question is task 3, and asking it twice would give the answer away: an item can only be rated for relevance to <em>Relational embeddedness</em> by someone who has already decided that is where it belongs. Keeping the two judgments separate lets them do different work — relevance asks whether the item belongs in this instrument at all, the sort asks where inside it the item lands.</p>
+    <p><strong>2 &middot; Clarity — for a community member, not for you.</strong> Rate how clearly you would expect someone with no organizing vocabulary and no knowledge of this framework to understand what is being asked. You are not being asked to certify that respondents comprehend the item; only respondents can establish that, and cognitive interviews with the intended population are planned for the next round (Willis, 2005). What an expert panel is good for here is spotting the failures that are visible on the page — double-barrelled wording, undefined abstractions, ambiguous referents, and readings we did not intend. If an item is clear to you but you can see how it would be misread, that is the comment box's best use.</p>
+    <p><strong>3 &middot; Sorting.</strong> Which construct does the item read as belonging to? &ldquo;None of these / unsure&rdquo; is a substantive answer, not a skip.</p>
     <p><strong>How the ratings are scored.</strong> Item-level content validity (I-CVI) is a <em>proportion of experts</em>, not an average of the 1&ndash;4 scale. Each rating is dichotomised — 3 or 4 counts as relevant, 1 or 2 does not — and I-CVI is the share of the panel in the relevant category. The .78 cut-off is the point at which that proportion exceeds chance agreement for a panel of six to ten raters (7 of 9 = .78); for a panel of five or fewer the criterion is 1.00, and for larger panels it relaxes toward .70 (Lynn, 1986; <a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>). The threshold applied will be the one matching this panel's final size. Items falling below it are revised or dropped.</p>
-    <p><strong>On the sorting task and published benchmarks.</strong> You are right that the benchmarks do not exist for a panel like this one. The distributions reported by <a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al. (2019)</a> are normed on large panels drawn from the general respondent population, so an expert panel of this size has nothing comparable to be scored against — which means the standard has to be built here rather than borrowed. The sort is therefore scored against criteria internal to the task itself: the proportion of substantive agreement (<em>p</em><sub>sa</sub>) and the substantive-validity coefficient (<em>c</em><sub>sv</sub>) of Anderson &amp; Gerbing (1991), both computed from the assignments this panel makes and neither requiring an external norm. Items that draw no consensus, or that are consistently read into a construct other than the intended one, are revised, reassigned, or dropped. The benchmarked comparison comes later: a definitional-correspondence study with raters drawn from the instrument's intended respondent population, scorable against the published distributions (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>).</p>
-    <p><strong>A final section following the items assesses the content coverage of the item pool</strong> — whether the set, taken together, samples each definition completely. This is the judgment for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019).</p>
+    <p><strong>On the sorting task and published benchmarks.</strong> The benchmarks do not exist for a panel like this one. The distributions reported by <a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al. (2019)</a> are normed on large panels drawn from the general respondent population, so an expert panel of this size has nothing comparable to be scored against — which means the standard has to be built here rather than borrowed. The sort is therefore scored against criteria internal to the task itself: the proportion of substantive agreement (<em>p</em><sub>sa</sub>) and the substantive-validity coefficient (<em>c</em><sub>sv</sub>) of Anderson &amp; Gerbing (1991), both computed from the assignments this panel makes and neither requiring an external norm. Items that draw no consensus, or that are consistently read into a construct other than the intended one, are revised, reassigned, or dropped. The benchmarked comparison comes later: a definitional-correspondence study with raters drawn from the instrument's intended respondent population, scorable against the published distributions (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>).</p>
+    <p><strong>After the items, two short closing sections ask:</strong> (a) how completely the item pool covers each construct, and what is missing; and (b) whether the instrument's instructions, stem, response scale, and recall window are appropriate. These are judgments for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019; Haynes, Richard, &amp; Kubany, 1995).</p>
   </div>
 
   <div class="note-plain">
     <p class="lead"><strong>Why the reference window is one month.</strong> CPA is specified as a <em>state</em>, not a trait. The instrument has to move when someone joins a campaign, sits through a training, wins something, or loses something — if it cannot detect that, it cannot do the job we need it for.</p>
     <p>One month is the shortest window that still spans a normal cycle of group activity. Most groups meet at least monthly, so nearly every respondent has real events to report rather than an impression to summarise. A one-week window would put respondents in groups on a monthly rhythm at the floor, and would pick up the ordinary noise of a bad week. Six months or a year would buy stability at the cost of exactly the sensitivity to organizing experience and exposure we are trying to preserve, and would push people from recall into general self-characterisation. An unanchored agree&ndash;disagree format takes that further still: it invites a trait reading, and a trait does not move when the organizing does.</p>
-    <p>The trade-off we are accepting is that a one-month state measure will carry more occasion-specific variance than a trait-style scale, and test&ndash;retest figures will look lower as a result. That is the intended behaviour, not error. If you would recommend a different window, or an unanchored agree&ndash;disagree format, please say so in the comment box.</p>
+    <p>The trade-off we are accepting is that a one-month state measure will carry more occasion-specific variance than a trait-style scale, and test&ndash;retest figures will look lower as a result. That is the intended behaviour, not error. The closing section asks you to rate this choice directly; if you would recommend a different window, or an unanchored agree&ndash;disagree format, please say so there.</p>
+  </div>
+
+  <div class="consent">
+    Participation in this expert review is <strong>voluntary</strong>; you may stop at any time and unsubmitted responses are not recorded. Your ratings, comments, and reviewer information are stored in the project's secure research database and used solely for instrument development; findings are reported in aggregate. Please complete the review <strong>independently, without discussing the items with other panelists</strong>, ideally in one sitting. Questions about this review or the study: contact Liz McKenna (Civic Power Lab, HKS &mdash; <a href="mailto:emckenna@hks.harvard.edu">emckenna@hks.harvard.edu</a>).
   </div>
 
   <div class="reviewer-row">
     <input id="reviewer-name" placeholder="Your name">
-    <input id="reviewer-aff" placeholder="Affiliation / expertise">
+    <input id="reviewer-aff" placeholder="Affiliation">
+    <select id="reviewer-role">
+      <option value="">Primary role — select</option>
+      <option value="scholar">Scholar / researcher</option>
+      <option value="practitioner">Practitioner / organizer</option>
+      <option value="both">Both</option>
+      <option value="other">Other</option>
+    </select>
+    <input id="reviewer-years" class="short" type="number" min="0" max="70" placeholder="Years of experience">
+    <input id="reviewer-domain" placeholder="Area of expertise (e.g., social movements, survey methods)">
   </div>
 
   <div id="review-list"></div>
 
   <h2>Assessment of content coverage</h2>
-  <p class="intro full">For each construct, rate how completely the item pool samples the content domain of that definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). Judge the pool as a whole rather than counting the items you happened to sort into that construct — which items bear on which construct is itself part of what this review is testing. This is a question about the adequacy of the set, not the quality of any individual item: a pool can be made entirely of good items and still leave half a definition unmeasured. Where sampling looks incomplete, please describe the unrepresented part of the domain and, where possible, suggest candidate items.</p>
+  <p class="intro full">For each construct, rate how completely the item pool samples the content domain of that definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). Judge the pool as a whole rather than counting the items you happened to sort into that construct — which items bear on which construct is itself part of what this review is testing. This is a question about the adequacy of the set, not the quality of any individual item: a pool can be made entirely of good items and still leave half a definition unmeasured. Where sampling looks incomplete, please describe the unrepresented part of the domain and, where possible, suggest candidate items. Racial group consciousness is deliberately carried by a single indicator in this short instrument; for that construct the question is not coverage but centrality — whether the chosen item represents the construct's most central content.</p>
   <div id="coverage-list"></div>
+
+  <h2>Review of instrument elements</h2>
+  <p class="intro full">Content validity extends beyond items to the instrument's other elements (Haynes, Richard, &amp; Kubany, 1995). Rate the appropriateness of each element for the instrument's purpose — a brief, repeatable state measure for members of organizing groups (1 = not appropriate &middot; 4 = highly appropriate) — and note any recommended changes.</p>
+  <div id="element-list"></div>
 
   <div class="submitrow">
     <button class="btn btn-primary" id="rev-submit-btn">Submit review</button>
     <button class="btn btn-ghost" id="export-btn">Export as JSON</button>
-    <span class="status" id="rev-progress">0 of 20 items rated</span>
+    <span class="status" id="rev-progress">0 of 21 items rated</span>
   </div>
   <div class="status thanks" id="rev-thanks" style="display:none; margin-top:14px;">Thank you so much for your time! We look forward to reporting back the results.</div>
+
+  <button class="defs-fab" id="defs-fab" aria-haspopup="dialog" aria-expanded="false">Definitions</button>
+  <div class="defs-overlay" id="defs-overlay" role="dialog" aria-modal="true" aria-label="Construct definitions">
+    <div class="defs-panel">
+      <h3>Construct definitions</h3>
+      <div id="defs-panel-list"></div>
+      <button class="btn btn-ghost dp-close" id="defs-close">Close</button>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -333,6 +385,8 @@ const CONSTRUCTS = [
     def:"The perceived conjoint capability of the group to organize and carry out collective action." },
   { key:"ir", name:"Institutional responsiveness",
     def:"The belief that institutions and decision-makers respond to organized collective action." },
+  { key:"gc", name:"Racial group consciousness",
+    def:"The perceived political power of one's racial or ethnic group and its bearing on one's own political standing." },
 ];
 
 const ITEMS = [
@@ -356,10 +410,17 @@ const ITEMS = [
   { id:"i2", c:"ir", rev:false, t:"that your group can get a seat at the tables where decisions are made?" },
   { id:"i3", c:"ir", rev:false, t:"that organized people can change what those in power consider possible?" },
   { id:"i4", c:"ir", rev:true,  t:"that the people who run things will do what they want regardless of what groups like yours do?" },
+  { id:"gc1", c:"gc", rev:false, t:"that people who share your racial or ethnic background have the power to shape what happens in this country?" },
 ];
 
-const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r1","c3","i4","m4","s3","r2","c4","i2","m5","s4","r3","c1","i3"];
-const REVIEW_ORDER = ["c2","m4","i4","r1","s3","m1","c4","r3","s1","m5","c1","i2","r4","s2","i3","i1","r2","s4","m3","c3"];
+const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r1","c3","i4","gc1","m4","s3","r2","c4","i2","m5","s4","r3","c1","i3"];
+/* Review order is randomized per reviewer (Fisher-Yates) and stored in the submission payload. */
+const REVIEW_ORDER = ITEMS.map(it => it.id);
+for (let i = REVIEW_ORDER.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [REVIEW_ORDER[i], REVIEW_ORDER[j]] = [REVIEW_ORDER[j], REVIEW_ORDER[i]];
+}
+const REVIEW_STARTED_AT = new Date().toISOString();
 const ANCHORS = [ ["0","Not at all"], ["1","A little"], ["2","Somewhat"], ["3","Quite a bit"], ["4","A great deal"] ];
 const byId = Object.fromEntries(ITEMS.map(it => [it.id, it]));
 const answers = {};
@@ -373,7 +434,7 @@ document.querySelectorAll('.tab').forEach(tb => tb.addEventListener('click', () 
 /* ===== Instrument (paged: 3 items per screen) ===== */
 const PER_SCREEN = 3;
 const SCREENS = Math.ceil(FIELD_ORDER.length / PER_SCREEN);
-const INST_STORE = "cpa_v05_answers";
+const INST_STORE = "cpa_v07_answers";
 let instPage = 0;
 let fromReview = false;
 let advanceTimer = null;
@@ -503,7 +564,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
   btn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
   try {
     await saveToBackend({
-      instrument: "cpa", version: "v0.7-pool20",
+      instrument: "cpa", version: "v0.7-pool21",
       field_order: FIELD_ORDER,
       answers,
       startedAt: PAGE_LOADED_AT, submittedAt: new Date().toISOString(),
@@ -527,6 +588,30 @@ CONSTRUCTS.forEach(c => {
   d.innerHTML = `<div class="cname">${c.name}</div><div class="cdef">${c.def}</div>`;
   defs.appendChild(d);
 });
+/* Floating definitions panel — keeps definitions in view throughout the review (Hinkin & Tracey, 1999) */
+const defsPanelList = document.getElementById('defs-panel-list');
+CONSTRUCTS.forEach(c => {
+  const d = document.createElement('div');
+  d.className = 'dp-item';
+  d.innerHTML = `<div class="dp-name">${c.name}</div><div class="dp-def">${c.def}</div>`;
+  defsPanelList.appendChild(d);
+});
+const defsFab = document.getElementById('defs-fab');
+const defsOverlay = document.getElementById('defs-overlay');
+function setDefsOpen(open) {
+  defsOverlay.classList.toggle('open', open);
+  defsFab.setAttribute('aria-expanded', String(open));
+  if (open) document.getElementById('defs-close').focus(); else defsFab.focus();
+}
+defsFab.addEventListener('click', () => setDefsOpen(true));
+document.getElementById('defs-close').addEventListener('click', () => setDefsOpen(false));
+defsOverlay.addEventListener('click', e => { if (e.target === defsOverlay) setDefsOpen(false); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && defsOverlay.classList.contains('open')) setDefsOpen(false);
+});
+/* Full anchor labels per Lynn (1986) — all four points defined, not endpoints only */
+const REL_ANCHORS = ["Not relevant", "Major revision needed", "Minor revision needed", "Highly relevant"];
+const CLA_ANCHORS = ["Not clear", "Major rewording needed", "Minor rewording needed", "Clear as written"];
 const rlist = document.getElementById('review-list');
 REVIEW_ORDER.forEach((id, idx) => {
   const it = byId[id];
@@ -537,15 +622,15 @@ REVIEW_ORDER.forEach((id, idx) => {
     <div class="rev-grid">
       <div class="rev-block rel">
         <label class="head">Relevance to CPA</label>
-        <div class="seg4" data-kind-style="rel">${[1,2,3,4].map(v =>
-          `<div class="opt" data-kind="rel" data-item="${id}" data-val="${v}"><span class="n">${v}</span></div>`).join('')}</div>
-        <div class="hintline">1 not relevant &rarr; 4 highly relevant &mdash; to the construct as a whole, not to one component</div>
+        <div class="seg4" data-kind-style="rel" role="radiogroup">${[1,2,3,4].map(v =>
+          `<div class="opt" role="radio" tabindex="0" aria-checked="false" data-kind="rel" data-item="${id}" data-val="${v}"><span class="n">${v}</span><span class="l">${REL_ANCHORS[v-1]}</span></div>`).join('')}</div>
+        <div class="hintline">Relevance to the construct as a whole, not to one component</div>
       </div>
       <div class="rev-block clar">
         <label class="head">Clarity</label>
-        <div class="seg4" data-kind-style="clar">${[1,2,3,4].map(v =>
-          `<div class="opt" data-kind="clar" data-item="${id}" data-val="${v}"><span class="n">${v}</span></div>`).join('')}</div>
-        <div class="hintline">1 likely to be misread &rarr; 4 unambiguous &mdash; as a community member would read it</div>
+        <div class="seg4" data-kind-style="clar" role="radiogroup">${[1,2,3,4].map(v =>
+          `<div class="opt" role="radio" tabindex="0" aria-checked="false" data-kind="clar" data-item="${id}" data-val="${v}"><span class="n">${v}</span><span class="l">${CLA_ANCHORS[v-1]}</span></div>`).join('')}</div>
+        <div class="hintline">As a community member would read it</div>
       </div>
       <div class="rev-block">
         <label class="head">Which construct?</label>
@@ -559,31 +644,40 @@ REVIEW_ORDER.forEach((id, idx) => {
     <textarea name="cmt-${id}" placeholder="Suggested rewording or comment (optional)"></textarea>`;
   rlist.appendChild(card);
 });
-/* Coverage / deficiency check — expert judgment of what the pool misses */
+/* Coverage / deficiency check — expert judgment of what the pool misses.
+   gc is a deliberate single-indicator construct: its question is indicator centrality, not pool coverage. */
 const covRatings = {};
 const covList = document.getElementById('coverage-list');
 CONSTRUCTS.forEach(c => {
+  const single = c.key === 'gc';
   const card = document.createElement('div');
   card.className = 'cov-card';
   card.innerHTML = `
     <div class="cname">${c.name}</div>
     <div class="cdef">${c.def}</div>
-    <div class="covq">How completely does the pool, taken as a whole, sample this definition?</div>
-    <div class="cov-chips">${[1,2,3,4,5,6,7].map(v =>
-      `<div class="cov-chip" data-c="${c.key}" data-val="${v}">${v}</div>`).join('')}</div>
-    <div class="cov-anchors">
-      <span class="a1">1 &middot; very incompletely</span>
+    <div class="covq">${single
+      ? 'How well does this single item represent the construct&rsquo;s most central content?'
+      : 'How completely does the pool, taken as a whole, sample this definition?'}</div>
+    <div class="cov-scale">${[1,2,3,4,5,6,7].map(v =>
+      `<div class="cov-chip" role="radio" tabindex="0" aria-checked="false" data-c="${c.key}" data-val="${v}">${v}</div>`).join('')}</div>
+    <div class="cov-legend">
+      <span class="a1">1 &middot; ${single ? 'very poorly' : 'very incompletely'}</span>
       <span class="a4">4 &middot; moderately</span>
-      <span class="a7">7 &middot; very completely</span>
+      <span class="a7">7 &middot; ${single ? 'very well' : 'very completely'}</span>
     </div>
-    <textarea name="cov-${c.key}" placeholder="Unrepresented aspects of this construct's domain; suggested candidate items (optional)"></textarea>`;
+    <textarea name="cov-${c.key}" placeholder="${single
+      ? 'If a different single item would better represent this construct, propose it (optional)'
+      : 'Unrepresented aspects of this content domain; suggested candidate items (optional)'}"></textarea>`;
   covList.appendChild(card);
 });
 covList.addEventListener('click', e => {
   const ch = e.target.closest('.cov-chip'); if (!ch) return;
   const { c, val } = ch.dataset;
   covRatings[c] = Number(val);
-  document.querySelectorAll(`.cov-chip[data-c="${c}"]`).forEach(x => x.classList.toggle('sel', x === ch));
+  document.querySelectorAll(`.cov-chip[data-c="${c}"]`).forEach(x => {
+    x.classList.toggle('sel', x === ch);
+    x.setAttribute('aria-checked', String(x === ch));
+  });
 });
 function coverage() {
   return CONSTRUCTS.map(c => ({
@@ -593,16 +687,77 @@ function coverage() {
   }));
 }
 
+/* Instrument-element review (Haynes, Richard, & Kubany, 1995) */
+const ELEMENTS = [
+  { key:'instructions', name:'Introductory instructions',
+    text:'"The questions below ask about your feelings and experiences during the last month… (Answer quickly, with your first impression, rather than deliberating over each one.)"' },
+  { key:'lead_in', name:'Group lead-in',
+    text:'"Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action)"' },
+  { key:'stem', name:'Item stem',
+    text:'"In the last month, to what extent have you felt…"' },
+  { key:'response_scale', name:'Response scale',
+    text:'0 Not at all · 1 A little · 2 Somewhat · 3 Quite a bit · 4 A great deal' },
+  { key:'recall_window', name:'Recall window',
+    text:'One month — chosen because CPA is a state rather than a trait: the window has to be short enough that the measure moves with organizing experience and exposure, and long enough to span a normal cycle of group activity, since most groups meet at least monthly. The full rationale and the trade-offs are set out in the note on the reference window above. If you would recommend a different window, or an unanchored agree–disagree format, please say so in the comment box.' },
+];
+const elemRatings = {};
+const elemList = document.getElementById('element-list');
+ELEMENTS.forEach(el => {
+  const card = document.createElement('div');
+  card.className = 'cov-card';
+  card.innerHTML = `
+    <div class="cname">${el.name}</div>
+    <div class="cdef">${el.text}</div>
+    <div class="cov-chips" style="max-width:250px">${[1,2,3,4].map(v =>
+      `<div class="cov-chip" role="radio" tabindex="0" aria-checked="false" data-e="${el.key}" data-val="${v}">${v}</div>`).join('')}</div>
+    <div class="cov-anchors" style="max-width:250px"><span>1 = not appropriate</span><span>4 = highly appropriate</span></div>`;
+  elemList.appendChild(card);
+});
+const elemComment = document.createElement('div');
+elemComment.className = 'cov-card';
+elemComment.innerHTML = `<div class="cname">Comments on instrument elements</div>
+  <textarea name="elem-comment" placeholder="Recommended changes to instructions, lead-in, stem, response scale, or recall window (optional)"></textarea>`;
+elemList.appendChild(elemComment);
+elemList.addEventListener('click', e => {
+  const ch = e.target.closest('.cov-chip'); if (!ch) return;
+  const { e: ekey, val } = ch.dataset;
+  elemRatings[ekey] = Number(val);
+  document.querySelectorAll(`.cov-chip[data-e="${ekey}"]`).forEach(x => {
+    x.classList.toggle('sel', x === ch);
+    x.setAttribute('aria-checked', String(x === ch));
+  });
+});
+function elements() {
+  return {
+    ratings_1to4: ELEMENTS.map(el => ({ element: el.key, rating: elemRatings[el.key] || null })),
+    comment: document.querySelector('textarea[name="elem-comment"]').value || null,
+  };
+}
+
+/* Keyboard operability for chip controls (WCAG) */
+function chipKeys(container) {
+  container.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const ch = e.target.closest('.cov-chip, .opt');
+    if (ch) { e.preventDefault(); ch.click(); }
+  });
+}
+chipKeys(covList); chipKeys(elemList);
+
 const revRatings = {};
 rlist.addEventListener('click', e => {
   const o = e.target.closest('.opt'); if (!o) return;
   const { kind, item, val } = o.dataset;
   revRatings[item] = revRatings[item] || {};
   revRatings[item][kind] = Number(val);
-  document.querySelectorAll(`.opt[data-kind="${kind}"][data-item="${item}"]`).forEach(x => x.classList.toggle('sel', x === o));
+  document.querySelectorAll(`.opt[data-kind="${kind}"][data-item="${item}"]`).forEach(x => {
+    x.classList.toggle('sel', x === o);
+    x.setAttribute('aria-checked', String(x === o));
+  });
   updateRevProgress();
 });
 rlist.addEventListener('change', updateRevProgress);
+chipKeys(rlist);
 function updateRevProgress() {
   const n = REVIEW_ORDER.filter(id =>
     revRatings[id] && revRatings[id].rel && revRatings[id].clar &&
@@ -610,11 +765,17 @@ function updateRevProgress() {
   ).length;
   document.getElementById('rev-progress').textContent = `${n} of ${REVIEW_ORDER.length} items rated`;
 }
+updateRevProgress();
 document.getElementById('export-btn').addEventListener('click', () => {
   const out = {
     reviewer: document.getElementById('reviewer-name').value || null,
     affiliation: document.getElementById('reviewer-aff').value || null,
-    instrument: "CPA candidate pool v0.2",
+    reviewer_role: document.getElementById('reviewer-role').value || null,
+    reviewer_years: document.getElementById('reviewer-years').value || null,
+    reviewer_domain: document.getElementById('reviewer-domain').value || null,
+    instrument: "CPA candidate pool v0.7-pool21",
+    item_order: REVIEW_ORDER,
+    startedAt: REVIEW_STARTED_AT,
     exportedAt: new Date().toISOString(),
     ratings: REVIEW_ORDER.map(id => ({
       item: id, text: byId[id].t, intended_construct: byId[id].c,
@@ -624,6 +785,7 @@ document.getElementById('export-btn').addEventListener('click', () => {
       comment: document.querySelector(`textarea[name="cmt-${id}"]`).value || null,
     })),
     coverage: coverage(),
+    instrument_elements: elements(),
   };
   const blob = new Blob([JSON.stringify(out, null, 2)], { type:"application/json" });
   const a = document.createElement('a');
@@ -647,12 +809,18 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
   try {
     await saveToBackend({
       channel: "CPA Expert Review",
-      instrument: "cpa", version: "v0.7-pool20",
+      instrument: "cpa", version: "v0.7-pool21",
       reviewer: document.getElementById('reviewer-name').value || null,
       affiliation: document.getElementById('reviewer-aff').value || null,
+      reviewer_role: document.getElementById('reviewer-role').value || null,
+      reviewer_years: document.getElementById('reviewer-years').value || null,
+      reviewer_domain: document.getElementById('reviewer-domain').value || null,
       respondent: document.getElementById('reviewer-name').value || null,
+      item_order: REVIEW_ORDER,
       ratings,
       coverage: coverage(),
+      instrument_elements: elements(),
+      startedAt: REVIEW_STARTED_AT,
       submittedAt: new Date().toISOString(),
     });
     prog.textContent = '';
