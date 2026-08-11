@@ -138,6 +138,11 @@
   .reviewer-row input.short { min-width:130px; }
   .consent { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
     border-radius:var(--radius); padding:14px 18px; font-size:13.5px; color:var(--text-2); margin:28px 0 22px; }
+  .rescue { background:#fdf3f2; border:1px solid #f0c9c4; border-left:3px solid var(--red);
+    border-radius:var(--radius); padding:16px 20px; margin-top:16px; font-size:14.5px; color:var(--text-2); }
+  .rescue strong { color:var(--red); display:block; margin-bottom:8px; font-size:15px; }
+  .rescue p { margin-top:8px; }
+  .rescue .detail { font-size:12.5px; color:var(--muted); }
   .draft-note { background:#eaf6f0; border:1px solid #bfe3d2; border-radius:var(--radius);
     padding:10px 14px; font-size:13px; color:#12694a; margin-bottom:14px; }
   .rev-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
@@ -345,6 +350,12 @@
     <span class="status" id="rev-progress">0 of 21 items rated</span>
   </div>
   <div class="status thanks" id="rev-thanks" style="display:none; margin-top:14px;">Thank you so much for your time! We look forward to reporting back the results.</div>
+
+  <div class="rescue" id="rev-rescue" style="display:none">
+    <strong>Your review did not reach our database, and none of your work is lost.</strong>
+    <p>A file of your answers has just downloaded to this device. Please email it to <a href="mailto:emckenna@hks.harvard.edu?subject=CPA%20expert%20review">emckenna@hks.harvard.edu</a> and we will load it in by hand. Your answers are also still saved in this browser, so you can come back to this page later and press Submit again.</p>
+    <p class="detail">Technical detail, in case it is useful to us: <span id="rev-rescue-detail"></span></p>
+  </div>
 
   <button class="defs-fab" id="defs-fab" aria-haspopup="dialog" aria-expanded="false">Definitions</button>
   <div class="defs-overlay" id="defs-overlay" role="dialog" aria-modal="true" aria-label="Construct definitions">
@@ -827,8 +838,8 @@ if (restoreDraft()) {
   document.getElementById('draft-note').style.display = 'block';
 }
 
-document.getElementById('export-btn').addEventListener('click', () => {
-  const out = {
+function reviewExport() {
+  return {
     reviewer: document.getElementById('reviewer-name').value || null,
     affiliation: document.getElementById('reviewer-aff').value || null,
     reviewer_role: document.getElementById('reviewer-role').value || null,
@@ -847,13 +858,17 @@ document.getElementById('export-btn').addEventListener('click', () => {
     })),
     coverage: coverage(),
   };
+}
+function downloadReview() {
+  const out = reviewExport();
   const blob = new Blob([JSON.stringify(out, null, 2)], { type:"application/json" });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `cpa-review-${(out.reviewer || "anonymous").toLowerCase().replace(/[^a-z0-9]+/g,"-")}.json`;
   a.click();
   URL.revokeObjectURL(a.href);
-});
+}
+document.getElementById('export-btn').addEventListener('click', downloadReview);
 
 document.getElementById('rev-submit-btn').addEventListener('click', async () => {
   const btn = document.getElementById('rev-submit-btn');
@@ -888,9 +903,16 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
     document.getElementById('draft-note').style.display = 'none';
     document.getElementById('rev-thanks').style.display = 'block';
   } catch (err) {
+    /* The save failed. Do not let the reviewer walk away with nothing: hand them
+       their answers as a file, and keep the draft in the browser as well. */
     btn.disabled = false;
     prog.className = 'status err';
-    prog.textContent = err.message;
+    prog.textContent = '';
+    try { downloadReview(); } catch (e) {}
+    const box = document.getElementById('rev-rescue');
+    document.getElementById('rev-rescue-detail').textContent = err.message;
+    box.style.display = 'block';
+    box.scrollIntoView({ block:'center' });
   }
 });
 
