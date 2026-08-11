@@ -379,12 +379,17 @@
    else: there is no select policy, so this key cannot read a single response back.
    Schema and policies live in supabase-setup.sql. */
 const SUPABASE_URL = "https://xdujvtvjpwboonxjjqa.supabase.co";
-const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_HERE";
+const SUPABASE_ANON_KEY = "sb_publishable_KYNMrQWM7OQQ72HLv7WiFQ_eB1R_uT_";
+/* Legacy anon keys are JWTs and go in Authorization as a bearer token. The newer
+   sb_publishable_ keys are not JWTs, and handing one to the JWT parser is rejected,
+   so those travel in apikey alone. */
+const KEY_IS_JWT = SUPABASE_ANON_KEY.startsWith("eyJ");
 async function saveToBackend(payload) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/cpa_responses`, {
     method:"POST",
     headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY,
-      "Authorization":`Bearer ${SUPABASE_ANON_KEY}`, "Prefer":"return=minimal" },
+      ...(KEY_IS_JWT ? { "Authorization":`Bearer ${SUPABASE_ANON_KEY}` } : {}),
+      "Prefer":"return=minimal" },
     body: JSON.stringify({
       kind: payload.kind,
       version: payload.version || null,
