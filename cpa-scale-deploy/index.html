@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collective Political Agency Scale</title>
+<link rel="icon" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#fafafa; --surface:#ffffff; --border:#e5e7eb; --border-strong:#d4d4d8;
+    --text:#18181b; --text-2:#3f3f46; --muted:#71717a;
+    --accent:#5371ff; --accent-soft:#eef1ff; --accent-deep:#3f57d6;
+    --green:#1a8a5c; --red:#c04437;
+    --radius:8px;
+    --shadow:0 1px 2px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.04);
+  }
+  * { box-sizing:border-box; margin:0; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:"Inter",-apple-system,system-ui,sans-serif;
+    font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .shell { max-width: 980px; margin:0 auto; padding: 24px 24px 100px; }
+
+  header.top { display:flex; align-items:center; justify-content:space-between; padding:6px 0 18px; }
+  .wordmark { font-size:13.5px; font-weight:600; letter-spacing:-0.01em; color:var(--text); }
+  .wordmark span { color:var(--muted); font-weight:400; }
+  .badge { font-size:11.5px; font-weight:500; color:var(--muted);
+    border:1px solid var(--border); background:var(--surface); padding:4px 10px; border-radius:999px; }
+
+  .tabs { display:flex; gap:4px; background:#efeff1; border-radius:10px; padding:3px; width:max-content; margin-bottom:34px; }
+  .tab { font-size:13.5px; font-weight:500; color:var(--muted); padding:7px 16px; border:none; cursor:pointer;
+    background:transparent; border-radius:8px; transition:all .12s; }
+  .tab.active { background:var(--surface); color:var(--accent-deep); box-shadow:var(--shadow); border:1px solid #dfe3f7; font-weight:600; }
+  .tab.active::before { content:"● "; font-size:8px; vertical-align:2px; }
+  .view { display:none; } .view.active { display:block; }
+
+  h1 { font-size:26px; font-weight:600; letter-spacing:-0.02em; margin-bottom:14px; }
+  h2 { font-size:18px; font-weight:600; letter-spacing:-0.01em; margin:34px 0 14px; }
+  .intro { font-size:16px; color:var(--text-2); max-width:76ch; margin-bottom:10px; }
+  .intro.full { max-width:none; }
+
+  /* ===== Sticky stem bar ===== */
+  .stickybar { position:sticky; top:0; z-index:20; background:rgba(250,250,250,0.96); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border); margin:0 -24px; padding:10px 24px 12px; }
+  .stickybar .stem-line { font-size:19px; font-weight:600; letter-spacing:-0.015em; line-height:1.3; color:var(--text); }
+  .stickybar .stem-line em { font-style:normal; color:var(--accent-deep); }
+  .stickybar .sub { font-size:12px; color:var(--muted); margin-top:2px; }
+  .stickybar .progress-track { height:3px; background:var(--border); border-radius:2px; margin-top:9px; overflow:hidden; }
+  .stickybar .progress-fill { height:100%; width:0%; background:var(--accent); transition:width .2s; }
+  .stickybar .meta { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .stickybar .count { font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  /* ===== Pager ===== */
+  .navrow { display:flex; align-items:center; gap:14px; margin-top:22px; }
+  .navrow .hint { font-size:12.5px; color:var(--muted); margin-right:auto; }
+  .backbtn { width:38px; height:38px; display:grid; place-items:center; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; color:var(--muted); font-size:15px; cursor:pointer; }
+  .backbtn:hover { border-color:var(--accent); color:var(--accent-deep); }
+  .backbtn[disabled] { opacity:0; pointer-events:none; }
+  .sumline { display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--surface);
+    border:1px solid var(--border); border-bottom:none; padding:10px 14px; cursor:pointer; font-family:inherit; }
+  .sumline:first-child { border-radius:8px 8px 0 0; }
+  .sumline:last-child { border-radius:0 0 8px 8px; border-bottom:1px solid var(--border); }
+  .sumline:hover { background:var(--accent-soft); }
+  .sumline .n { font-size:12px; color:var(--muted); min-width:22px; font-variant-numeric:tabular-nums; }
+  .sumline .t { flex:1; font-size:13.5px; line-height:1.35; }
+  .sumline .v { font-size:12px; font-weight:600; color:var(--accent-deep); background:var(--accent-soft);
+    padding:3px 9px; border-radius:999px; white-space:nowrap; }
+
+  .stem-big { font-size:21px; font-weight:600; letter-spacing:-0.015em; line-height:1.45; color:var(--text);
+    background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:var(--radius); padding:18px 22px; margin:26px 0 26px; max-width:none; }
+
+  /* ===== Items ===== */
+  .item { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:18px 20px; margin-bottom:12px; }
+  .item.missing { border-color:var(--red); }
+  .item .qrow { display:flex; gap:10px; margin-bottom:14px; }
+  .item .num { font-size:13px; font-weight:600; color:var(--muted); min-width:26px; padding-top:3px; font-variant-numeric:tabular-nums; }
+  .item .text { font-size:17px; font-weight:500; color:var(--text); line-height:1.5; }
+  .opts { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .opt { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:9px 6px;
+    display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; transition:all .1s; }
+  .opt:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .opt .n { font-size:15px; font-weight:600; color:var(--text-2); }
+  .opt .l { font-size:12px; color:var(--muted); text-align:center; line-height:1.25; }
+  .opt.sel { background:var(--accent); border-color:var(--accent); }
+  .opt.sel .n, .opt.sel .l { color:#fff; }
+  @media (max-width:640px){ .opts{grid-template-columns:repeat(5,1fr)} .opt .l{font-size:10px} }
+
+  .submitrow { margin-top:30px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .btn { font-size:14px; font-weight:600; padding:11px 22px; border-radius:8px; cursor:pointer; border:1px solid; transition:all .12s; }
+  .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn-primary:hover { background:var(--accent-deep); }
+  .btn-primary:disabled { opacity:.55; cursor:default; }
+  .btn-ghost { background:var(--surface); color:var(--text-2); border-color:var(--border-strong); }
+  .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+  .status { font-size:14px; }
+  .status.ok { color:var(--green); font-weight:500; }
+  .status.err { color:var(--red); font-weight:500; }
+
+  /* ===== Review ===== */
+  .defs-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:720px){ .defs-grid{grid-template-columns:1fr} }
+  .construct-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:16px 18px; }
+  .construct-card .cname { font-size:14.5px; font-weight:600; color:var(--accent-deep); }
+  .construct-card .cdef { font-size:14.5px; color:var(--text-2); margin-top:5px; }
+  .defs-fab { position:fixed; right:18px; bottom:18px; z-index:60; padding:10px 16px;
+    background:var(--accent); color:#fff; border:0; border-radius:999px; font-family:inherit;
+    font-size:13.5px; font-weight:600; cursor:pointer; box-shadow:0 4px 14px rgba(63,87,214,.35); }
+  .defs-fab:hover { background:var(--accent-deep); }
+  .defs-overlay { position:fixed; inset:0; z-index:70; background:rgba(20,22,40,.45); display:none;
+    align-items:flex-end; justify-content:flex-end; padding:18px; }
+  .defs-overlay.open { display:flex; }
+  .defs-panel { background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:0 12px 40px rgba(20,22,40,.25); max-width:430px; width:100%;
+    max-height:min(78vh, 640px); overflow-y:auto; padding:18px 20px; }
+  .defs-panel h3 { font-size:15px; margin:0 0 4px; }
+  .defs-panel .dp-item { padding:9px 0; border-top:1px solid var(--border); }
+  .defs-panel .dp-item:first-of-type { border-top:0; margin-top:6px; }
+  .defs-panel .dp-name { font-size:13.5px; font-weight:600; color:var(--accent-deep); }
+  .defs-panel .dp-def { font-size:13.5px; color:var(--text-2); margin-top:3px; }
+  .defs-panel .dp-close { margin-top:12px; }
+  .method-note { background:var(--accent-soft); border:1px solid #dfe3f7; border-radius:var(--radius);
+    padding:16px 20px; font-size:15px; color:var(--text-2); margin:20px 0 26px; }
+  .method-note p + p { margin-top:13px; }
+  .method-note .lead { color:var(--text); }
+  .note-plain { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:var(--radius); padding:16px 20px; font-size:15px; color:var(--text-2); margin:0 0 26px; }
+  .note-plain p + p { margin-top:13px; }
+  .note-plain .lead { color:var(--text); }
+  .reviewer-row { display:flex; gap:12px; margin-bottom:22px; flex-wrap:wrap; }
+  .reviewer-row input, .reviewer-row select { padding:10px 13px; background:var(--surface); border:1px solid var(--border);
+    border-radius:8px; font-family:inherit; font-size:14.5px; min-width:260px; color:var(--text); }
+  .reviewer-row input.short { min-width:130px; }
+  .consent { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:var(--radius); padding:14px 18px; font-size:13.5px; color:var(--text-2); margin:0 0 22px; }
+  .rev-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:18px 20px; margin-bottom:14px; }
+  .rev-item .text { font-size:16.5px; font-weight:500; margin-bottom:16px; }
+  .rev-item .text .num { color:var(--muted); font-weight:600; font-size:13px; margin-right:10px; }
+  .rev-grid { display:grid; grid-template-columns:1fr 1fr 1.3fr; gap:18px; }
+  @media (max-width:760px){ .rev-grid{grid-template-columns:1fr} }
+  .rev-block label.head { display:block; font-size:12px; font-weight:600; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--muted); margin-bottom:8px; }
+  .seg4 { display:flex; gap:6px; }
+  .seg4 .opt { flex:1; padding:8px 4px; }
+  .seg4 .l { font-size:10px; }
+  .hintline { font-size:12px; color:var(--muted); margin-top:6px; }
+  .rev-block select, .rev-item textarea { width:100%; padding:9px 11px; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px; color:var(--text); }
+  .rev-item textarea { margin-top:14px; resize:vertical; min-height:40px; }
+  /* Relevance (blue) vs clarity (green): grey cards + pill titles */
+  .rev-block.rel, .rev-block.clar { background:#f4f4f5; border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+  .rev-block.rel .head, .rev-block.clar .head { display:inline-block; padding:3px 12px; border-radius:999px;
+    color:#fff; letter-spacing:0.04em; font-size:11.5px; }
+  .rev-block.rel .head { background:var(--accent); }
+  .rev-block.clar .head { background:var(--green); }
+  .rev-block.rel .opt, .rev-block.clar .opt { background:var(--surface); }
+  .seg4[data-kind-style="clar"] .opt:hover { border-color:var(--green); background:#e9f6f0; }
+  .seg4[data-kind-style="clar"] .opt.sel { background:var(--green); border-color:var(--green); }
+  /* Fix: these need to outrank `.rev-block.rel .opt { background:var(--surface) }`,
+     which silently beat the generic `.opt.sel` on specificity. */
+  .seg4[data-kind-style="rel"] .opt:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .seg4[data-kind-style="rel"] .opt.sel { background:var(--accent); border-color:var(--accent); }
+  /* ===== Coverage / deficiency check (expert task; Colquitt et al., 2019) ===== */
+  .cov-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:16px 18px; margin-bottom:14px; }
+  .cov-card .cname { font-size:15px; font-weight:600; color:var(--accent-deep); }
+  .cov-card .cdef { font-size:13.5px; color:var(--text-2); margin:4px 0 12px; }
+  .cov-card .covq { font-size:14px; color:var(--text); font-weight:500; margin-bottom:9px; max-width:62ch; }
+  /* Chips and their anchors share one 7-column grid so each label lands under the point it names. */
+  .cov-chips { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px; }
+  .cov-chip { height:38px; display:grid; place-items:center; font-size:13px;
+    font-weight:600; color:var(--text-2); background:var(--surface); border:1px solid var(--border);
+    border-radius:7px; cursor:pointer; transition:all .1s; }
+  .cov-chip:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .cov-chip.sel { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .cov-anchors { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px;
+    font-size:11px; line-height:1.3; color:var(--muted); margin-top:6px; }
+  .cov-anchors .a1 { grid-column:1 / 3; text-align:left; }
+  .cov-anchors .a4 { grid-column:3 / 6; text-align:center; }
+  .cov-anchors .a7 { grid-column:6 / 8; text-align:right; }
+  /* Elements review uses a 4-point version of the same chips */
+  .cov-chips.four { grid-template-columns:repeat(4,1fr); max-width:250px; }
+  .cov-anchors.flexrow { display:flex; justify-content:space-between; max-width:250px; }
+  .cov-card textarea { width:100%; margin-top:12px; padding:9px 11px; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px;
+    color:var(--text); resize:vertical; min-height:52px; }
+  .status.thanks { color:var(--green); font-weight:600; font-size:15px; }
+  /* Mobile */
+  @media (max-width:640px){
+    .shell { padding:16px 14px 80px; }
+    h1 { font-size:22px; }
+    .stem-big { font-size:17.5px; padding:14px 16px; }
+    .stickybar { margin:0 -14px; padding:8px 14px 10px; }
+    .stickybar .stem-line { font-size:16.5px; }
+    .item { padding:14px; }
+    .item .text { font-size:16px; }
+    .opts { gap:5px; }
+    .opt { padding:8px 3px; border-radius:7px; }
+    .opt .n { font-size:14px; }
+    .opt .l { font-size:9.5px; hyphens:auto; }
+    .rev-item { padding:14px; }
+    footer { flex-wrap:wrap; gap:6px; }
+    .reviewer-row input { min-width:0; width:100%; }
+  }
+  footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--border);
+    font-size:12.5px; color:var(--muted); display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="top">
+  <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
+  <span class="badge">Draft v0.7 · pilot</span>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-view="instrument">Instrument</button>
+  <button class="tab" data-view="review">Expert review (CVI)</button>
+</div>
+
+<!-- ============ VIEW 1: INSTRUMENT ============ -->
+<section class="view active" id="view-instrument">
+
+  <div id="inst-start">
+    <h1>Working With Others: A Short Survey</h1>
+    <p class="intro">The questions below ask about your feelings and experiences during the last month. For each one, indicate to what extent you felt that way. Some questions are similar, but treat each as its own question. (Answer quickly, with your first impression, rather than deliberating over each one.)</p>
+
+    <div class="stem-big"><div>Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action):</div><div style="margin-top:14px">In the last month, to what extent have you felt&hellip;</div></div>
+
+    <div class="submitrow" style="margin-top:22px">
+      <button class="btn btn-primary" id="start-btn">Start</button>
+      <span class="status" id="start-status"></span>
+    </div>
+  </div>
+
+  <div id="inst-run" style="display:none">
+    <div class="stickybar" id="stickybar">
+      <div class="meta">
+        <div>
+          <div class="stem-line"><em>In the last month,</em> to what extent have you felt&hellip;</div>
+          <div class="sub">about the group you're most involved with</div>
+        </div>
+        <span class="count" id="progress">0 / 21</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div id="item-list" style="margin-top:16px"></div>
+
+    <div class="navrow">
+      <button class="backbtn" id="back-btn" aria-label="Previous screen">&larr;</button>
+      <span class="hint" id="screen-hint"></span>
+      <button class="btn btn-primary" id="next-btn" disabled>Continue &rarr;</button>
+    </div>
+  </div>
+
+  <div id="inst-review" style="display:none">
+    <h1>Check your answers</h1>
+    <p class="intro">Tap any row to change an answer, then submit.</p>
+    <div id="review-summary" style="margin-top:18px"></div>
+    <div class="submitrow">
+      <button class="btn btn-primary" id="submit-btn">Submit responses</button>
+      <span class="status" id="submit-status"></span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============ VIEW 2: EXPERT REVIEW ============ -->
+<section class="view" id="view-review">
+  <h1>Expert content review</h1>
+  <p class="intro full">You are rating candidate items for a new instrument, the Collective Political Agency scale (CPA). The scale measures an individually held perception of collective capacity: how the <em>us</em> is experienced from the individual's point of view. It is a state measure with a 1-month reference window.</p>
+
+  <h2>Construct definitions</h2>
+  <div class="defs-grid" id="construct-defs"></div>
+
+  <div class="method-note">
+    <p class="lead"><strong>Thank you for lending your time and expertise to this review.</strong> For each item we ask three brief judgments — relevance, clarity, and sorting. Items are presented without their intended construct labels, in an order randomized for each reviewer, and a comment box is provided on each for suggested rewording.</p>
+    <p><strong>1 · Relevance — to Collective Political Agency as a whole.</strong> Rate how relevant the item is to the overarching construct described above, <em>not</em> to any one of the five components. The component-level question is task 3, and asking it twice would give the answer away: an item can only be rated for relevance to <em>Relational embeddedness</em> by someone who has already decided that is where it belongs. Keeping the two judgments separate lets them do different work — relevance asks whether the item belongs in this instrument at all, the sort asks where inside it the item lands.</p>
+    <p><strong>2 · Clarity — for a community member, not for you.</strong> Rate how clearly you would expect someone with no organizing vocabulary and no knowledge of this framework to understand what is being asked. You are not being asked to certify that respondents comprehend the item; only respondents can establish that, and cognitive interviews with the intended population are planned for the next round (Willis, 2005). What an expert panel is good for here is spotting the failures that are visible on the page — double-barrelled wording, undefined abstractions, ambiguous referents, and readings we did not intend. If an item is clear to you but you can see how it would be misread, that is the comment box's best use.</p>
+    <p><strong>3 · Sorting.</strong> To which construct does the item read as belonging? &ldquo;None of these / unsure&rdquo; is a substantive answer, not a skip.</p>
+    <p><strong>How the ratings are scored.</strong> Item-level content validity (I-CVI) is a <em>proportion of experts</em>, not an average of the 1&ndash;4 scale. Each rating is dichotomised — 3 or 4 counts as relevant, 1 or 2 does not — and I-CVI is the share of the panel in the relevant category. The .78 cut-off is the point at which that proportion exceeds chance agreement for a panel of six to ten raters (7 of 9 = .78); for a panel of five or fewer the criterion is 1.00, and for larger panels it relaxes toward .70 (Lynn, 1986; <a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>). The threshold applied will be the one matching this panel's final size. Items falling below it are revised or dropped.</p>
+    <p><strong>On the sorting task and published benchmarks.</strong> You are right that the benchmarks do not exist for a panel like this one. The distributions reported by <a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al. (2019)</a> are normed on large panels drawn from the general respondent population, so an expert panel of this size has nothing comparable to be scored against — which means the standard has to be built here rather than borrowed. The sort is therefore scored against criteria internal to the task itself: the proportion of substantive agreement (<em>p</em><sub>sa</sub>) and the substantive-validity coefficient (<em>c</em><sub>sv</sub>) of Anderson &amp; Gerbing (1991), both computed from the assignments this panel makes and neither requiring an external norm. Items that draw no consensus, or that are consistently read into a construct other than the intended one, are revised, reassigned, or dropped. The benchmarked comparison comes later: a definitional-correspondence study with raters drawn from the instrument's intended respondent population, scorable against the published distributions (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>).</p>
+    <p><strong>After the items, two short closing sections ask:</strong> (a) how completely the item pool covers each construct — whether the set, taken together, samples each definition completely — and what is missing; and (b) whether the instrument's instructions, stem, response scale, and recall window are appropriate. These are judgments for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019; Haynes, Richard, &amp; Kubany, 1995).</p>
+  </div>
+
+  <div class="note-plain">
+    <p class="lead"><strong>Why the reference window is one month.</strong> CPA is specified as a <em>state</em>, not a trait. The instrument has to move when someone joins a campaign, sits through a training, wins something, or loses something — if it cannot detect that, it cannot do the job we need it for.</p>
+    <p>One month is the shortest window that still spans a normal cycle of group activity. Most groups meet at least monthly, so nearly every respondent has real events to report rather than an impression to summarise. A one-week window would put respondents in groups on a monthly rhythm at the floor, and would pick up the ordinary noise of a bad week. Six months or a year would buy stability at the cost of exactly the sensitivity to organizing experience and exposure we are trying to preserve, and would push people from recall into general self-characterisation. An unanchored agree&ndash;disagree format takes that further still: it invites a trait reading, and a trait does not move when the organizing does.</p>
+    <p>The trade-off we are accepting is that a one-month state measure will carry more occasion-specific variance than a trait-style scale, and test&ndash;retest figures will look lower as a result. That is the intended behaviour, not error. If you would recommend a different window, or an unanchored agree&ndash;disagree format, please say so in the comment box.</p>
+  </div>
+
+  <div class="consent">
+    Participation in this expert review is <strong>voluntary</strong>; you may stop at any time and unsubmitted responses are not recorded. Your ratings, comments, and reviewer information are stored in the project's secure research database and used solely for instrument development; findings are reported in aggregate. Please complete the review <strong>independently, without discussing the items with other panelists</strong>, ideally in one sitting. Questions about this review or the study: contact Liz McKenna (Civic Power Lab, HKS &mdash; <a href="mailto:emckenna@hks.harvard.edu">emckenna@hks.harvard.edu</a>).
+  </div>
+
+  <div class="reviewer-row">
+    <input id="reviewer-name" placeholder="Your name">
+    <input id="reviewer-aff" placeholder="Affiliation">
+    <select id="reviewer-role">
+      <option value="">Primary role — select</option>
+      <option value="scholar">Scholar / researcher</option>
+      <option value="practitioner">Practitioner / organizer</option>
+      <option value="both">Both</option>
+      <option value="other">Other</option>
+    </select>
+    <input id="reviewer-years" class="short" type="number" min="0" max="70" placeholder="Years of experience">
+    <input id="reviewer-domain" placeholder="Area of expertise (e.g., social movements, survey methods)">
+  </div>
+
+  <div id="review-list"></div>
+
+  <h2>Assessment of content coverage</h2>
+  <p class="intro full">For each construct, rate how completely the item pool samples the content domain of that definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). Judge the pool as a whole rather than counting the items you happened to sort into that construct — which items bear on which construct is itself part of what this review is testing. This is a question about the adequacy of the set, not the quality of any individual item: a pool can be made entirely of good items and still leave half a definition unmeasured. Where sampling looks incomplete, please describe the unrepresented part of the domain and, where possible, suggest candidate items. Racial group consciousness is deliberately carried by a single indicator in this short instrument; for that construct, please judge instead whether the chosen item best represents the construct's most central content.</p>
+  <div id="coverage-list"></div>
+
+  <h2>Review of instrument elements</h2>
+  <p class="intro full">Content validity extends beyond items to the instrument's other elements (Haynes, Richard, &amp; Kubany, 1995). Rate the appropriateness of each element for the instrument's purpose — a brief, repeatable state measure for members of organizing groups (1 = not appropriate &middot; 4 = highly appropriate) — and note any recommended changes.</p>
+  <div id="element-list"></div>
+
+  <div class="submitrow">
+    <button class="btn btn-primary" id="rev-submit-btn" disabled>Submit review</button>
+    <button class="btn btn-ghost" id="export-btn">Export as JSON</button>
+    <span class="status" id="rev-progress">0 of 21 items rated</span>
+  </div>
+  <div class="status thanks" id="rev-thanks" style="display:none; margin-top:14px;">Thank you so much for your time! We look forward to reporting back the results.</div>
+
+  <button class="defs-fab" id="defs-fab" aria-haspopup="dialog" aria-expanded="false">Definitions</button>
+  <div class="defs-overlay" id="defs-overlay" role="dialog" aria-modal="true" aria-label="Construct definitions">
+    <div class="defs-panel">
+      <h3>Construct definitions</h3>
+      <div id="defs-panel-list"></div>
+      <button class="btn btn-ghost dp-close" id="defs-close">Close</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Collective Political Agency scale · Civic Power Lab</span>
+  <span>Pilot instrument · responses save to the research database</span>
+</footer>
+</div>
+
+<script>
+/* ========= Backend (Supabase; shared research project) ========= */
+const SUPABASE_URL = "https://jddrxzirkkmpsqqrmsea.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZHJ4emlya2ttcHNxcXJtc2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTY0MjQsImV4cCI6MjA4ODU5MjQyNH0.RBk3fRlL6thd7AT3YBdmxEXpmtb_KoY9hHAOPUWREME";
+/* CPA pilot rows share the demo table until a dedicated cpa_responses table exists;
+   tagged org_name="CPA Scale Pilot" so they filter cleanly. */
+async function saveToBackend(payload) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/team_effectiveness_responses`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY,
+      "Authorization":`Bearer ${SUPABASE_ANON_KEY}`, "Prefer":"return=minimal" },
+    body: JSON.stringify({
+      snapshot_date: new Date().toISOString().slice(0,10),
+      filled_out_by: payload.respondent || null,
+      org_name: payload.channel || "CPA Scale Pilot",
+      source: "demo",
+      payload,
+    }),
+  });
+  if (!res.ok) throw new Error(`Save failed (${res.status}): ${await res.text()}`);
+}
+
+/* ========= Item pool v0.2 — 22 candidates, 5 constructs ========= */
+const CONSTRUCTS = [
+  { key:"ma", name:"Moral-affective orientation",
+    def:"The values and emotions that motivate or inhibit acting with others." },
+  { key:"cs", name:"Cognitive-strategic competence",
+    def:"The group's perceived ability to read power and choose effective courses of action." },
+  { key:"re", name:"Relational embeddedness",
+    def:"The degree to which a person is woven into networks of mutual commitment." },
+  { key:"cc", name:"Collective capacity",
+    def:"The perceived conjoint capability of the group to organize and carry out collective action." },
+  { key:"ir", name:"Institutional responsiveness",
+    def:"The belief that institutions and decision-makers respond to organized collective action." },
+  { key:"gc", name:"Racial group consciousness",
+    def:"The perceived political power of one's racial or ethnic group and its bearing on one's own political standing." },
+];
+
+const ITEMS = [
+  { id:"m1", c:"ma", rev:false, t:"hopeful about what people like you can build together?" },
+  { id:"m3", c:"ma", rev:true,  t:"that you were alone in caring about the issues that matter to you?" },
+  { id:"m4", c:"ma", rev:true,  t:"worn down by the work of trying to make change?" },
+  { id:"m5", c:"ma", rev:false, t:"angry about an injustice in a way that made you want to act with others?" },
+  { id:"s1", c:"cs", rev:false, t:"that your group knows who actually holds power over the decisions you care about?" },
+  { id:"s2", c:"cs", rev:false, t:"that your group can size up a situation and choose an action likely to work?" },
+  { id:"s3", c:"cs", rev:false, t:"that your group has a strategy connecting what you do this month to what you want to win?" },
+  { id:"s4", c:"cs", rev:true,  t:"that your group was reacting to events without a plan of its own?" },
+  { id:"r1", c:"re", rev:false, t:"that there are people who would show up for you if you asked, and you for them?" },
+  { id:"r2", c:"re", rev:false, t:"that people in your group keep the commitments they make to one another?" },
+  { id:"r3", c:"re", rev:false, t:"that others in your group would step up if you had to step back?" },
+  { id:"r4", c:"re", rev:true,  t:"that your group is a collection of individuals rather than a team that depends on one another?" },
+  { id:"c1", c:"cc", rev:false, t:"that the people you might take public action with could accomplish something together that none of you could alone?" },
+  { id:"c2", c:"cc", rev:false, t:"that when your group decides to act, it can mobilize the people it needs?" },
+  { id:"c3", c:"cc", rev:false, t:"that your group can turn its plans into public action, not just talk?" },
+  { id:"c4", c:"cc", rev:true,  t:"that your group's power depended on the same handful of people doing everything?" },
+  { id:"i1", c:"ir", rev:false, t:"that when people like you act together, institutions and leaders have to respond?" },
+  { id:"i2", c:"ir", rev:false, t:"that your group can get a seat at the tables where decisions are made?" },
+  { id:"i3", c:"ir", rev:false, t:"that organized people can change what those in power consider possible?" },
+  { id:"i4", c:"ir", rev:true,  t:"that the people who run things will do what they want regardless of what groups like yours do?" },
+  { id:"gc1", c:"gc", rev:false, t:"that people who share your racial or ethnic background have the power to shape what happens in this country?" },
+];
+
+const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r1","c3","i4","gc1","m4","s3","r2","c4","i2","m5","s4","r3","c1","i3"];
+/* Review order is randomized per reviewer (Fisher-Yates) and stored in the submission payload. */
+const REVIEW_ORDER = ITEMS.map(it => it.id);
+for (let i = REVIEW_ORDER.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [REVIEW_ORDER[i], REVIEW_ORDER[j]] = [REVIEW_ORDER[j], REVIEW_ORDER[i]];
+}
+const REVIEW_STARTED_AT = new Date().toISOString();
+const ANCHORS = [ ["0","Not at all"], ["1","A little"], ["2","Somewhat"], ["3","Quite a bit"], ["4","A great deal"] ];
+const byId = Object.fromEntries(ITEMS.map(it => [it.id, it]));
+const answers = {};
+
+/* ===== Tabs ===== */
+document.querySelectorAll('.tab').forEach(tb => tb.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tb));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + tb.dataset.view));
+}));
+
+/* ===== Instrument (paged: 3 items per screen) ===== */
+const PER_SCREEN = 3;
+const SCREENS = Math.ceil(FIELD_ORDER.length / PER_SCREEN);
+const INST_STORE = "cpa_v07_answers";
+let instPage = 0;
+let fromReview = false;
+let advanceTimer = null;
+
+try {
+  const saved = JSON.parse(localStorage.getItem(INST_STORE) || "null");
+  if (saved && typeof saved === "object") Object.assign(answers, saved);
+} catch (e) {}
+
+const elStart = document.getElementById('inst-start');
+const elRun = document.getElementById('inst-run');
+const elReview = document.getElementById('inst-review');
+const list = document.getElementById('item-list');
+
+const screenIds = p => FIELD_ORDER.slice(p * PER_SCREEN, p * PER_SCREEN + PER_SCREEN);
+const screenDone = p => screenIds(p).every(id => id in answers);
+const answeredCount = () => FIELD_ORDER.filter(id => id in answers).length;
+const saveLocal = () => { try { localStorage.setItem(INST_STORE, JSON.stringify(answers)); } catch (e) {} };
+
+function showInst(which) {
+  elStart.style.display = which === 'start' ? '' : 'none';
+  elRun.style.display = which === 'run' ? '' : 'none';
+  elReview.style.display = which === 'review' ? '' : 'none';
+  window.scrollTo(0, 0);
+}
+
+function renderScreen() {
+  clearTimeout(advanceTimer);
+  list.innerHTML = '';
+  screenIds(instPage).forEach(id => {
+    const idx = FIELD_ORDER.indexOf(id);
+    const it = byId[id];
+    const card = document.createElement('div');
+    card.className = 'item';
+    card.id = 'card-' + id;
+    card.innerHTML = `
+      <div class="qrow"><span class="num">${idx+1}</span><span class="text">&hellip;${it.t}</span></div>
+      <div class="opts">${ANCHORS.map(([n,l]) =>
+        `<div class="opt${answers[id] === Number(n) ? ' sel' : ''}" data-item="${id}" data-val="${n}" role="radio" tabindex="0" aria-checked="${answers[id] === Number(n)}" aria-label="${l}">
+          <span class="n">${n}</span><span class="l">${l}</span></div>`).join('')}
+      </div>`;
+    list.appendChild(card);
+  });
+  document.getElementById('screen-hint').textContent = `Screen ${instPage + 1} of ${SCREENS}`;
+  document.getElementById('back-btn').disabled = instPage === 0 && !fromReview;
+  updateInstChrome();
+}
+
+function updateInstChrome() {
+  const n = answeredCount();
+  document.getElementById('progress').textContent = `${n} / ${FIELD_ORDER.length}`;
+  document.getElementById('progress-fill').style.width = (100 * n / FIELD_ORDER.length) + '%';
+  const next = document.getElementById('next-btn');
+  const remaining = screenIds(instPage).filter(id => !(id in answers)).length;
+  next.disabled = remaining > 0;
+  next.innerHTML = remaining > 0
+    ? `Answer ${remaining} more to continue`
+    : (fromReview ? 'Back to review' : (instPage === SCREENS - 1 ? 'Review answers' : 'Continue')) + ' &rarr;';
+}
+
+function selectOpt(el) {
+  const id = el.dataset.item;
+  answers[id] = Number(el.dataset.val);
+  saveLocal();
+  document.querySelectorAll(`.opt[data-item="${id}"]`).forEach(o => {
+    o.classList.toggle('sel', o === el);
+    o.setAttribute('aria-checked', String(o === el));
+  });
+  updateInstChrome();
+}
+list.addEventListener('click', e => { const o = e.target.closest('.opt'); if (o) selectOpt(o); });
+list.addEventListener('keydown', e => {
+  if ((e.key === ' ' || e.key === 'Enter')) { const o = e.target.closest('.opt'); if (o) { e.preventDefault(); selectOpt(o); } }
+});
+
+function goNextScreen() {
+  clearTimeout(advanceTimer);
+  if (!screenDone(instPage)) return;
+  if (fromReview || instPage >= SCREENS - 1) { fromReview = false; renderReview(); showInst('review'); return; }
+  instPage += 1; renderScreen(); window.scrollTo(0, 0);
+}
+document.getElementById('next-btn').addEventListener('click', goNextScreen);
+document.getElementById('back-btn').addEventListener('click', () => {
+  clearTimeout(advanceTimer);
+  if (fromReview) { fromReview = false; renderReview(); showInst('review'); return; }
+  if (instPage === 0) return;
+  instPage -= 1; renderScreen(); window.scrollTo(0, 0);
+});
+
+document.getElementById('start-btn').addEventListener('click', () => {
+  const firstBlank = FIELD_ORDER.findIndex(id => !(id in answers));
+  if (firstBlank < 0) { renderReview(); showInst('review'); return; }
+  instPage = Math.floor(firstBlank / PER_SCREEN);
+  renderScreen(); showInst('run');
+});
+(function initStart() {
+  const n = answeredCount();
+  if (n > 0) {
+    document.getElementById('start-btn').textContent =
+      n >= FIELD_ORDER.length ? 'Review your answers' : `Continue · ${n} of ${FIELD_ORDER.length} answered`;
+  }
+})();
+
+function renderReview() {
+  const wrap = document.getElementById('review-summary');
+  wrap.innerHTML = '';
+  FIELD_ORDER.forEach((id, idx) => {
+    const it = byId[id];
+    const a = answers[id];
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'sumline';
+    row.innerHTML = `<span class="n">${idx+1}</span><span class="t">&hellip;${it.t}</span>
+      <span class="v">${a} · ${ANCHORS[a][1]}</span>`;
+    row.addEventListener('click', () => {
+      instPage = Math.floor(idx / PER_SCREEN);
+      fromReview = true;
+      renderScreen(); showInst('run');
+    });
+    wrap.appendChild(row);
+  });
+}
+
+document.getElementById('submit-btn').addEventListener('click', async () => {
+  const status = document.getElementById('submit-status');
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
+  try {
+    await saveToBackend({
+      instrument: "cpa", version: "v0.7-pool21",
+      field_order: FIELD_ORDER,
+      answers,
+      startedAt: PAGE_LOADED_AT, submittedAt: new Date().toISOString(),
+    });
+    status.className = 'status ok';
+    status.textContent = 'Saved. Thank you — your responses have been recorded.';
+    try { localStorage.removeItem(INST_STORE); } catch (e) {}
+  } catch (err) {
+    btn.disabled = false;
+    status.className = 'status err';
+    status.textContent = err.message;
+  }
+});
+const PAGE_LOADED_AT = new Date().toISOString();
+
+/* ===== Review ===== */
+const defs = document.getElementById('construct-defs');
+CONSTRUCTS.forEach(c => {
+  const d = document.createElement('div');
+  d.className = 'construct-card';
+  d.innerHTML = `<div class="cname">${c.name}</div><div class="cdef">${c.def}</div>`;
+  defs.appendChild(d);
+});
+/* Floating definitions panel — keeps definitions in view throughout the review (Hinkin & Tracey, 1999) */
+const defsPanelList = document.getElementById('defs-panel-list');
+CONSTRUCTS.forEach(c => {
+  const d = document.createElement('div');
+  d.className = 'dp-item';
+  d.innerHTML = `<div class="dp-name">${c.name}</div><div class="dp-def">${c.def}</div>`;
+  defsPanelList.appendChild(d);
+});
+const defsFab = document.getElementById('defs-fab');
+const defsOverlay = document.getElementById('defs-overlay');
+function setDefsOpen(open) {
+  defsOverlay.classList.toggle('open', open);
+  defsFab.setAttribute('aria-expanded', String(open));
+  if (open) document.getElementById('defs-close').focus(); else defsFab.focus();
+}
+defsFab.addEventListener('click', () => setDefsOpen(true));
+document.getElementById('defs-close').addEventListener('click', () => setDefsOpen(false));
+defsOverlay.addEventListener('click', e => { if (e.target === defsOverlay) setDefsOpen(false); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && defsOverlay.classList.contains('open')) setDefsOpen(false);
+});
+/* Full anchor labels per Lynn (1986) — all four points defined, not endpoints only */
+const REL_ANCHORS = ["Not relevant", "Major revision needed", "Minor revision needed", "Highly relevant"];
+const CLA_ANCHORS = ["Not clear", "Major rewording needed", "Minor rewording needed", "Clear as written"];
+const rlist = document.getElementById('review-list');
+REVIEW_ORDER.forEach((id, idx) => {
+  const it = byId[id];
+  const card = document.createElement('div');
+  card.className = 'rev-item';
+  card.innerHTML = `
+    <div class="text"><span class="num">${idx+1}</span>&hellip;${it.t}</div>
+    <div class="rev-grid">
+      <div class="rev-block rel">
+        <label class="head">Relevance to CPA</label>
+        <div class="seg4" data-kind-style="rel" role="radiogroup">${[1,2,3,4].map(v =>
+          `<div class="opt" role="radio" tabindex="0" aria-checked="false" data-kind="rel" data-item="${id}" data-val="${v}"><span class="n">${v}</span><span class="l">${REL_ANCHORS[v-1]}</span></div>`).join('')}</div>
+        <div class="hintline">To the construct as a whole, not to one component</div>
+      </div>
+      <div class="rev-block clar">
+        <label class="head">Clarity</label>
+        <div class="seg4" data-kind-style="clar" role="radiogroup">${[1,2,3,4].map(v =>
+          `<div class="opt" role="radio" tabindex="0" aria-checked="false" data-kind="clar" data-item="${id}" data-val="${v}"><span class="n">${v}</span><span class="l">${CLA_ANCHORS[v-1]}</span></div>`).join('')}</div>
+        <div class="hintline">As a community member would read it, not as you read it</div>
+      </div>
+      <div class="rev-block">
+        <label class="head">Which construct?</label>
+        <select name="sort-${id}">
+          <option value="">&mdash; select &mdash;</option>
+          ${CONSTRUCTS.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}
+          <option value="none">None of these / unsure</option>
+        </select>
+      </div>
+    </div>
+    <textarea name="cmt-${id}" placeholder="Suggested rewording or comment (optional)"></textarea>`;
+  rlist.appendChild(card);
+});
+/* Coverage / deficiency check — expert judgment of what the pool misses.
+   gc is a deliberate single-indicator construct: its question is indicator centrality, not pool coverage. */
+const covRatings = {};
+const covList = document.getElementById('coverage-list');
+CONSTRUCTS.forEach(c => {
+  const single = c.key === 'gc';
+  const card = document.createElement('div');
+  card.className = 'cov-card';
+  card.innerHTML = `
+    <div class="cname">${c.name}</div>
+    <div class="cdef">${c.def}</div>
+    <div class="covq">${single
+      ? 'How well does the single chosen item represent this construct&rsquo;s most central content?'
+      : 'How completely does the pool, taken as a whole, sample this definition?'}</div>
+    <div class="cov-chips">${[1,2,3,4,5,6,7].map(v =>
+      `<div class="cov-chip" role="radio" tabindex="0" aria-checked="false" data-c="${c.key}" data-val="${v}">${v}</div>`).join('')}</div>
+    <div class="cov-anchors">
+      <span class="a1">1 &middot; ${single ? 'very poorly' : 'very incompletely'}</span>
+      <span class="a4">4 &middot; moderately</span>
+      <span class="a7">7 &middot; ${single ? 'very well' : 'very completely'}</span>
+    </div>
+    <textarea name="cov-${c.key}" placeholder="${single
+      ? 'If a different single item would better represent this construct, propose it (optional)'
+      : 'Unrepresented aspects of this content domain; suggested candidate items (optional)'}"></textarea>`;
+  covList.appendChild(card);
+});
+covList.addEventListener('click', e => {
+  const ch = e.target.closest('.cov-chip'); if (!ch) return;
+  const { c, val } = ch.dataset;
+  covRatings[c] = Number(val);
+  document.querySelectorAll(`.cov-chip[data-c="${c}"]`).forEach(x => {
+    x.classList.toggle('sel', x === ch);
+    x.setAttribute('aria-checked', String(x === ch));
+  });
+});
+function coverage() {
+  return CONSTRUCTS.map(c => ({
+    construct: c.key, name: c.name,
+    coverage_1to7: covRatings[c.key] || null,
+    missing: document.querySelector(`textarea[name="cov-${c.key}"]`).value || null,
+  }));
+}
+
+/* Instrument-element review (Haynes, Richard, & Kubany, 1995) */
+const ELEMENTS = [
+  { key:'instructions', name:'Introductory instructions',
+    text:'"The questions below ask about your feelings and experiences during the last month… (Answer quickly, with your first impression, rather than deliberating over each one.)"' },
+  { key:'lead_in', name:'Group lead-in',
+    text:'"Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action)"' },
+  { key:'stem', name:'Item stem',
+    text:'"In the last month, to what extent have you felt…"' },
+  { key:'response_scale', name:'Response scale',
+    text:'0 Not at all · 1 A little · 2 Somewhat · 3 Quite a bit · 4 A great deal' },
+  { key:'recall_window', name:'Recall window',
+    text:'One month. If you would recommend a different window, or an unanchored agree–disagree format, please say so in the comment box.' },
+];
+const elemRatings = {};
+const elemList = document.getElementById('element-list');
+ELEMENTS.forEach(el => {
+  const card = document.createElement('div');
+  card.className = 'cov-card';
+  card.innerHTML = `
+    <div class="cname">${el.name}</div>
+    <div class="cdef">${el.text}</div>
+    <div class="cov-chips four">${[1,2,3,4].map(v =>
+      `<div class="cov-chip" role="radio" tabindex="0" aria-checked="false" data-e="${el.key}" data-val="${v}">${v}</div>`).join('')}</div>
+    <div class="cov-anchors flexrow"><span>1 = not appropriate</span><span>4 = highly appropriate</span></div>`;
+  elemList.appendChild(card);
+});
+const elemComment = document.createElement('div');
+elemComment.className = 'cov-card';
+elemComment.innerHTML = `<div class="cname">Comments on instrument elements</div>
+  <textarea name="elem-comment" placeholder="Recommended changes to instructions, lead-in, stem, response scale, or recall window (optional)"></textarea>`;
+elemList.appendChild(elemComment);
+elemList.addEventListener('click', e => {
+  const ch = e.target.closest('.cov-chip'); if (!ch) return;
+  const { e: ekey, val } = ch.dataset;
+  elemRatings[ekey] = Number(val);
+  document.querySelectorAll(`.cov-chip[data-e="${ekey}"]`).forEach(x => {
+    x.classList.toggle('sel', x === ch);
+    x.setAttribute('aria-checked', String(x === ch));
+  });
+});
+function elements() {
+  return {
+    ratings_1to4: ELEMENTS.map(el => ({ element: el.key, rating: elemRatings[el.key] || null })),
+    comment: document.querySelector('textarea[name="elem-comment"]').value || null,
+  };
+}
+
+/* Keyboard operability for chip controls (WCAG) */
+function chipKeys(container) {
+  container.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const ch = e.target.closest('.cov-chip, .opt');
+    if (ch) { e.preventDefault(); ch.click(); }
+  });
+}
+chipKeys(covList); chipKeys(elemList);
+
+const revRatings = {};
+rlist.addEventListener('click', e => {
+  const o = e.target.closest('.opt'); if (!o) return;
+  const { kind, item, val } = o.dataset;
+  revRatings[item] = revRatings[item] || {};
+  revRatings[item][kind] = Number(val);
+  document.querySelectorAll(`.opt[data-kind="${kind}"][data-item="${item}"]`).forEach(x => {
+    x.classList.toggle('sel', x === o);
+    x.setAttribute('aria-checked', String(x === o));
+  });
+  updateRevProgress();
+});
+rlist.addEventListener('change', updateRevProgress);
+chipKeys(rlist);
+function updateRevProgress() {
+  const n = REVIEW_ORDER.filter(id =>
+    revRatings[id] && revRatings[id].rel && revRatings[id].clar &&
+    document.querySelector(`select[name="sort-${id}"]`).value
+  ).length;
+  const total = REVIEW_ORDER.length;
+  document.getElementById('rev-progress').textContent = n < total
+    ? `${n} of ${total} items rated — all items require relevance, clarity, and a sort before submitting`
+    : `All ${total} items rated — ready to submit`;
+  document.getElementById('rev-submit-btn').disabled = n < total;
+}
+updateRevProgress();
+document.getElementById('export-btn').addEventListener('click', () => {
+  const out = {
+    reviewer: document.getElementById('reviewer-name').value || null,
+    affiliation: document.getElementById('reviewer-aff').value || null,
+    reviewer_role: document.getElementById('reviewer-role').value || null,
+    reviewer_years: document.getElementById('reviewer-years').value || null,
+    reviewer_domain: document.getElementById('reviewer-domain').value || null,
+    instrument: "CPA candidate pool v0.7-pool21",
+    item_order: REVIEW_ORDER,
+    startedAt: REVIEW_STARTED_AT,
+    exportedAt: new Date().toISOString(),
+    ratings: REVIEW_ORDER.map(id => ({
+      item: id, text: byId[id].t, intended_construct: byId[id].c,
+      relevance: (revRatings[id] || {}).rel || null,
+      clarity: (revRatings[id] || {}).clar || null,
+      sorted_to: document.querySelector(`select[name="sort-${id}"]`).value || null,
+      comment: document.querySelector(`textarea[name="cmt-${id}"]`).value || null,
+    })),
+    coverage: coverage(),
+    instrument_elements: elements(),
+  };
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type:"application/json" });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `cpa-review-${(out.reviewer || "anonymous").toLowerCase().replace(/[^a-z0-9]+/g,"-")}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+document.getElementById('rev-submit-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('rev-submit-btn');
+  const prog = document.getElementById('rev-progress');
+  const ratings = REVIEW_ORDER.map(id => ({
+    item: id, text: byId[id].t, intended_construct: byId[id].c,
+    relevance: (revRatings[id] || {}).rel || null,
+    clarity: (revRatings[id] || {}).clar || null,
+    sorted_to: document.querySelector(`select[name="sort-${id}"]`).value || null,
+    comment: document.querySelector(`textarea[name="cmt-${id}"]`).value || null,
+  }));
+  btn.disabled = true; prog.className = 'status'; prog.textContent = 'Saving\u2026';
+  try {
+    await saveToBackend({
+      channel: "CPA Expert Review",
+      instrument: "cpa", version: "v0.7-pool21",
+      reviewer: document.getElementById('reviewer-name').value || null,
+      affiliation: document.getElementById('reviewer-aff').value || null,
+      reviewer_role: document.getElementById('reviewer-role').value || null,
+      reviewer_years: document.getElementById('reviewer-years').value || null,
+      reviewer_domain: document.getElementById('reviewer-domain').value || null,
+      respondent: document.getElementById('reviewer-name').value || null,
+      item_order: REVIEW_ORDER,
+      ratings,
+      coverage: coverage(),
+      instrument_elements: elements(),
+      startedAt: REVIEW_STARTED_AT,
+      submittedAt: new Date().toISOString(),
+    });
+    prog.textContent = '';
+    document.getElementById('rev-thanks').style.display = 'block';
+  } catch (err) {
+    btn.disabled = false;
+    prog.className = 'status err';
+    prog.textContent = err.message;
+  }
+});
+
+</script>
+</body>
+</html>
