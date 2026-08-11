@@ -124,14 +124,14 @@
   .defs-panel .dp-name { font-size:13.5px; font-weight:600; color:var(--accent-deep); }
   .defs-panel .dp-def { font-size:13.5px; color:var(--text-2); margin-top:3px; }
   .defs-panel .dp-close { margin-top:12px; }
-  .method-note { background:var(--accent-soft); border:1px solid #dfe3f7; border-radius:var(--radius);
-    padding:16px 20px; font-size:15px; color:var(--text-2); margin:20px 0 26px; }
-  .method-note p + p { margin-top:13px; }
-  .method-note .lead { color:var(--text); }
-  .note-plain { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
-    border-radius:var(--radius); padding:16px 20px; font-size:15px; color:var(--text-2); margin:0 0 26px; }
-  .note-plain p + p { margin-top:13px; }
-  .note-plain .lead { color:var(--text); }
+  /* The three tasks, stated once and briefly. Everything else lives in methods.html. */
+  .tasks { background:var(--accent-soft); border:1px solid #dfe3f7; border-radius:var(--radius);
+    padding:15px 20px; font-size:15px; color:var(--text-2); margin:16px 0 8px; }
+  .tasks > p:first-child { color:var(--text); }
+  .tasks ol { margin:8px 0 0; padding-left:20px; }
+  .tasks li { margin-bottom:4px; }
+  .tasks li strong { color:var(--text); }
+  .tasks .tasks-foot { margin-top:11px; padding-top:11px; border-top:1px solid #dfe3f7; font-size:13.5px; }
   .reviewer-row { display:flex; gap:12px; margin-bottom:22px; flex-wrap:wrap; }
   .reviewer-row input, .reviewer-row select { padding:10px 13px; background:var(--surface); border:1px solid var(--border);
     border-radius:8px; font-family:inherit; font-size:14.5px; min-width:260px; color:var(--text); }
@@ -273,26 +273,20 @@
 <!-- ============ VIEW 2: EXPERT REVIEW ============ -->
 <section class="view" id="view-review">
   <h1>Expert content review</h1>
-  <p class="intro full">You are rating candidate items for a new instrument, the Collective Political Agency scale (CPA). The scale measures an individually held perception of collective capacity: how the <em>us</em> is experienced from the individual's point of view. It is a state measure with a 1-month reference window.</p>
+  <p class="intro full">Thank you for lending your time and expertise. You are rating candidate items for the Collective Political Agency scale (CPA), a state measure of how the <em>us</em> is experienced from one person's point of view, with a one-month reference window.</p>
+
+  <div class="tasks">
+    <p><strong>Three judgments per item.</strong></p>
+    <ol>
+      <li><strong>Relevance</strong> to CPA as a whole, not to any one component.</li>
+      <li><strong>Clarity</strong> as a community member would read it, not as you read it.</li>
+      <li><strong>Sorting:</strong> which construct it reads as belonging to. Items appear unlabelled, in a random order. &ldquo;None of these / unsure&rdquo; is a real answer.</li>
+    </ol>
+    <p class="tasks-foot">Every item has a comment box, and a short section on content coverage follows the items. <a href="methods.html">Methods and rationale</a> covers why we are building this, how the ratings are scored, why the window is one month, and the citations.</p>
+  </div>
 
   <h2>Construct definitions</h2>
   <div class="defs-grid" id="construct-defs"></div>
-
-  <div class="method-note">
-    <p class="lead"><strong>Thank you for lending your time and expertise to this review.</strong> For each item we ask three brief judgments. Items appear without their intended construct labels, in an order randomized for each reviewer, and every item has a comment box for suggested rewording.</p>
-    <p><strong>1 &middot; Relevance (to Collective Political Agency as a whole).</strong> Rate how relevant the item is to the overarching construct, <em>not</em> to any one of the six components. The component-level question is task 3, and asking it twice would give the answer away: an item can only be rated for relevance to <em>Relational embeddedness</em> by someone who has already decided that is where it belongs. Keeping the two judgments separate lets them do different work: relevance asks whether the item belongs in this instrument at all, the sort asks where inside it the item lands.</p>
-    <p><strong>2 &middot; Clarity (for a community member, not for you).</strong> Rate how clearly you would expect someone with no organizing vocabulary and no knowledge of this framework to understand what is being asked. <em>You are not being asked to certify that respondents comprehend the item</em>; only respondents can establish that, and cognitive interviews with the intended population are planned for the next round (Willis, 2005). What an expert panel is good for here is spotting likely failures related to double-barrelled wording, undefined abstractions, ambiguous referents, and readings we did not intend. If an item is clear to you but you can see how it would be misread, that is the comment box's best use.</p>
-    <p><strong>3 &middot; Sorting.</strong> Which construct does the item read as belonging to? &ldquo;None of these / unsure&rdquo; is a substantive answer, not a skip.</p>
-    <p><strong>How the ratings are scored.</strong> Item-level content validity (I-CVI) is a <em>proportion of experts</em>, not an average of the 1&ndash;4 scale. Each rating is dichotomised (3 or 4 counts as relevant, 1 or 2 does not), and I-CVI is the share of the panel in the relevant category. The .78 cut-off is the point at which that proportion exceeds chance agreement for a panel of six to ten raters (7 of 9 = .78); for a panel of five or fewer the criterion is 1.00, and for larger panels it relaxes toward .70 (Lynn, 1986; <a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>). The threshold applied will be the one matching this panel's final size. Items falling below it are revised or dropped.</p>
-    <p><strong>On the sorting task and published benchmarks.</strong> The benchmarks do not exist for a panel like this one. The distributions reported by <a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al. (2019)</a> are normed on large panels drawn from the general respondent population, so an expert panel of this size has nothing comparable to be scored against. The sort is therefore scored against criteria internal to the task itself: the proportion of substantive agreement (<em>p</em><sub>sa</sub>) and the substantive-validity coefficient (<em>c</em><sub>sv</sub>) of Anderson &amp; Gerbing (1991), both computed from the assignments this panel makes and neither requiring an external norm. Items that draw no consensus, or that are consistently read into a construct other than the intended one, are revised, reassigned, or dropped. The benchmarked comparison comes later: a definitional-correspondence study with raters drawn from the instrument's intended respondent population, scorable against the published distributions (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>).</p>
-    <p><strong>A short closing section follows the items,</strong> asking how completely the item pool covers each construct and what is missing. This is a judgment for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019).</p>
-  </div>
-
-  <div class="note-plain">
-    <p class="lead"><strong>Why the reference window is one month.</strong> CPA is specified as a <em>state</em>, not a trait. The instrument has to move when someone joins a campaign, sits through a training, wins something, or loses something; if it cannot detect that, it cannot do the job we need it for.</p>
-    <p>One month is the shortest window that still spans a normal cycle of group activity. Most groups meet at least monthly, so nearly every respondent has real events to report rather than an impression to summarise. A one-week window would put respondents in groups on a monthly rhythm at the floor, and would pick up the ordinary noise of a bad week. Six months or a year would buy stability at the cost of exactly the sensitivity to organizing experience and exposure we are trying to preserve, and would push people from recall into general self-characterisation. An unanchored agree&ndash;disagree format takes that further still: it invites a trait reading, and a trait does not move when the organizing does.</p>
-    <p>The trade-off we are accepting is that a one-month state measure will carry more occasion-specific variance than a trait-style scale, and test&ndash;retest figures will look lower as a result. That is the intended behaviour, not error. If you would recommend a different window, or an unanchored agree&ndash;disagree format, please say so in any of the comment boxes below.</p>
-  </div>
 
   <div class="consent">
     Participation in this expert review is <strong>voluntary</strong>; you may stop at any time and unsubmitted responses are not recorded. Your ratings, comments, and reviewer information are stored in the project's secure research database and used solely for instrument development; findings are reported in aggregate. Please complete the review <strong>independently, without discussing the items with other panelists</strong>, ideally in one sitting. Questions about this review or the study: contact Liz McKenna (Civic Power Lab, HKS &mdash; <a href="mailto:emckenna@hks.harvard.edu">emckenna@hks.harvard.edu</a>).
@@ -315,7 +309,7 @@
   <div id="review-list"></div>
 
   <h2>Assessment of content coverage</h2>
-  <p class="intro full">For each construct, rate how completely the item pool samples the content domain of that definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). Judge the pool as a whole rather than counting the items you happened to sort into that construct; which items bear on which construct is itself part of what this review is testing. This is a question about the adequacy of the set, not the quality of any individual item: a pool can be made entirely of good items and still leave half a definition unmeasured. Where sampling looks incomplete, please describe the unrepresented part of the domain and, where possible, suggest candidate items. Racial group consciousness is deliberately carried by a single indicator in this short instrument; for that construct the question is not coverage but centrality: whether the chosen item represents the construct's most central content.</p>
+  <p class="intro full">How completely does the pool sample each construct's content domain? Judge the whole set, not the items you happened to sort into that construct. Where sampling looks incomplete, say what is missing and suggest items if you can. Racial group consciousness is carried by a single indicator, so there the question is centrality rather than coverage. (<a href="methods.html#coverage">More on this judgment</a>.)</p>
   <div id="coverage-list"></div>
 
   <div class="submitrow">

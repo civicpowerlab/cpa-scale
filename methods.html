@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPA scale · Methods and rationale</title>
+<link rel="icon" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#fafafa; --surface:#ffffff; --border:#e5e7eb;
+    --text:#18181b; --text-2:#3f3f46; --muted:#71717a;
+    --accent:#5371ff; --accent-soft:#eef1ff; --accent-deep:#3f57d6;
+    --radius:8px;
+    --shadow:0 1px 2px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.04);
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--text); font-family:"Inter",-apple-system,system-ui,sans-serif;
+    font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased; }
+  .shell { max-width: 760px; margin:0 auto; padding: 24px 24px 100px; }
+
+  header.top { display:flex; align-items:center; justify-content:space-between; padding:6px 0 18px; }
+  .wordmark { font-size:13.5px; font-weight:600; letter-spacing:-0.01em; color:var(--text); }
+  .wordmark span { color:var(--muted); font-weight:400; }
+  .badge { font-size:11.5px; font-weight:500; color:var(--muted);
+    border:1px solid var(--border); background:var(--surface); padding:4px 10px; border-radius:999px; }
+
+  .back { display:inline-block; font-size:13.5px; font-weight:500; color:var(--accent-deep);
+    text-decoration:none; margin-bottom:26px; }
+  .back:hover { text-decoration:underline; }
+
+  h1 { font-size:28px; font-weight:600; letter-spacing:-0.02em; margin-bottom:10px; }
+  .standfirst { font-size:17px; color:var(--text-2); margin-bottom:34px; }
+  h2 { font-size:19px; font-weight:600; letter-spacing:-0.01em; margin:38px 0 12px;
+    padding-top:20px; border-top:1px solid var(--border); }
+  h2:first-of-type { border-top:0; padding-top:0; }
+  h3 { font-size:15.5px; font-weight:600; margin:22px 0 6px; color:var(--accent-deep); }
+  p { color:var(--text-2); margin-bottom:13px; }
+  p strong { color:var(--text); }
+  a { color:var(--accent-deep); }
+
+  .callout { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:var(--radius); padding:16px 20px; margin:20px 0; }
+  .callout p:last-child { margin-bottom:0; }
+
+  .defs { display:grid; gap:10px; margin:18px 0 6px; }
+  .def { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:13px 16px; }
+  .def .n { font-size:14.5px; font-weight:600; color:var(--accent-deep); }
+  .def .d { font-size:14.5px; color:var(--text-2); margin-top:3px; }
+
+  ul { margin:0 0 13px 20px; color:var(--text-2); }
+  li { margin-bottom:7px; }
+
+  .refs { font-size:14px; color:var(--text-2); }
+  /* DOI URLs have no break opportunities and will push the page wide on a phone. */
+  .refs a { overflow-wrap:anywhere; }
+  .refs li { margin-bottom:10px; text-indent:-22px; padding-left:22px; list-style:none; }
+  .refs ul { margin-left:22px; }
+
+  footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--border);
+    font-size:12.5px; color:var(--muted); display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+
+  @media (max-width:640px){
+    .shell { padding:16px 14px 80px; }
+    h1 { font-size:23px; }
+    .standfirst { font-size:16px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="top">
+  <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
+  <span class="badge">Draft v0.7 · pilot</span>
+</header>
+
+<a class="back" href="index.html">&larr; Back to the instrument</a>
+
+<h1>Methods and rationale</h1>
+<p class="standfirst">Why we are building the Collective Political Agency scale, what we are asking expert reviewers to do, and how their judgments will be used. Nothing here is required reading in order to complete the review.</p>
+
+<h2>Why this instrument</h2>
+<p>Organizers routinely claim that their work builds something in people beyond a vote, a signature, or a turnout number: a sense that acting together is possible and worth doing. That claim is largely unmeasured. Existing scales capture adjacent things, including internal and external political efficacy, collective efficacy, sense of community, and group consciousness, but none of them measures the thing organizers describe, and none was designed to move in response to organizing.</p>
+<p>The Collective Political Agency scale (CPA) is an attempt at that measure. It is an individually held perception of collective capacity: how the <em>us</em> is experienced from one person's point of view. It is deliberately a <em>state</em> measure, not a trait, because the point is to detect change from campaigns, trainings, wins, and losses.</p>
+
+<h2>The constructs</h2>
+<p>Six components, each defined below. The definitions are the object of this review: an item that does not follow from a definition is either a bad item or a sign that the definition needs work.</p>
+<div class="defs">
+  <div class="def"><div class="n">Moral-affective orientation</div><div class="d">The values and emotions that motivate or inhibit acting with others.</div></div>
+  <div class="def"><div class="n">Cognitive-strategic competence</div><div class="d">The group's perceived ability to read power and choose effective courses of action.</div></div>
+  <div class="def"><div class="n">Relational embeddedness</div><div class="d">The degree to which a person is woven into networks of mutual commitment.</div></div>
+  <div class="def"><div class="n">Collective capacity</div><div class="d">The perceived conjoint capability of the group to organize and carry out collective action.</div></div>
+  <div class="def"><div class="n">Institutional responsiveness</div><div class="d">The belief that institutions and decision-makers respond to organized collective action.</div></div>
+  <div class="def"><div class="n">Racial group consciousness</div><div class="d">The perceived political power of one's racial or ethnic group and its bearing on one's own political standing.</div></div>
+</div>
+
+<h2>The three judgments we ask for</h2>
+
+<h3>1 · Relevance (to Collective Political Agency as a whole)</h3>
+<p>Reviewers rate how relevant each item is to the overarching construct, <em>not</em> to any one of the six components. The component-level question is the sorting task, and asking it twice would give the answer away: an item can only be rated for relevance to <em>Relational embeddedness</em> by someone who has already decided that is where it belongs.</p>
+<p>Keeping the two judgments separate lets them do different work: relevance asks whether the item belongs in this instrument at all, the sort asks where inside it the item lands.</p>
+
+<h3>2 · Clarity (for a community member, not for the reviewer)</h3>
+<p>Reviewers rate how clearly they would expect someone with no organizing vocabulary and no knowledge of this framework to understand what is being asked.</p>
+<p><em>Reviewers are not being asked to certify that respondents comprehend the item.</em> Only respondents can establish that, and cognitive interviews with the intended population are planned for the next round (Willis, 2005). What an expert panel is good for here is spotting likely failures related to double-barrelled wording, undefined abstractions, ambiguous referents, and readings we did not intend. An item that is clear to a reviewer who can nonetheless see how it would be misread is exactly what the comment box is for.</p>
+
+<h3>3 · Sorting</h3>
+<p>Which construct does the item read as belonging to? Items are presented without their intended labels, in an order randomized for each reviewer, so that the sort is a real test rather than a confirmation. "None of these / unsure" is a substantive answer, not a skip.</p>
+
+<h2>How the ratings are scored</h2>
+<p><strong>Item-level content validity (I-CVI) is a proportion of experts, not an average of the 1&ndash;4 scale.</strong> Each relevance rating is dichotomised (3 or 4 counts as relevant, 1 or 2 does not), and I-CVI is the share of the panel in the relevant category.</p>
+<p>The familiar .78 cut-off is the point at which that proportion exceeds chance agreement for a panel of six to ten raters (7 of 9 = .78). For a panel of five or fewer the criterion is 1.00, and for larger panels it relaxes toward .70 (Lynn, 1986; Polit &amp; Beck, 2006). The threshold applied will be the one matching this panel's final size, and items falling below it are revised or dropped.</p>
+
+<h2>The sorting task, and why there is no benchmark to score it against</h2>
+<p>The published benchmarks do not exist for a panel like this one. The distributions reported by Colquitt et&nbsp;al. (2019) are normed on large panels of raters drawn from the general respondent population, so an expert panel of this size has nothing comparable to be scored against.</p>
+<p>The sort is therefore scored against criteria internal to the task itself: the proportion of substantive agreement (<em>p</em><sub>sa</sub>) and the substantive-validity coefficient (<em>c</em><sub>sv</sub>) of Anderson &amp; Gerbing (1991), both computed from the assignments this panel makes and neither requiring an external norm. Items that draw no consensus, or that are consistently read into a construct other than the intended one, are revised, reassigned, or dropped.</p>
+<p>The benchmarked comparison comes later: a definitional-correspondence study with raters drawn from the instrument's intended respondent population, scorable against the published distributions (Hinkin &amp; Tracey, 1999).</p>
+
+<h2>Why the reference window is one month</h2>
+<div class="callout">
+  <p>CPA is specified as a <em>state</em>, not a trait. The instrument has to move when someone joins a campaign, sits through a training, wins something, or loses something; if it cannot detect that, it cannot do the job we need it for.</p>
+</div>
+<p>One month is the shortest window that still spans a normal cycle of group activity. Most groups meet at least monthly, so nearly every respondent has real events to report rather than an impression to summarise.</p>
+<ul>
+  <li><strong>A week</strong> would put respondents in groups on a monthly rhythm at the floor, and would pick up the ordinary noise of a bad week.</li>
+  <li><strong>Six months or a year</strong> would buy stability at the cost of exactly the sensitivity to organizing experience and exposure we are trying to preserve, and would push people from recall into general self-characterisation.</li>
+  <li><strong>An unanchored agree&ndash;disagree format</strong> takes that further still: it invites a trait reading, and a trait does not move when the organizing does.</li>
+</ul>
+<p>The trade-off we accept is that a one-month state measure carries more occasion-specific variance than a trait-style scale, and test&ndash;retest figures will look lower as a result. That is the intended behaviour, not error. Reviewers who would recommend a different window, or an unanchored format, are asked to say so in any comment box.</p>
+
+<h2 id="coverage">Content coverage</h2>
+<p>The closing section of the review asks how completely the item pool samples each construct's content domain (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). This is a question about the adequacy of the set, not the quality of any individual item: a pool can be made entirely of good items and still leave half a definition unmeasured. It is the judgment for which expert raters are specifically recommended.</p>
+<p>Racial group consciousness is deliberately carried by a single indicator in this short instrument, so for that construct the question is not coverage but centrality: whether the chosen item represents the construct's most central content.</p>
+
+<h2>What happens next</h2>
+<ul>
+  <li>Items below the I-CVI threshold for this panel's size are revised or dropped; items that sort inconsistently are revised, reassigned, or dropped.</li>
+  <li>Cognitive interviews with respondents from the intended population test comprehension directly.</li>
+  <li>A definitional-correspondence study with intended-population raters provides the benchmarked comparison.</li>
+  <li>Pilot administration and dimensionality testing follow, with the results reported back to this panel.</li>
+</ul>
+
+<h2>References</h2>
+<ul class="refs">
+  <li>Anderson, J. C., &amp; Gerbing, D. W. (1991). Predicting the performance of measures in a confirmatory factor analysis with a pretest assessment of their substantive validities. <em>Journal of Applied Psychology, 76</em>(5), 732&ndash;740.</li>
+  <li>Colquitt, J. A., Sabey, T. B., Rodell, J. B., &amp; Hill, E. T. (2019). Content validation guidelines: Evaluation criteria for definitional correspondence and definitional distinctiveness. <em>Journal of Applied Psychology, 104</em>(10), 1243&ndash;1265. <a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">https://doi.org/10.1037/apl0000406</a></li>
+  <li>Cronbach, L. J. (1990). <em>Essentials of psychological testing</em> (5th ed.). Harper &amp; Row.</li>
+  <li>Hinkin, T. R., &amp; Tracey, J. B. (1999). An analysis of variance approach to content validation. <em>Organizational Research Methods, 2</em>(2), 175&ndash;186. <a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">https://doi.org/10.1177/109442819922004</a></li>
+  <li>Lynn, M. R. (1986). Determination and quantification of content validity. <em>Nursing Research, 35</em>(6), 382&ndash;385.</li>
+  <li>Nunnally, J. C. (1978). <em>Psychometric theory</em> (2nd ed.). McGraw-Hill.</li>
+  <li>Polit, D. F., &amp; Beck, C. T. (2006). The content validity index: Are you sure you know what's being reported? Critique and recommendations. <em>Research in Nursing &amp; Health, 29</em>(5), 489&ndash;497. <a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">https://doi.org/10.1002/nur.20147</a></li>
+  <li>Willis, G. B. (2005). <em>Cognitive interviewing: A tool for improving questionnaire design</em>. Sage.</li>
+</ul>
+
+<footer>
+  <span>Collective Political Agency scale · Civic Power Lab</span>
+  <span><a href="index.html">Back to the instrument</a></span>
+</footer>
+</div>
+</body>
+</html>
