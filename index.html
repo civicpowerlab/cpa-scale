@@ -138,6 +138,8 @@
   .reviewer-row input.short { min-width:130px; }
   .consent { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
     border-radius:var(--radius); padding:14px 18px; font-size:13.5px; color:var(--text-2); margin:28px 0 22px; }
+  .draft-note { background:#eaf6f0; border:1px solid #bfe3d2; border-radius:var(--radius);
+    padding:10px 14px; font-size:13px; color:#12694a; margin-bottom:14px; }
   .rev-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
     box-shadow:var(--shadow); padding:18px 20px; margin-bottom:14px; }
   .rev-item .text { font-size:16.5px; font-weight:500; margin-bottom:16px; }
@@ -312,7 +314,7 @@
   <div class="defs-grid" id="construct-defs"></div>
 
   <div class="consent">
-    Participation in this expert review is <strong>voluntary</strong>; you may stop at any time and unsubmitted responses are not recorded. Your ratings, comments, and reviewer information are stored in the project's secure research database and used solely for instrument development; findings are reported in aggregate. Please complete the review <strong>independently, without discussing the items with other panelists</strong>, ideally in one sitting. Questions about this review or the study: contact Liz McKenna (Civic Power Lab, HKS &mdash; <a href="mailto:emckenna@hks.harvard.edu">emckenna@hks.harvard.edu</a>).
+    Participation in this expert review is <strong>voluntary</strong>; you may stop at any time, and nothing reaches the research database until you press Submit. A draft is kept in your own browser so that you can finish later, and is cleared when you submit. Your ratings, comments, and reviewer information are stored in the project's secure research database and used solely for instrument development; findings are reported in aggregate. Please complete the review <strong>independently, without discussing the items with other panelists</strong>, ideally in one sitting. Questions about this review or the study: contact Liz McKenna (Civic Power Lab, HKS &mdash; <a href="mailto:emckenna@hks.harvard.edu">emckenna@hks.harvard.edu</a>).
   </div>
 
   <div class="reviewer-row">
@@ -328,6 +330,8 @@
     <input id="reviewer-years" class="short" type="number" min="0" max="70" placeholder="Years of experience">
     <input id="reviewer-domain" placeholder="Area of expertise (e.g., social movements, survey methods)">
   </div>
+
+  <div class="draft-note" id="draft-note" style="display:none">Your review in progress has been restored from this browser. It is kept here until you submit.</div>
 
   <div id="review-list"></div>
 
@@ -421,13 +425,31 @@ const ITEMS = [
 ];
 
 const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r1","c3","i4","gc1","m4","s3","r2","c4","i2","m5","s4","r3","c1","i3"];
-/* Review order is randomized per reviewer (Fisher-Yates) and stored in the submission payload. */
-const REVIEW_ORDER = ITEMS.map(it => it.id);
-for (let i = REVIEW_ORDER.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1));
-  [REVIEW_ORDER[i], REVIEW_ORDER[j]] = [REVIEW_ORDER[j], REVIEW_ORDER[i]];
+/* A review in progress is kept in the reviewer's browser, so closing the tab or a
+   reload does not cost 21 items of work. Cleared once the review saves to the DB. */
+const REV_STORE = "cpa_v07_review";
+let revSaved = null;
+try { revSaved = JSON.parse(localStorage.getItem(REV_STORE) || "null"); } catch (e) {}
+if (revSaved && typeof revSaved !== "object") revSaved = null;
+
+/* Review order is randomized per reviewer (Fisher-Yates) and stored in the submission
+   payload. A restored draft keeps its original order, so items stay where the reviewer
+   left them and the recorded order is the one they actually saw. */
+function shuffledOrder() {
+  const o = ITEMS.map(it => it.id);
+  for (let i = o.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [o[i], o[j]] = [o[j], o[i]];
+  }
+  return o;
 }
-const REVIEW_STARTED_AT = new Date().toISOString();
+function usableOrder(o) {
+  if (!Array.isArray(o) || o.length !== ITEMS.length) return false;
+  const ids = new Set(ITEMS.map(it => it.id));
+  return o.every(id => ids.has(id)) && new Set(o).size === o.length;
+}
+const REVIEW_ORDER = (revSaved && usableOrder(revSaved.order)) ? revSaved.order : shuffledOrder();
+const REVIEW_STARTED_AT = (revSaved && revSaved.startedAt) || new Date().toISOString();
 const ANCHORS = [ ["0","Not at all"], ["1","A little"], ["2","Somewhat"], ["3","Quite a bit"], ["4","A great deal"] ];
 const byId = Object.fromEntries(ITEMS.map(it => [it.id, it]));
 const answers = {};
@@ -692,6 +714,7 @@ covList.addEventListener('click', e => {
     x.classList.toggle('sel', x === ch);
     x.setAttribute('aria-checked', String(x === ch));
   });
+  saveDraft();
 });
 function coverage() {
   return CONSTRUCTS.map(c => ({
@@ -722,6 +745,7 @@ rlist.addEventListener('click', e => {
     x.setAttribute('aria-checked', String(x === o));
   });
   updateRevProgress();
+  saveDraft();
 });
 rlist.addEventListener('change', updateRevProgress);
 chipKeys(rlist);
@@ -733,6 +757,76 @@ function updateRevProgress() {
   document.getElementById('rev-progress').textContent = `${n} of ${REVIEW_ORDER.length} items rated`;
 }
 updateRevProgress();
+/* ---- Draft persistence for the review ---- */
+const REVIEWER_FIELDS = ['reviewer-name','reviewer-aff','reviewer-role','reviewer-years','reviewer-domain'];
+const val = sel => { const el = document.querySelector(sel); return el ? el.value : ''; };
+
+function reviewDraft() {
+  const sorts = {}, comments = {}, covNotes = {};
+  REVIEW_ORDER.forEach(id => {
+    const s = val(`select[name="sort-${id}"]`); if (s) sorts[id] = s;
+    const c = val(`textarea[name="cmt-${id}"]`); if (c) comments[id] = c;
+  });
+  CONSTRUCTS.forEach(c => {
+    const t = val(`textarea[name="cov-${c.key}"]`); if (t) covNotes[c.key] = t;
+  });
+  const reviewer = {};
+  REVIEWER_FIELDS.forEach(k => { const el = document.getElementById(k); if (el && el.value) reviewer[k] = el.value; });
+  return { order:REVIEW_ORDER, startedAt:REVIEW_STARTED_AT, reviewer,
+           ratings:revRatings, sorts, comments, coverage:covRatings, covNotes };
+}
+function saveDraft() { try { localStorage.setItem(REV_STORE, JSON.stringify(reviewDraft())); } catch (e) {} }
+function clearDraft() { try { localStorage.removeItem(REV_STORE); } catch (e) {} }
+
+function restoreDraft() {
+  if (!revSaved) return false;
+  Object.entries(revSaved.reviewer || {}).forEach(([k, v]) => {
+    const el = document.getElementById(k); if (el) el.value = v;
+  });
+  Object.entries(revSaved.ratings || {}).forEach(([id, kinds]) => {
+    Object.entries(kinds || {}).forEach(([kind, v]) => {
+      const o = document.querySelector(`.opt[data-kind="${kind}"][data-item="${id}"][data-val="${v}"]`);
+      if (!o) return;
+      o.classList.add('sel'); o.setAttribute('aria-checked', 'true');
+      revRatings[id] = revRatings[id] || {};
+      revRatings[id][kind] = Number(v);
+    });
+  });
+  Object.entries(revSaved.sorts || {}).forEach(([id, v]) => {
+    const s = document.querySelector(`select[name="sort-${id}"]`); if (s) s.value = v;
+  });
+  Object.entries(revSaved.comments || {}).forEach(([id, v]) => {
+    const t = document.querySelector(`textarea[name="cmt-${id}"]`); if (t) t.value = v;
+  });
+  Object.entries(revSaved.coverage || {}).forEach(([k, v]) => {
+    const ch = document.querySelector(`.cov-chip[data-c="${k}"][data-val="${v}"]`);
+    if (!ch) return;
+    ch.classList.add('sel'); ch.setAttribute('aria-checked', 'true');
+    covRatings[k] = Number(v);
+  });
+  Object.entries(revSaved.covNotes || {}).forEach(([k, v]) => {
+    const t = document.querySelector(`textarea[name="cov-${k}"]`); if (t) t.value = v;
+  });
+  updateRevProgress();
+  return Object.keys(revRatings).length > 0 || Object.keys(covRatings).length > 0;
+}
+
+/* Chip clicks fire neither input nor change, so those handlers call saveDraft directly. */
+const revView = document.getElementById('view-review');
+revView.addEventListener('input', saveDraft);
+revView.addEventListener('change', saveDraft);
+
+let revSubmitted = false;
+window.addEventListener('beforeunload', e => {
+  if (revSubmitted || Object.keys(revRatings).length === 0) return;
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+if (restoreDraft()) {
+  document.getElementById('draft-note').style.display = 'block';
+}
+
 document.getElementById('export-btn').addEventListener('click', () => {
   const out = {
     reviewer: document.getElementById('reviewer-name').value || null,
@@ -788,7 +882,10 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
         startedAt: REVIEW_STARTED_AT,
       submittedAt: new Date().toISOString(),
     });
+    revSubmitted = true;
+    clearDraft();
     prog.textContent = '';
+    document.getElementById('draft-note').style.display = 'none';
     document.getElementById('rev-thanks').style.display = 'block';
   } catch (err) {
     btn.disabled = false;
