@@ -374,21 +374,21 @@
 </div>
 
 <script>
-/* ========= Backend (Supabase; shared research project) ========= */
-const SUPABASE_URL = "https://jddrxzirkkmpsqqrmsea.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZHJ4emlya2ttcHNxcXJtc2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTY0MjQsImV4cCI6MjA4ODU5MjQyNH0.RBk3fRlL6thd7AT3YBdmxEXpmtb_KoY9hHAOPUWREME";
-/* CPA pilot rows share the demo table until a dedicated cpa_responses table exists;
-   tagged org_name="CPA Scale Pilot" so they filter cleanly. */
+/* ========= Backend (Supabase, project cpa-scale) =========
+   The anon key is meant to be public. It can INSERT into cpa_responses and nothing
+   else: there is no select policy, so this key cannot read a single response back.
+   Schema and policies live in supabase-setup.sql. */
+const SUPABASE_URL = "https://xdujvtvjpwboonxjjqa.supabase.co";
+const SUPABASE_ANON_KEY = "PASTE_ANON_KEY_HERE";
 async function saveToBackend(payload) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/team_effectiveness_responses`, {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/cpa_responses`, {
     method:"POST",
     headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY,
       "Authorization":`Bearer ${SUPABASE_ANON_KEY}`, "Prefer":"return=minimal" },
     body: JSON.stringify({
-      snapshot_date: new Date().toISOString().slice(0,10),
-      filled_out_by: payload.respondent || null,
-      org_name: payload.channel || "CPA Scale Pilot",
-      source: "demo",
+      kind: payload.kind,
+      version: payload.version || null,
+      respondent: payload.respondent || null,
       payload,
     }),
   });
@@ -604,6 +604,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
   btn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
   try {
     await saveToBackend({
+      kind: "instrument",
       instrument: "cpa", version: "v0.7-pool21",
       field_order: FIELD_ORDER,
       answers,
@@ -883,6 +884,7 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
   btn.disabled = true; prog.className = 'status'; prog.textContent = 'Saving\u2026';
   try {
     await saveToBackend({
+      kind: "expert_review",
       channel: "CPA Expert Review",
       instrument: "cpa", version: "v0.7-pool21",
       reviewer: document.getElementById('reviewer-name').value || null,
