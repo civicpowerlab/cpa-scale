@@ -146,6 +146,29 @@
   @media (max-width:760px){ .rev-grid{grid-template-columns:1fr} }
   .rev-block label.head { display:block; font-size:12px; font-weight:600; text-transform:uppercase;
     letter-spacing:0.05em; color:var(--muted); margin-bottom:8px; }
+  /* Definitions on hover, at the point of the sort, so nobody has to scroll back up. */
+  .rev-block { position:relative; }
+  .head-row { display:flex; align-items:baseline; gap:8px; }
+  .defhint { position:relative; font-size:11px; font-weight:600; color:var(--accent-deep);
+    background:var(--accent-soft); border:1px solid #dfe3f7; border-radius:999px;
+    padding:1px 9px; margin-bottom:8px; cursor:help; white-space:nowrap; }
+  .defhint:hover, .defhint:focus-visible { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .defpop { position:absolute; z-index:50; right:0; top:calc(100% + 7px); width:330px; max-width:78vw;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    box-shadow:0 10px 30px rgba(20,22,40,.18); padding:13px 15px; display:none;
+    text-align:left; cursor:auto; white-space:normal; }
+  .defhint:hover .defpop, .defhint:focus .defpop, .defhint:focus-within .defpop { display:block; }
+  .defpop .dn { display:block; font-size:12.5px; font-weight:600; color:var(--accent-deep);
+    text-transform:none; letter-spacing:0; }
+  .defpop .dd { display:block; font-size:12.5px; font-weight:400; color:var(--text-2);
+    margin:2px 0 10px; line-height:1.45; text-transform:none; letter-spacing:0; }
+  .defpop .dd:last-child { margin-bottom:0; }
+  /* On a phone the chip sits too far right for a chip-anchored popover to fit, so let it
+     resolve against .rev-block and span the card instead. */
+  @media (max-width:760px){
+    .defhint { position:static; }
+    .defpop { top:calc(100% + 6px); left:0; right:0; width:auto; max-width:none; }
+  }
   .seg4 { display:flex; gap:6px; }
   .seg4 .opt { flex:1; padding:8px 4px; }
   .seg4 .l { font-size:10px; }
@@ -593,6 +616,10 @@ defsOverlay.addEventListener('click', e => { if (e.target === defsOverlay) setDe
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && defsOverlay.classList.contains('open')) setDefsOpen(false);
 });
+/* Built once, inlined into every item's sort block: hover or focus the chip to read
+   all six definitions without leaving the item. */
+const DEF_POPOVER = `<span class="defpop">${CONSTRUCTS.map(c =>
+  `<span class="dn">${c.name}</span><span class="dd">${c.def}</span>`).join('')}</span>`;
 /* Full anchor labels per Lynn (1986) — all four points defined, not endpoints only */
 const REL_ANCHORS = ["Not relevant", "Major revision needed", "Minor revision needed", "Highly relevant"];
 const CLA_ANCHORS = ["Not clear", "Major rewording needed", "Minor rewording needed", "Clear as written"];
@@ -617,10 +644,13 @@ REVIEW_ORDER.forEach((id, idx) => {
         <div class="hintline">As a community member would read it</div>
       </div>
       <div class="rev-block">
-        <label class="head">Which construct?</label>
+        <div class="head-row">
+          <label class="head">Which construct?</label>
+          <span class="defhint" tabindex="0" role="button" aria-label="Show construct definitions">definitions${DEF_POPOVER}</span>
+        </div>
         <select name="sort-${id}">
           <option value="">&mdash; select &mdash;</option>
-          ${CONSTRUCTS.map(c => `<option value="${c.key}">${c.name}</option>`).join('')}
+          ${CONSTRUCTS.map(c => `<option value="${c.key}" title="${c.def}">${c.name}</option>`).join('')}
           <option value="none">None of these / unsure</option>
         </select>
       </div>
