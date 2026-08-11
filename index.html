@@ -110,6 +110,12 @@
   .construct-card .cdef { font-size:14.5px; color:var(--text-2); margin-top:5px; }
   .method-note { background:var(--accent-soft); border:1px solid #dfe3f7; border-radius:var(--radius);
     padding:16px 20px; font-size:15px; color:var(--text-2); margin:20px 0 26px; }
+  .method-note p + p { margin-top:13px; }
+  .method-note .lead { color:var(--text); }
+  .note-plain { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:var(--radius); padding:16px 20px; font-size:15px; color:var(--text-2); margin:0 0 26px; }
+  .note-plain p + p { margin-top:13px; }
+  .note-plain .lead { color:var(--text); }
   .reviewer-row { display:flex; gap:12px; margin-bottom:22px; flex-wrap:wrap; }
   .reviewer-row input { padding:10px 13px; background:var(--surface); border:1px solid var(--border);
     border-radius:8px; font-family:inherit; font-size:14.5px; min-width:260px; }
@@ -145,14 +151,19 @@
     box-shadow:var(--shadow); padding:16px 18px; margin-bottom:14px; }
   .cov-card .cname { font-size:15px; font-weight:600; color:var(--accent-deep); }
   .cov-card .cdef { font-size:13.5px; color:var(--text-2); margin:4px 0 12px; }
-  .cov-chips { display:flex; gap:6px; max-width:420px; }
-  .cov-chip { flex:1; min-width:30px; height:36px; display:grid; place-items:center; font-size:13px;
+  .cov-card .covq { font-size:14px; color:var(--text); font-weight:500; margin-bottom:9px; max-width:62ch; }
+  /* Chips and their anchors share one 7-column grid so each label lands under the point it names. */
+  .cov-chips { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px; }
+  .cov-chip { height:38px; display:grid; place-items:center; font-size:13px;
     font-weight:600; color:var(--text-2); background:var(--surface); border:1px solid var(--border);
     border-radius:7px; cursor:pointer; transition:all .1s; }
   .cov-chip:hover { border-color:var(--accent); background:var(--accent-soft); }
   .cov-chip.sel { background:var(--accent); border-color:var(--accent); color:#fff; }
-  .cov-anchors { display:flex; justify-content:space-between; max-width:420px;
-    font-size:11px; color:var(--muted); margin-top:5px; }
+  .cov-anchors { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px;
+    font-size:11px; line-height:1.3; color:var(--muted); margin-top:6px; }
+  .cov-anchors .a1 { grid-column:1 / 3; text-align:left; }
+  .cov-anchors .a4 { grid-column:3 / 6; text-align:center; }
+  .cov-anchors .a7 { grid-column:6 / 8; text-align:right; }
   .cov-card textarea { width:100%; margin-top:12px; padding:9px 11px; background:var(--surface);
     border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px;
     color:var(--text); resize:vertical; min-height:52px; }
@@ -183,7 +194,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.6.1 · pilot</span>
+  <span class="badge">Draft v0.7 · pilot</span>
 </header>
 
 <div class="tabs">
@@ -248,7 +259,19 @@
   <div class="defs-grid" id="construct-defs"></div>
 
   <div class="method-note">
-    <strong>Your three tasks per item.</strong> (1) <em>Relevance</em>: how relevant is this item to the construct system as a whole? (2) <em>Clarity</em>: how clearly would you expect a community member to understand it? (3) <em>Sorting</em>: to which construct does the item read as belonging? Items are presented in shuffled order without their intended labels. A comment box is provided for suggested rewording or comments. Item-level content validity (I-CVI) will be computed as the proportion of experts rating relevance 3 or 4; items below .78 will be revised or dropped (<a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>; Lynn, 1986). Your sort assignments are used <em>diagnostically</em> — to identify which construct an item is read as reflecting — rather than scored against published benchmarks, which are normed on large panels of raters drawn from the general respondent population (<a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al., 2019</a>). A separate definitional-correspondence study with raters drawn from the instrument's intended respondent population will follow (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>). <strong>A final section following the items assesses the content coverage of the item pool</strong> — a judgment for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019).
+    <p class="lead"><strong>Your three tasks per item.</strong> Items are presented in shuffled order without their intended construct labels, and a comment box is provided on each for suggested rewording.</p>
+    <p><strong>1 · Relevance — to Collective Political Agency as a whole.</strong> Rate how relevant the item is to the overarching construct described above, <em>not</em> to any one of the five components. The component-level question is task 3, and asking it twice would give the answer away: an item can only be rated for relevance to <em>Relational embeddedness</em> by someone who has already decided that is where it belongs. Keeping the two judgments separate lets them do different work — relevance asks whether the item belongs in this instrument at all, the sort asks where inside it the item lands.</p>
+    <p><strong>2 · Clarity — for a community member, not for you.</strong> Rate how clearly you would expect someone with no organizing vocabulary and no knowledge of this framework to understand what is being asked. You are not being asked to certify that respondents comprehend the item; only respondents can establish that, and cognitive interviews with the intended population are planned for the next round (Willis, 2005). What an expert panel is good for here is spotting the failures that are visible on the page — double-barrelled wording, undefined abstractions, ambiguous referents, and readings we did not intend. If an item is clear to you but you can see how it would be misread, that is the comment box's best use.</p>
+    <p><strong>3 · Sorting.</strong> To which construct does the item read as belonging? &ldquo;None of these / unsure&rdquo; is a substantive answer, not a skip.</p>
+    <p><strong>How the ratings are scored.</strong> Item-level content validity (I-CVI) is a <em>proportion of experts</em>, not an average of the 1&ndash;4 scale. Each rating is dichotomised — 3 or 4 counts as relevant, 1 or 2 does not — and I-CVI is the share of the panel in the relevant category. The .78 cut-off is the point at which that proportion exceeds chance agreement for a panel of six to ten raters (7 of 9 = .78); for a panel of five or fewer the criterion is 1.00, and for larger panels it relaxes toward .70 (Lynn, 1986; <a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>). The threshold applied will be the one matching this panel's final size. Items falling below it are revised or dropped.</p>
+    <p><strong>On the sorting task and published benchmarks.</strong> You are right that the benchmarks do not exist for a panel like this one. The distributions reported by <a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al. (2019)</a> are normed on large panels drawn from the general respondent population, so an expert panel of this size has nothing comparable to be scored against — which means the standard has to be built here rather than borrowed. The sort is therefore scored against criteria internal to the task itself: the proportion of substantive agreement (<em>p</em><sub>sa</sub>) and the substantive-validity coefficient (<em>c</em><sub>sv</sub>) of Anderson &amp; Gerbing (1991), both computed from the assignments this panel makes and neither requiring an external norm. Items that draw no consensus, or that are consistently read into a construct other than the intended one, are revised, reassigned, or dropped. The benchmarked comparison comes later: a definitional-correspondence study with raters drawn from the instrument's intended respondent population, scorable against the published distributions (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>).</p>
+    <p><strong>A final section following the items assesses the content coverage of the item pool</strong> — whether the set, taken together, samples each definition completely. This is the judgment for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019).</p>
+  </div>
+
+  <div class="note-plain">
+    <p class="lead"><strong>Why the reference window is one month.</strong> CPA is specified as a <em>state</em>, not a trait. The instrument has to move when someone joins a campaign, sits through a training, wins something, or loses something — if it cannot detect that, it cannot do the job we need it for.</p>
+    <p>One month is the shortest window that still spans a normal cycle of group activity. Most groups meet at least monthly, so nearly every respondent has real events to report rather than an impression to summarise. A one-week window would put respondents in groups on a monthly rhythm at the floor, and would pick up the ordinary noise of a bad week. Six months or a year would buy stability at the cost of exactly the sensitivity to organizing experience and exposure we are trying to preserve, and would push people from recall into general self-characterisation. An unanchored agree&ndash;disagree format takes that further still: it invites a trait reading, and a trait does not move when the organizing does.</p>
+    <p>The trade-off we are accepting is that a one-month state measure will carry more occasion-specific variance than a trait-style scale, and test&ndash;retest figures will look lower as a result. That is the intended behaviour, not error. If you would recommend a different window, or an unanchored agree&ndash;disagree format, please say so in the comment box.</p>
   </div>
 
   <div class="reviewer-row">
@@ -259,7 +282,7 @@
   <div id="review-list"></div>
 
   <h2>Assessment of content coverage</h2>
-  <p class="intro full">For each construct, rate the extent to which the 20 items, considered as a set, sample the full content domain of the definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). This judgment concerns the adequacy of the pool as a whole rather than the quality of individual items. Where sampling appears incomplete, please describe the unrepresented aspects of the domain and, where possible, suggest candidate items.</p>
+  <p class="intro full">For each construct, rate how completely the item pool samples the content domain of that definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). Judge the pool as a whole rather than counting the items you happened to sort into that construct — which items bear on which construct is itself part of what this review is testing. This is a question about the adequacy of the set, not the quality of any individual item: a pool can be made entirely of good items and still leave half a definition unmeasured. Where sampling looks incomplete, please describe the unrepresented part of the domain and, where possible, suggest candidate items.</p>
   <div id="coverage-list"></div>
 
   <div class="submitrow">
@@ -480,7 +503,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
   btn.disabled = true; status.className = 'status'; status.textContent = 'Saving…';
   try {
     await saveToBackend({
-      instrument: "cpa", version: "v0.5-pool20",
+      instrument: "cpa", version: "v0.7-pool20",
       field_order: FIELD_ORDER,
       answers,
       startedAt: PAGE_LOADED_AT, submittedAt: new Date().toISOString(),
@@ -513,16 +536,16 @@ REVIEW_ORDER.forEach((id, idx) => {
     <div class="text"><span class="num">${idx+1}</span>&hellip;${it.t}</div>
     <div class="rev-grid">
       <div class="rev-block rel">
-        <label class="head">Relevance</label>
+        <label class="head">Relevance to CPA</label>
         <div class="seg4" data-kind-style="rel">${[1,2,3,4].map(v =>
           `<div class="opt" data-kind="rel" data-item="${id}" data-val="${v}"><span class="n">${v}</span></div>`).join('')}</div>
-        <div class="hintline">1 not relevant &rarr; 4 highly relevant</div>
+        <div class="hintline">1 not relevant &rarr; 4 highly relevant &mdash; to the construct as a whole, not to one component</div>
       </div>
       <div class="rev-block clar">
         <label class="head">Clarity</label>
         <div class="seg4" data-kind-style="clar">${[1,2,3,4].map(v =>
           `<div class="opt" data-kind="clar" data-item="${id}" data-val="${v}"><span class="n">${v}</span></div>`).join('')}</div>
-        <div class="hintline">1 unclear &rarr; 4 very clear</div>
+        <div class="hintline">1 likely to be misread &rarr; 4 unambiguous &mdash; as a community member would read it</div>
       </div>
       <div class="rev-block">
         <label class="head">Which construct?</label>
@@ -545,9 +568,14 @@ CONSTRUCTS.forEach(c => {
   card.innerHTML = `
     <div class="cname">${c.name}</div>
     <div class="cdef">${c.def}</div>
+    <div class="covq">How completely does the pool, taken as a whole, sample this definition?</div>
     <div class="cov-chips">${[1,2,3,4,5,6,7].map(v =>
       `<div class="cov-chip" data-c="${c.key}" data-val="${v}">${v}</div>`).join('')}</div>
-    <div class="cov-anchors"><span>1 = the item set samples this content domain very incompletely</span><span>7 = very completely</span></div>
+    <div class="cov-anchors">
+      <span class="a1">1 &middot; very incompletely</span>
+      <span class="a4">4 &middot; moderately</span>
+      <span class="a7">7 &middot; very completely</span>
+    </div>
     <textarea name="cov-${c.key}" placeholder="Unrepresented aspects of this construct's domain; suggested candidate items (optional)"></textarea>`;
   covList.appendChild(card);
 });
@@ -619,7 +647,7 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
   try {
     await saveToBackend({
       channel: "CPA Expert Review",
-      instrument: "cpa", version: "v0.4-pool20",
+      instrument: "cpa", version: "v0.7-pool20",
       reviewer: document.getElementById('reviewer-name').value || null,
       affiliation: document.getElementById('reviewer-aff').value || null,
       respondent: document.getElementById('reviewer-name').value || null,
