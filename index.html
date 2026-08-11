@@ -172,19 +172,13 @@
   .cov-card .cname { font-size:15px; font-weight:600; color:var(--accent-deep); }
   .cov-card .cdef { font-size:13.5px; color:var(--text-2); margin:4px 0 12px; }
   .cov-card .covq { font-size:14px; color:var(--text); font-weight:500; margin-bottom:9px; max-width:62ch; }
-  .cov-chips { display:flex; gap:6px; max-width:420px; }
-  .cov-chip { flex:1; min-width:30px; height:36px; display:grid; place-items:center; font-size:13px;
+  .cov-chip { min-width:30px; height:38px; display:grid; place-items:center; font-size:13px;
     font-weight:600; color:var(--text-2); background:var(--surface); border:1px solid var(--border);
     border-radius:7px; cursor:pointer; transition:all .1s; }
   .cov-chip:hover { border-color:var(--accent); background:var(--accent-soft); }
   .cov-chip.sel { background:var(--accent); border-color:var(--accent); color:#fff; }
-  .cov-anchors { display:flex; justify-content:space-between; max-width:420px;
-    font-size:11px; color:var(--muted); margin-top:5px; }
-  /* Coverage uses a 7-point scale: chips and legend share one 7-column grid so each
-     label lands under the point it names. (The element cards below keep .cov-chips /
-     .cov-anchors, which are a 4-point flex row.) */
+  /* Chips and legend share one 7-column grid so each label lands under the point it names. */
   .cov-scale { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px; }
-  .cov-scale .cov-chip { height:38px; }
   .cov-legend { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; max-width:460px;
     font-size:11px; line-height:1.3; color:var(--muted); margin-top:6px; }
   .cov-legend .a1 { grid-column:1 / 3; text-align:left; }
@@ -286,18 +280,18 @@
 
   <div class="method-note">
     <p class="lead"><strong>Thank you for lending your time and expertise to this review.</strong> For each item we ask three brief judgments. Items appear without their intended construct labels, in an order randomized for each reviewer, and every item has a comment box for suggested rewording.</p>
-    <p><strong>1 &middot; Relevance — to Collective Political Agency as a whole.</strong> Rate how relevant the item is to the overarching construct, <em>not</em> to any one of the six components. The component-level question is task 3, and asking it twice would give the answer away: an item can only be rated for relevance to <em>Relational embeddedness</em> by someone who has already decided that is where it belongs. Keeping the two judgments separate lets them do different work — relevance asks whether the item belongs in this instrument at all, the sort asks where inside it the item lands.</p>
-    <p><strong>2 &middot; Clarity — for a community member, not for you.</strong> Rate how clearly you would expect someone with no organizing vocabulary and no knowledge of this framework to understand what is being asked. You are not being asked to certify that respondents comprehend the item; only respondents can establish that, and cognitive interviews with the intended population are planned for the next round (Willis, 2005). What an expert panel is good for here is spotting the failures that are visible on the page — double-barrelled wording, undefined abstractions, ambiguous referents, and readings we did not intend. If an item is clear to you but you can see how it would be misread, that is the comment box's best use.</p>
+    <p><strong>1 &middot; Relevance (to Collective Political Agency as a whole).</strong> Rate how relevant the item is to the overarching construct, <em>not</em> to any one of the six components. The component-level question is task 3, and asking it twice would give the answer away: an item can only be rated for relevance to <em>Relational embeddedness</em> by someone who has already decided that is where it belongs. Keeping the two judgments separate lets them do different work: relevance asks whether the item belongs in this instrument at all, the sort asks where inside it the item lands.</p>
+    <p><strong>2 &middot; Clarity (for a community member, not for you).</strong> Rate how clearly you would expect someone with no organizing vocabulary and no knowledge of this framework to understand what is being asked. <em>You are not being asked to certify that respondents comprehend the item</em>; only respondents can establish that, and cognitive interviews with the intended population are planned for the next round (Willis, 2005). What an expert panel is good for here is spotting likely failures related to double-barrelled wording, undefined abstractions, ambiguous referents, and readings we did not intend. If an item is clear to you but you can see how it would be misread, that is the comment box's best use.</p>
     <p><strong>3 &middot; Sorting.</strong> Which construct does the item read as belonging to? &ldquo;None of these / unsure&rdquo; is a substantive answer, not a skip.</p>
-    <p><strong>How the ratings are scored.</strong> Item-level content validity (I-CVI) is a <em>proportion of experts</em>, not an average of the 1&ndash;4 scale. Each rating is dichotomised — 3 or 4 counts as relevant, 1 or 2 does not — and I-CVI is the share of the panel in the relevant category. The .78 cut-off is the point at which that proportion exceeds chance agreement for a panel of six to ten raters (7 of 9 = .78); for a panel of five or fewer the criterion is 1.00, and for larger panels it relaxes toward .70 (Lynn, 1986; <a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>). The threshold applied will be the one matching this panel's final size. Items falling below it are revised or dropped.</p>
-    <p><strong>On the sorting task and published benchmarks.</strong> The benchmarks do not exist for a panel like this one. The distributions reported by <a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al. (2019)</a> are normed on large panels drawn from the general respondent population, so an expert panel of this size has nothing comparable to be scored against — which means the standard has to be built here rather than borrowed. The sort is therefore scored against criteria internal to the task itself: the proportion of substantive agreement (<em>p</em><sub>sa</sub>) and the substantive-validity coefficient (<em>c</em><sub>sv</sub>) of Anderson &amp; Gerbing (1991), both computed from the assignments this panel makes and neither requiring an external norm. Items that draw no consensus, or that are consistently read into a construct other than the intended one, are revised, reassigned, or dropped. The benchmarked comparison comes later: a definitional-correspondence study with raters drawn from the instrument's intended respondent population, scorable against the published distributions (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>).</p>
-    <p><strong>After the items, two short closing sections ask:</strong> (a) how completely the item pool covers each construct, and what is missing; and (b) whether the instrument's instructions, stem, response scale, and recall window are appropriate. These are judgments for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019; Haynes, Richard, &amp; Kubany, 1995).</p>
+    <p><strong>How the ratings are scored.</strong> Item-level content validity (I-CVI) is a <em>proportion of experts</em>, not an average of the 1&ndash;4 scale. Each rating is dichotomised (3 or 4 counts as relevant, 1 or 2 does not), and I-CVI is the share of the panel in the relevant category. The .78 cut-off is the point at which that proportion exceeds chance agreement for a panel of six to ten raters (7 of 9 = .78); for a panel of five or fewer the criterion is 1.00, and for larger panels it relaxes toward .70 (Lynn, 1986; <a href="https://doi.org/10.1002/nur.20147" target="_blank" rel="noopener">Polit &amp; Beck, 2006</a>). The threshold applied will be the one matching this panel's final size. Items falling below it are revised or dropped.</p>
+    <p><strong>On the sorting task and published benchmarks.</strong> The benchmarks do not exist for a panel like this one. The distributions reported by <a href="https://doi.org/10.1037/apl0000406" target="_blank" rel="noopener">Colquitt et&nbsp;al. (2019)</a> are normed on large panels drawn from the general respondent population, so an expert panel of this size has nothing comparable to be scored against. The sort is therefore scored against criteria internal to the task itself: the proportion of substantive agreement (<em>p</em><sub>sa</sub>) and the substantive-validity coefficient (<em>c</em><sub>sv</sub>) of Anderson &amp; Gerbing (1991), both computed from the assignments this panel makes and neither requiring an external norm. Items that draw no consensus, or that are consistently read into a construct other than the intended one, are revised, reassigned, or dropped. The benchmarked comparison comes later: a definitional-correspondence study with raters drawn from the instrument's intended respondent population, scorable against the published distributions (<a href="https://doi.org/10.1177/109442819922004" target="_blank" rel="noopener">Hinkin &amp; Tracey, 1999</a>).</p>
+    <p><strong>A short closing section follows the items,</strong> asking how completely the item pool covers each construct and what is missing. This is a judgment for which expert raters are specifically recommended (Colquitt et&nbsp;al., 2019).</p>
   </div>
 
   <div class="note-plain">
-    <p class="lead"><strong>Why the reference window is one month.</strong> CPA is specified as a <em>state</em>, not a trait. The instrument has to move when someone joins a campaign, sits through a training, wins something, or loses something — if it cannot detect that, it cannot do the job we need it for.</p>
+    <p class="lead"><strong>Why the reference window is one month.</strong> CPA is specified as a <em>state</em>, not a trait. The instrument has to move when someone joins a campaign, sits through a training, wins something, or loses something; if it cannot detect that, it cannot do the job we need it for.</p>
     <p>One month is the shortest window that still spans a normal cycle of group activity. Most groups meet at least monthly, so nearly every respondent has real events to report rather than an impression to summarise. A one-week window would put respondents in groups on a monthly rhythm at the floor, and would pick up the ordinary noise of a bad week. Six months or a year would buy stability at the cost of exactly the sensitivity to organizing experience and exposure we are trying to preserve, and would push people from recall into general self-characterisation. An unanchored agree&ndash;disagree format takes that further still: it invites a trait reading, and a trait does not move when the organizing does.</p>
-    <p>The trade-off we are accepting is that a one-month state measure will carry more occasion-specific variance than a trait-style scale, and test&ndash;retest figures will look lower as a result. That is the intended behaviour, not error. The closing section asks you to rate this choice directly; if you would recommend a different window, or an unanchored agree&ndash;disagree format, please say so there.</p>
+    <p>The trade-off we are accepting is that a one-month state measure will carry more occasion-specific variance than a trait-style scale, and test&ndash;retest figures will look lower as a result. That is the intended behaviour, not error. If you would recommend a different window, or an unanchored agree&ndash;disagree format, please say so in any of the comment boxes below.</p>
   </div>
 
   <div class="consent">
@@ -321,12 +315,8 @@
   <div id="review-list"></div>
 
   <h2>Assessment of content coverage</h2>
-  <p class="intro full">For each construct, rate how completely the item pool samples the content domain of that definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). Judge the pool as a whole rather than counting the items you happened to sort into that construct — which items bear on which construct is itself part of what this review is testing. This is a question about the adequacy of the set, not the quality of any individual item: a pool can be made entirely of good items and still leave half a definition unmeasured. Where sampling looks incomplete, please describe the unrepresented part of the domain and, where possible, suggest candidate items. Racial group consciousness is deliberately carried by a single indicator in this short instrument; for that construct the question is not coverage but centrality — whether the chosen item represents the construct's most central content.</p>
+  <p class="intro full">For each construct, rate how completely the item pool samples the content domain of that definition (Cronbach, 1990; Nunnally, 1978; Colquitt et&nbsp;al., 2019). Judge the pool as a whole rather than counting the items you happened to sort into that construct; which items bear on which construct is itself part of what this review is testing. This is a question about the adequacy of the set, not the quality of any individual item: a pool can be made entirely of good items and still leave half a definition unmeasured. Where sampling looks incomplete, please describe the unrepresented part of the domain and, where possible, suggest candidate items. Racial group consciousness is deliberately carried by a single indicator in this short instrument; for that construct the question is not coverage but centrality: whether the chosen item represents the construct's most central content.</p>
   <div id="coverage-list"></div>
-
-  <h2>Review of instrument elements</h2>
-  <p class="intro full">Content validity extends beyond items to the instrument's other elements (Haynes, Richard, &amp; Kubany, 1995). Rate the appropriateness of each element for the instrument's purpose — a brief, repeatable state measure for members of organizing groups (1 = not appropriate &middot; 4 = highly appropriate) — and note any recommended changes.</p>
-  <div id="element-list"></div>
 
   <div class="submitrow">
     <button class="btn btn-primary" id="rev-submit-btn">Submit review</button>
@@ -373,7 +363,7 @@ async function saveToBackend(payload) {
   if (!res.ok) throw new Error(`Save failed (${res.status}): ${await res.text()}`);
 }
 
-/* ========= Item pool v0.2 — 22 candidates, 5 constructs ========= */
+/* ========= Item pool v0.7 = 21 candidates, 6 constructs ========= */
 const CONSTRUCTS = [
   { key:"ma", name:"Moral-affective orientation",
     def:"The values and emotions that motivate or inhibit acting with others." },
@@ -687,53 +677,6 @@ function coverage() {
   }));
 }
 
-/* Instrument-element review (Haynes, Richard, & Kubany, 1995) */
-const ELEMENTS = [
-  { key:'instructions', name:'Introductory instructions',
-    text:'"The questions below ask about your feelings and experiences during the last month… (Answer quickly, with your first impression, rather than deliberating over each one.)"' },
-  { key:'lead_in', name:'Group lead-in',
-    text:'"Thinking of the group or organization you are most involved with (or, if none, the people with whom you might take public action)"' },
-  { key:'stem', name:'Item stem',
-    text:'"In the last month, to what extent have you felt…"' },
-  { key:'response_scale', name:'Response scale',
-    text:'0 Not at all · 1 A little · 2 Somewhat · 3 Quite a bit · 4 A great deal' },
-  { key:'recall_window', name:'Recall window',
-    text:'One month — chosen because CPA is a state rather than a trait: the window has to be short enough that the measure moves with organizing experience and exposure, and long enough to span a normal cycle of group activity, since most groups meet at least monthly. The full rationale and the trade-offs are set out in the note on the reference window above. If you would recommend a different window, or an unanchored agree–disagree format, please say so in the comment box.' },
-];
-const elemRatings = {};
-const elemList = document.getElementById('element-list');
-ELEMENTS.forEach(el => {
-  const card = document.createElement('div');
-  card.className = 'cov-card';
-  card.innerHTML = `
-    <div class="cname">${el.name}</div>
-    <div class="cdef">${el.text}</div>
-    <div class="cov-chips" style="max-width:250px">${[1,2,3,4].map(v =>
-      `<div class="cov-chip" role="radio" tabindex="0" aria-checked="false" data-e="${el.key}" data-val="${v}">${v}</div>`).join('')}</div>
-    <div class="cov-anchors" style="max-width:250px"><span>1 = not appropriate</span><span>4 = highly appropriate</span></div>`;
-  elemList.appendChild(card);
-});
-const elemComment = document.createElement('div');
-elemComment.className = 'cov-card';
-elemComment.innerHTML = `<div class="cname">Comments on instrument elements</div>
-  <textarea name="elem-comment" placeholder="Recommended changes to instructions, lead-in, stem, response scale, or recall window (optional)"></textarea>`;
-elemList.appendChild(elemComment);
-elemList.addEventListener('click', e => {
-  const ch = e.target.closest('.cov-chip'); if (!ch) return;
-  const { e: ekey, val } = ch.dataset;
-  elemRatings[ekey] = Number(val);
-  document.querySelectorAll(`.cov-chip[data-e="${ekey}"]`).forEach(x => {
-    x.classList.toggle('sel', x === ch);
-    x.setAttribute('aria-checked', String(x === ch));
-  });
-});
-function elements() {
-  return {
-    ratings_1to4: ELEMENTS.map(el => ({ element: el.key, rating: elemRatings[el.key] || null })),
-    comment: document.querySelector('textarea[name="elem-comment"]').value || null,
-  };
-}
-
 /* Keyboard operability for chip controls (WCAG) */
 function chipKeys(container) {
   container.addEventListener('keydown', e => {
@@ -742,7 +685,7 @@ function chipKeys(container) {
     if (ch) { e.preventDefault(); ch.click(); }
   });
 }
-chipKeys(covList); chipKeys(elemList);
+chipKeys(covList);
 
 const revRatings = {};
 rlist.addEventListener('click', e => {
@@ -785,7 +728,6 @@ document.getElementById('export-btn').addEventListener('click', () => {
       comment: document.querySelector(`textarea[name="cmt-${id}"]`).value || null,
     })),
     coverage: coverage(),
-    instrument_elements: elements(),
   };
   const blob = new Blob([JSON.stringify(out, null, 2)], { type:"application/json" });
   const a = document.createElement('a');
@@ -819,8 +761,7 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
       item_order: REVIEW_ORDER,
       ratings,
       coverage: coverage(),
-      instrument_elements: elements(),
-      startedAt: REVIEW_STARTED_AT,
+        startedAt: REVIEW_STARTED_AT,
       submittedAt: new Date().toISOString(),
     });
     prog.textContent = '';
