@@ -244,7 +244,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.7 · pilot</span>
+  <span class="badge">Draft v0.7 · build 2026-08-11-b</span>
 </header>
 
 <div class="tabs">
@@ -384,6 +384,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_KYNMrQWM7OQQ72HLv7WiFQ_eB1R_uT_";
    sb_publishable_ keys are not JWTs, and handing one to the JWT parser is rejected,
    so those travel in apikey alone. */
 const KEY_IS_JWT = SUPABASE_ANON_KEY.startsWith("eyJ");
+const BUILD = "2026-08-11-b";
 async function saveToBackend(payload) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/cpa_responses`, {
     method:"POST",
@@ -916,8 +917,11 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
     prog.className = 'status err';
     prog.textContent = '';
     try { downloadReview(); } catch (e) {}
+    /* Name the host and key actually in use: a stale cached copy of this page is
+       otherwise indistinguishable from a live backend fault. */
     const box = document.getElementById('rev-rescue');
-    document.getElementById('rev-rescue-detail').textContent = err.message;
+    document.getElementById('rev-rescue-detail').textContent =
+      `${err.message} · build ${BUILD} · host ${SUPABASE_URL.replace('https://','')} · key ${SUPABASE_ANON_KEY.slice(0,22)}…`;
     box.style.display = 'block';
     box.scrollIntoView({ block:'center' });
   }
