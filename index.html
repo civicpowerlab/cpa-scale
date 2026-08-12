@@ -259,7 +259,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.9 · build 2026-08-12-b</span>
+  <span class="badge">Draft v0.10 · build 2026-08-12-c</span>
 </header>
 
 <div class="tabs">
@@ -443,7 +443,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_KYNMrQWM7OQQ72HLv7WiFQ_eB1R_uT_";
    sb_publishable_ keys are not JWTs, and handing one to the JWT parser is rejected,
    so those travel in apikey alone. */
 const KEY_IS_JWT = SUPABASE_ANON_KEY.startsWith("eyJ");
-const BUILD = "2026-08-12-b";
+const BUILD = "2026-08-12-c";
 async function saveToBackend(payload) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/cpa_responses`, {
     method:"POST",
@@ -490,10 +490,8 @@ const ITEMS = [
   { id:"r6", c:"re", rev:false, t:"that you have real say in what your group decides to do?" },
   { id:"r4", c:"re", rev:true,  t:"that your group is a collection of individuals rather than a team that depends on one another?" },
   { id:"c1", c:"cc", rev:false, t:"that the people you might take public action with could accomplish something together that none of you could alone?" },
-  { id:"c2", c:"cc", rev:false, t:"that when your group decides to act, it can mobilize the people it needs?" },
   { id:"c5", c:"cc", rev:false, t:"that your group can keep people involved for weeks, not just turn out for one day?" },
   { id:"c4", c:"cc", rev:true,  t:"that your group's power depended on the same handful of people doing everything?" },
-  { id:"c6", c:"cc", rev:false, t:"that your group is stronger than the people who oppose it?" },
   { id:"c7", c:"cc", rev:false, t:"that your group could get enough people to stop cooperating with those in power?" },
   { id:"i1", c:"ir", rev:false, t:"that when people like you act together, institutions and leaders have to respond?" },
   { id:"i2", c:"ir", rev:false, t:"that your group can get a seat at the tables where decisions are made?" },
@@ -502,7 +500,7 @@ const ITEMS = [
   { id:"gc1", c:"gc", rev:false, t:"that people who share your racial or ethnic background have the power to shape what happens in this country?" },
 ];
 
-const FIELD_ORDER = ["m1","s1","r4","c2","i1","m3","s2","r5","c5","i4","gc1","m4","s3","r2","c4","i2","c6","m5","s4","r6","c1","c7","i5"];
+const FIELD_ORDER = ["m1","s1","r4","c5","i1","m3","s2","r5","c4","i4","gc1","m4","s3","r2","c7","i2","m5","s4","r6","c1","i5"];
 /* A review in progress is kept in the reviewer's browser, so closing the tab or a
    reload does not cost 21 items of work. Cleared once the review saves to the DB. */
 const REV_STORE = "cpa_v07_review";
@@ -745,7 +743,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
   try {
     await saveToBackend({
       kind: "instrument",
-      instrument: "cpa", version: "v0.9-pool23",
+      instrument: "cpa", version: "v0.10-pool21",
       field_order: FIELD_ORDER,
       answers,
       in_a_group: document.getElementById('q-screen').value || null,
@@ -987,7 +985,7 @@ function reviewExport() {
     reviewer_role: document.getElementById('reviewer-role').value || null,
     reviewer_years: document.getElementById('reviewer-years').value || null,
     reviewer_domain: document.getElementById('reviewer-domain').value || null,
-    instrument: "CPA candidate pool v0.9-pool23",
+    instrument: "CPA candidate pool v0.10-pool21",
     item_order: REVIEW_ORDER,
     startedAt: REVIEW_STARTED_AT,
     exportedAt: new Date().toISOString(),
@@ -1027,7 +1025,7 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
     await saveToBackend({
       kind: "expert_review",
       channel: "CPA Expert Review",
-      instrument: "cpa", version: "v0.9-pool23",
+      instrument: "cpa", version: "v0.10-pool21",
       reviewer: document.getElementById('reviewer-name').value || null,
       affiliation: document.getElementById('reviewer-aff').value || null,
       reviewer_role: document.getElementById('reviewer-role').value || null,
