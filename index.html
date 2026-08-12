@@ -101,6 +101,21 @@
   .status.ok { color:var(--green); font-weight:500; }
   .status.err { color:var(--red); font-weight:500; }
 
+  /* ===== Demographics (respondent instrument, after the items) ===== */
+  .demo { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:18px 20px; }
+  .demo-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; }
+  @media (max-width:640px){ .demo-grid { grid-template-columns:1fr; } }
+  .dq > span { display:block; font-size:13px; font-weight:600; color:var(--text-2); margin-bottom:6px; }
+  .dq > span em { font-weight:400; color:var(--muted); font-style:normal; }
+  .dq input, .dq select { width:100%; padding:9px 11px; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14.5px; color:var(--text); }
+  .checks { display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; }
+  @media (max-width:640px){ .checks { grid-template-columns:1fr; } }
+  .checks label { display:flex; align-items:flex-start; gap:8px; font-size:14px; color:var(--text-2);
+    line-height:1.35; cursor:pointer; }
+  .checks input { width:auto; margin-top:2px; }
+
   /* ===== Review ===== */
   .defs-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   @media (max-width:720px){ .defs-grid{grid-template-columns:1fr} }
@@ -244,7 +259,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.8 · build 2026-08-11-e</span>
+  <span class="badge">Draft v0.8 · build 2026-08-11-f</span>
 </header>
 
 <div class="tabs">
@@ -292,6 +307,38 @@
     <h1>Check your answers</h1>
     <p class="intro">Tap any row to change an answer, then submit.</p>
     <div id="review-summary" style="margin-top:18px"></div>
+
+    <h2>A few last questions</h2>
+    <p class="intro">These help us understand who the scale works for. Every one is optional, and answers are stored without your name.</p>
+    <div class="demo">
+      <div class="demo-grid">
+        <label class="dq"><span>Year you were born</span>
+          <input id="d-born" type="number" inputmode="numeric" min="1900" max="2012" placeholder="e.g. 1987"></label>
+        <label class="dq"><span>Years you have been organizing</span>
+          <input id="d-years" type="number" inputmode="numeric" min="0" max="80" placeholder="e.g. 6"></label>
+        <label class="dq"><span>Gender</span>
+          <select id="d-gender">
+            <option value="">&mdash; select &mdash;</option>
+            <option value="woman">Woman</option>
+            <option value="man">Man</option>
+            <option value="nonbinary">Non-binary</option>
+            <option value="self">Prefer to self-describe</option>
+            <option value="no_answer">Prefer not to say</option>
+          </select>
+          <input id="d-gender-self" placeholder="Self-describe" style="display:none; margin-top:8px"></label>
+        <label class="dq"><span>Group or organization you had in mind</span>
+          <input id="d-group" placeholder="Name of the group (or leave blank)"></label>
+        <label class="dq"><span>ZIP code</span>
+          <input id="d-zip" inputmode="numeric" maxlength="5" placeholder="5 digits"></label>
+      </div>
+
+      <div class="dq" style="margin-top:16px">
+        <span>Race or ethnicity <em>(select all that apply)</em></span>
+        <div class="checks" id="d-race"></div>
+        <input id="d-race-self" placeholder="Another background (optional)" style="margin-top:8px">
+      </div>
+    </div>
+
     <div class="submitrow">
       <button class="btn btn-primary" id="submit-btn">Submit responses</button>
       <span class="status" id="submit-status"></span>
@@ -309,7 +356,7 @@
     <p><strong>Three judgments per item.</strong></p>
     <ol>
       <li><strong>Relevance</strong> to CPA as a whole, not to any one component.</li>
-      <li><strong>Clarity</strong> of the wording itself: does the item carry a single plain reading, or is it ambiguous, double-barreled, or reliant on vocabulary a respondent would not share? (<a href="methods.html#clarity">why we ask experts this</a>)</li>
+      <li><strong>Clarity</strong> of the wording itself: does the item carry a single plain reading, or is it ambiguous, double-barreled, or reliant on vocabulary a respondent might not share? (<a href="methods.html#clarity">why we ask experts this</a>)</li>
       <li><strong>Sorting:</strong> which construct it reads as belonging to. Items appear unlabelled, in a random order. &ldquo;None of these / unsure&rdquo; is a valid answer.</li>
     </ol>
     <p class="tasks-foot">Every item has a comment box, and a short section on content coverage follows the items. <a href="methods.html">Methods and rationale</a> covers why we are building this, how the ratings are scored, why the window is one month, and the citations.</p>
@@ -384,7 +431,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_KYNMrQWM7OQQ72HLv7WiFQ_eB1R_uT_";
    sb_publishable_ keys are not JWTs, and handing one to the JWT parser is rejected,
    so those travel in apikey alone. */
 const KEY_IS_JWT = SUPABASE_ANON_KEY.startsWith("eyJ");
-const BUILD = "2026-08-11-e";
+const BUILD = "2026-08-11-f";
 async function saveToBackend(payload) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/cpa_responses`, {
     method:"POST",
@@ -604,6 +651,64 @@ function renderReview() {
   });
 }
 
+/* ===== Demographics =====
+   All optional. Kept in this browser alongside the answers so a reload does not
+   cost them, and cleared with the answers once the response saves. */
+const RACE_OPTIONS = [
+  ['aian',    'American Indian or Alaska Native'],
+  ['asian',   'Asian'],
+  ['black',   'Black or African American'],
+  ['hispanic','Hispanic or Latino/a/e'],
+  ['mena',    'Middle Eastern or North African'],
+  ['nhpi',    'Native Hawaiian or Pacific Islander'],
+  ['white',   'White'],
+  ['no_answer','Prefer not to say'],
+];
+const DEMO_STORE = "cpa_v08_demo";
+const DEMO_FIELDS = ['d-born','d-years','d-gender','d-gender-self','d-group','d-zip','d-race-self'];
+document.getElementById('d-race').innerHTML = RACE_OPTIONS.map(([v,l]) =>
+  `<label><input type="checkbox" value="${v}"><span>${l}</span></label>`).join('');
+
+const genderSel = document.getElementById('d-gender');
+const genderSelf = document.getElementById('d-gender-self');
+genderSel.addEventListener('change', () => {
+  genderSelf.style.display = genderSel.value === 'self' ? '' : 'none';
+  if (genderSel.value !== 'self') genderSelf.value = '';
+});
+
+function demographics() {
+  const v = id => { const el = document.getElementById(id); return el && el.value.trim() ? el.value.trim() : null; };
+  const race = [...document.querySelectorAll('#d-race input:checked')].map(c => c.value);
+  return {
+    year_born: v('d-born'), years_organizing: v('d-years'),
+    gender: v('d-gender'), gender_self_described: v('d-gender-self'),
+    race_ethnicity: race.length ? race : null, race_self_described: v('d-race-self'),
+    group_name: v('d-group'), zip: v('d-zip'),
+  };
+}
+function saveDemo() {
+  try {
+    localStorage.setItem(DEMO_STORE, JSON.stringify({
+      fields: Object.fromEntries(DEMO_FIELDS.map(id => [id, document.getElementById(id).value])),
+      race: [...document.querySelectorAll('#d-race input:checked')].map(c => c.value),
+    }));
+  } catch (e) {}
+}
+(function restoreDemo() {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(DEMO_STORE) || "null"); } catch (e) {}
+  if (!d) return;
+  Object.entries(d.fields || {}).forEach(([id, val]) => {
+    const el = document.getElementById(id); if (el) el.value = val;
+  });
+  (d.race || []).forEach(v => {
+    const c = document.querySelector(`#d-race input[value="${v}"]`); if (c) c.checked = true;
+  });
+  genderSelf.style.display = genderSel.value === 'self' ? '' : 'none';
+})();
+document.querySelector('.demo').addEventListener('input', saveDemo);
+document.querySelector('.demo').addEventListener('change', saveDemo);
+
 document.getElementById('submit-btn').addEventListener('click', async () => {
   const status = document.getElementById('submit-status');
   const btn = document.getElementById('submit-btn');
@@ -614,11 +719,12 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
       instrument: "cpa", version: "v0.8-pool21",
       field_order: FIELD_ORDER,
       answers,
+      demographics: demographics(),
       startedAt: PAGE_LOADED_AT, submittedAt: new Date().toISOString(),
     });
     status.className = 'status ok';
     status.textContent = 'Saved. Thank you — your responses have been recorded.';
-    try { localStorage.removeItem(INST_STORE); } catch (e) {}
+    try { localStorage.removeItem(INST_STORE); localStorage.removeItem(DEMO_STORE); } catch (e) {}
   } catch (err) {
     btn.disabled = false;
     status.className = 'status err';
