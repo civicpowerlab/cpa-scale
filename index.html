@@ -259,7 +259,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.8 · build 2026-08-11-g</span>
+  <span class="badge">Draft v0.8 · build 2026-08-12-a</span>
 </header>
 
 <div class="tabs">
@@ -333,7 +333,7 @@
       </div>
 
       <div class="dq" style="margin-top:16px">
-        <span>Race or ethnicity <em>(select all that apply)</em></span>
+        <span>I identify my racial and ethnic identity to be <em>(select all that apply)</em></span>
         <div class="checks" id="d-race"></div>
         <input id="d-race-self" placeholder="Self-describe" style="display:none; margin-top:8px">
       </div>
@@ -431,7 +431,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_KYNMrQWM7OQQ72HLv7WiFQ_eB1R_uT_";
    sb_publishable_ keys are not JWTs, and handing one to the JWT parser is rejected,
    so those travel in apikey alone. */
 const KEY_IS_JWT = SUPABASE_ANON_KEY.startsWith("eyJ");
-const BUILD = "2026-08-11-g";
+const BUILD = "2026-08-12-a";
 async function saveToBackend(payload) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/cpa_responses`, {
     method:"POST",
@@ -654,16 +654,19 @@ function renderReview() {
 /* ===== Demographics =====
    All optional. Kept in this browser alongside the answers so a reload does not
    cost them, and cleared with the answers once the response saves. */
+/* Categories and stem match the Agency Instrument in Qualtrics verbatim, so the two
+   studies pool. */
 const RACE_OPTIONS = [
-  ['aian',    'American Indian or Alaska Native'],
-  ['asian',   'Asian'],
-  ['black',   'Black or African American'],
-  ['hispanic','Hispanic or Latino/a/e'],
-  ['mena',    'Middle Eastern or North African'],
-  ['nhpi',    'Native Hawaiian or Pacific Islander'],
-  ['white',   'White'],
-  ['self',    'Self-describe'],
-  ['no_answer','Prefer not to say'],
+  ['aian',          'American Indian or Alaska Native'],
+  ['asian',         'Asian'],
+  ['black_aa',      'Black, African American'],
+  ['black_african', 'Black, African'],
+  ['hispanic',      'Hispanic or Latino'],
+  ['middle_eastern','Middle Eastern'],
+  ['nhpi',          'Native Hawaiian or Other Pacific Islander'],
+  ['white',         'White'],
+  ['something_else','Something else'],
+  ['self',          'Prefer to self-describe below'],
 ];
 const DEMO_STORE = "cpa_v08_demo";
 const DEMO_FIELDS = ['d-born','d-years','d-gender','d-gender-self','d-group','d-zip','d-race-self'];
