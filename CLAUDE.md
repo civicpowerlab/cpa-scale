@@ -11,6 +11,10 @@ https://civicpowerlab.github.io/cpa-scale/.
   dichotomized, randomized, double-barreled.
 - **No em dashes in prose.** Use parentheses, a colon, or a semicolon. The
   `— select —` dropdown placeholders are a UI convention and stay as they are.
+- **Do not end a sentence with a preposition.** Recast it.
+- Respondent-facing instructions read as a research instrument, not as
+  marketing: "We will now ask a handful of demographic questions that may be of
+  help to us in this research later on. You may skip any question."
 - Keep the review tab short. Justification, citations, and rationale belong in
   `methods.html`, linked from the tab. A reviewer should reach the first item
   quickly.
