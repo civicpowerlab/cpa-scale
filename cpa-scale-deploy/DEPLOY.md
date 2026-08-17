@@ -23,7 +23,7 @@ summary), expert tab (21 review items, 6 coverage cards incl. gc
 single-indicator variant, 5 element cards, definitions panel open/close),
 no console errors. The word "naive" appears nowhere.
 
-sha256(index.html) = f3d588546afc527ffc40541b526ef153c75abaaa5be17fa7194e247d4be118b2
+sha256(index.html) = 5e596e00f9315ecba0906b19bfc7c51ec084f0c710c0031934938bb5c589a3f6
 
 ## To deploy (from a session with push access to civicpowerlab/cpa-scale)
 
@@ -35,3 +35,16 @@ sha256(index.html) = f3d588546afc527ffc40541b526ef153c75abaaa5be17fa7194e247d4be
     git push origin main
 
 If main has moved past 6b9b932, review the newer commits before overwriting.
+
+## v0.7.1 addendum — bulletproof saving (added after a lost expert review)
+
+- Review tab now persists every interaction (ratings, sorts, comments,
+  coverage, elements, reviewer fields, item order) to localStorage and
+  restores on reload; item order stays stable across reloads.
+- Backend saves retry 3x with 20s per-attempt timeouts.
+- If submission still fails, a backup JSON of the complete review
+  auto-downloads and a banner instructs the reviewer to email it to
+  emckenna@hks.harvard.edu.
+- A leave-page warning fires when unsubmitted ratings exist.
+- Verified headless: restore-after-reload, failure path (banner +
+  auto-download), success path (thanks + submitted flag).
