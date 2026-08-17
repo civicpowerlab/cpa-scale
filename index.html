@@ -259,7 +259,7 @@
 
 <header class="top">
   <span class="wordmark">Civic Power Lab <span>/ Collective Political Agency scale</span></span>
-  <span class="badge">Draft v0.10 · build 2026-08-12-c</span>
+  <span class="badge">Draft v0.11 · build 2026-08-12-c</span>
 </header>
 
 <div class="tabs">
@@ -482,7 +482,7 @@ const ITEMS = [
   { id:"m4", c:"ma", rev:true,  t:"worn down by the work of trying to make change?" },
   { id:"m5", c:"ma", rev:false, t:"angry about an injustice in a way that made you want to act with others?" },
   { id:"s1", c:"cs", rev:false, t:"that your group knows who actually holds power over the decisions you care about?" },
-  { id:"s2", c:"cs", rev:false, t:"that your group can size up a situation and choose an action likely to work?" },
+  { id:"s2", c:"cs", rev:false, t:"that your group can pick fights that build its power?" },
   { id:"s3", c:"cs", rev:false, t:"that your group has a strategy connecting what you do this month to what you want to win?" },
   { id:"s4", c:"cs", rev:true,  t:"that your group was reacting to events without a plan of its own?" },
   { id:"r5", c:"re", rev:false, t:"that there are people who would take a real risk for you, and you for them?" },
@@ -743,7 +743,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
   try {
     await saveToBackend({
       kind: "instrument",
-      instrument: "cpa", version: "v0.10-pool21",
+      instrument: "cpa", version: "v0.11-pool21",
       field_order: FIELD_ORDER,
       answers,
       in_a_group: document.getElementById('q-screen').value || null,
@@ -985,7 +985,7 @@ function reviewExport() {
     reviewer_role: document.getElementById('reviewer-role').value || null,
     reviewer_years: document.getElementById('reviewer-years').value || null,
     reviewer_domain: document.getElementById('reviewer-domain').value || null,
-    instrument: "CPA candidate pool v0.10-pool21",
+    instrument: "CPA candidate pool v0.11-pool21",
     item_order: REVIEW_ORDER,
     startedAt: REVIEW_STARTED_AT,
     exportedAt: new Date().toISOString(),
@@ -1025,7 +1025,7 @@ document.getElementById('rev-submit-btn').addEventListener('click', async () => 
     await saveToBackend({
       kind: "expert_review",
       channel: "CPA Expert Review",
-      instrument: "cpa", version: "v0.10-pool21",
+      instrument: "cpa", version: "v0.11-pool21",
       reviewer: document.getElementById('reviewer-name').value || null,
       affiliation: document.getElementById('reviewer-aff').value || null,
       reviewer_role: document.getElementById('reviewer-role').value || null,
