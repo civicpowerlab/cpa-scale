@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agency Research Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Coral theme: #f15747 is the brand accent for surfaces and large elements.
+     Small text and selected-state fills use darker derivatives so all text meets WCAG AA:
+     --accent-mid #d13a28 (4.6:1 with white), --accent-deep #b3301f (6.1:1 with white). */
+  :root {
+    --bg:#fafafa; --surface:#ffffff; --border:#e5e7eb; --border-strong:#d4d4d8;
+    --text:#18181b; --text-2:#3f3f46; --muted:#71717a;
+    --accent:#f15747; --accent-mid:#d13a28; --accent-deep:#b3301f; --accent-soft:#fdece9;
+    --accent-line:#f6d3cc;
+    --green:#1a8a5c; --red:#c04437;
+    --radius:8px;
+    --shadow:0 1px 2px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.04);
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--text); font-family:"Inter",-apple-system,system-ui,sans-serif;
+    font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .shell { max-width:820px; margin:0 auto; padding:24px 24px 100px; }
+  header.top { display:flex; align-items:center; justify-content:space-between; padding:6px 0 18px; }
+  .wordmark { font-size:13.5px; font-weight:600; letter-spacing:-0.01em; color:var(--text); }
+  .wordmark span { color:var(--muted); font-weight:400; }
+  .badge { font-size:11.5px; font-weight:500; color:var(--muted);
+    border:1px solid var(--border); background:var(--surface); padding:4px 10px; border-radius:999px; }
+  h1 { font-size:26px; font-weight:600; letter-spacing:-0.02em; margin-bottom:14px; }
+  h2 { font-size:20px; font-weight:600; letter-spacing:-0.01em; margin:0 0 6px; }
+  .kicker { font-size:11.5px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--accent-deep); margin-bottom:10px; }
+  .lede { font-size:16.5px; color:var(--text-2); max-width:70ch; margin-bottom:14px; }
+  .sec-desc { font-size:15px; color:var(--text-2); max-width:70ch; margin-bottom:6px; }
+  .meta-chips { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0; }
+  .chip { font-size:12.5px; font-weight:500; color:var(--text-2); border:1px solid var(--border);
+    background:var(--surface); border-radius:999px; padding:5px 12px; }
+
+  .progress-wrap { position:sticky; top:0; z-index:20; background:rgba(250,250,250,0.96);
+    backdrop-filter:blur(6px); border-bottom:1px solid var(--border); margin:0 -24px 22px; padding:10px 24px 12px; }
+  .progress-wrap .meta { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .progress-wrap .where { font-size:14px; font-weight:600; color:var(--text); }
+  .progress-wrap .count { font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .progress-track { height:3px; background:var(--border); border-radius:2px; margin-top:8px; overflow:hidden; }
+  .progress-fill { height:100%; width:0%; background:var(--accent); transition:width .2s; }
+
+  .stem { font-size:18.5px; font-weight:600; letter-spacing:-0.01em; line-height:1.45; color:var(--text);
+    background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:var(--radius); padding:15px 19px; margin:18px 0 20px; }
+
+  .item { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:17px 19px; margin-bottom:12px; }
+  .item .text { font-size:16.5px; font-weight:500; color:var(--text); line-height:1.5; margin-bottom:13px; }
+  .opts { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; }
+  .opts.three { grid-template-columns:repeat(3,1fr); max-width:420px; }
+  .opts.two { grid-template-columns:repeat(2,1fr); max-width:300px; }
+  .opt { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:9px 5px;
+    display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; transition:all .1s; }
+  .opt:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .opt .l { font-size:12px; color:var(--muted); text-align:center; line-height:1.25; }
+  .opt.sel { background:var(--accent-mid); border-color:var(--accent-mid); }
+  .opt.sel .l { color:#fff; font-weight:600; }
+  @media (max-width:640px){ .opt .l { font-size:10.5px; } }
+
+  .checks { display:flex; flex-direction:column; gap:8px; }
+  .checkrow { display:flex; gap:11px; align-items:flex-start; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; padding:12px 14px; cursor:pointer; font-size:15px; }
+  .checkrow:hover { border-color:var(--accent); background:var(--accent-soft); }
+  .checkrow input { margin-top:3px; flex:none; width:16px; height:16px; accent-color:var(--accent-mid); cursor:pointer; }
+  .checkrow.on { border-color:var(--accent-mid); background:var(--accent-soft); }
+  .checkrow .sub { display:block; font-size:13px; color:var(--muted); margin-top:3px; }
+
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:13.5px; font-weight:600; color:var(--text-2); margin-bottom:6px; }
+  .field input, .field select { width:100%; max-width:420px; padding:10px 13px; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:15px; color:var(--text); }
+
+  .consent-box { border:1px solid var(--border); border-radius:10px; background:var(--surface); margin:8px 0 20px; overflow:hidden; }
+  .consent-box summary { list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+    padding:13px 18px; font-size:14.5px; font-weight:600; color:var(--text); }
+  .consent-box summary::-webkit-details-marker { display:none; }
+  .consent-box summary:hover { background:var(--accent-soft); }
+  .consent-cue { font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent-deep);
+    font-weight:600; display:flex; align-items:center; gap:6px; }
+  .consent-cue::after { content:"+"; font-size:14px; line-height:1; }
+  .consent-box[open] .consent-cue::after { content:"\2013"; }
+  .consent-box[open] summary { border-bottom:1px solid var(--border); }
+  .consent-body { padding:6px 18px 18px; font-size:13.5px; line-height:1.55; color:var(--muted); }
+  .consent-body p { margin:12px 0 0; }
+  .consent-body b { color:var(--text-2); font-weight:600; }
+  .consent-body a { color:var(--accent-deep); }
+  .consent-check { display:flex; gap:11px; align-items:flex-start; font-size:14.5px; color:var(--text-2);
+    margin:16px 0 4px; cursor:pointer; }
+  .consent-check input { margin:2px 0 0; flex:none; width:16px; height:16px; accent-color:var(--accent-mid); cursor:pointer; }
+
+  .navrow { display:flex; align-items:center; gap:14px; margin-top:24px; }
+  .navrow .spacer { margin-right:auto; }
+  .btn { font-size:14px; font-weight:600; padding:11px 22px; border-radius:8px; cursor:pointer; border:1px solid; transition:all .12s; font-family:inherit; }
+  .btn-primary { background:var(--accent-mid); color:#fff; border-color:var(--accent-mid); }
+  .btn-primary:hover { background:var(--accent-deep); }
+  .btn-primary:disabled { opacity:.5; cursor:default; }
+  .btn-ghost { background:var(--surface); color:var(--text-2); border-color:var(--border-strong); }
+  .btn-ghost:hover { border-color:var(--accent-mid); color:var(--accent-deep); }
+  .status { font-size:14px; }
+  .status.ok { color:var(--green); font-weight:500; }
+  .status.err { color:var(--red); font-weight:500; }
+  .rescue { display:none; background:var(--surface); border:1px solid var(--red); border-left:3px solid var(--red);
+    border-radius:var(--radius); padding:14px 18px; font-size:14px; color:var(--text-2); margin-top:14px; }
+
+  .profile-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:17px 19px; margin-bottom:13px; }
+  .profile-card .dim { font-size:15px; font-weight:600; color:var(--accent-deep); }
+  .profile-card .band { display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:0.05em;
+    text-transform:uppercase; border-radius:999px; padding:3px 10px; margin-left:8px; }
+  .band.low { background:#fdece9; color:var(--accent-deep); }
+  .band.medium { background:#fef3e2; color:#92600a; }
+  .band.high { background:#e6f4ec; color:var(--green); }
+  .profile-card .advice { font-size:14.5px; color:var(--text-2); margin-top:8px; }
+  .gapnote { background:var(--accent-soft); border:1px solid var(--accent-line); border-radius:var(--radius);
+    padding:14px 18px; font-size:14.5px; color:var(--text-2); margin:16px 0; }
+
+  footer { margin-top:56px; padding-top:18px; border-top:1px solid var(--border);
+    display:flex; justify-content:space-between; font-size:12.5px; color:var(--muted); }
+  @media (max-width:640px){
+    .shell { padding:16px 14px 80px; }
+    h1 { font-size:22px; }
+    .progress-wrap { margin:0 -14px 18px; padding:8px 14px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="top">
+  <span class="wordmark">DPI Fund &middot; Civic Power Lab <span>/ Agency research</span></span>
+  <span class="badge">Research battery &middot; draft v0.1</span>
+</header>
+
+<div class="progress-wrap" id="progress-wrap" style="display:none">
+  <div class="meta"><span class="where" id="where"></span><span class="count" id="count"></span></div>
+  <div class="progress-track"><div class="progress-fill" id="fill"></div></div>
+</div>
+
+<div id="stage"></div>
+
+<footer>
+  <span>Agency research battery &middot; DPI Fund &middot; Civic Power Lab</span>
+  <span>Demo only &mdash; validation in progress</span>
+</footer>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIG — Miriam's optionality lives here. Every flag can also be set
+   by URL parameter so different study arms need no code edits:
+     ?share=1                      org-sharing consent screen on
+     ?exp=community,voice,cpa,traits   expansion blocks (or exp=all)
+     ?results=profile              banded agency profile instead of standard thanks
+   The active configuration is stored inside every submission.
+===================================================================== */
+const CONFIG = {
+  shareConsent: false,
+  expansions: { community:false, voice:false, cpa:false, traits:false },
+  results: "standard",   // "standard" | "profile"
+};
+(function applyParams(){
+  const p = new URLSearchParams(location.search);
+  if (p.get("share") === "1") CONFIG.shareConsent = true;
+  const exp = p.get("exp");
+  if (exp) {
+    const on = exp === "all" ? ["community","voice","cpa","traits"] : exp.split(",");
+    on.forEach(k => { if (k in CONFIG.expansions) CONFIG.expansions[k] = true; });
+  }
+  if (p.get("results") === "profile") CONFIG.results = "profile";
+})();
+
+const SUPABASE_URL = "https://jddrxzirkkmpsqqrmsea.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZHJ4emlya2ttcHNxcXJtc2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTY0MjQsImV4cCI6MjA4ODU5MjQyNH0.RBk3fRlL6thd7AT3YBdmxEXpmtb_KoY9hHAOPUWREME";
+/* Shares the CPA project's cpa_responses table; rows distinguished by kind:"battery". */
+async function saveToBackend(payload) {
+  let lastErr = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 20000);
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/cpa_responses`, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY,
+          "Authorization":`Bearer ${SUPABASE_ANON_KEY}`, "Prefer":"return=minimal" },
+        body: JSON.stringify({ kind: payload.kind, version: payload.version || null,
+          respondent: payload.respondent || null, payload }),
+        signal: ctrl.signal,
+      });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error(`Save failed (${res.status}): ${await res.text()}`);
+      return;
+    } catch (err) {
+      lastErr = err;
+      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 1500));
+    }
+  }
+  throw lastErr;
+}
+
+/* ================= Response scales ================= */
+const FREQ    = ["Never","Almost never","Sometimes","Fairly often","Very often"];
+const AGREE   = ["Strongly disagree","Disagree","Neither agree nor disagree","Agree","Strongly agree"];
+const DAWSON  = ["Definitely not","Probably not","Might or might not","Probably yes","Definitely yes"];
+const EMO     = ["Not at all","Moderately","Very strongly"];
+const POWER   = ["Not at all powerful","Moderately powerful","Extremely powerful"];
+const LIKEME  = ["Not at all like me","A little like me","Somewhat like me","Mostly like me","A lot like me"];
+const EXTENT  = ["Not at all","A little","Somewhat","Quite a bit","A great deal"];
+
+/* ================= Core blocks (Miriam's battery, August 2026) =================
+   Participant-facing titles only; internal construct names never render. */
+const CORE_BLOCKS = [
+  { key:"pa", title:"Taking Action", construct:"personal_agency", lead:"How often have you…", scale:FREQ, items:[
+    { id:"pa1", rev:false, t:"…felt able to act on what matters to you?" },
+    { id:"pa2", rev:true,  t:"…felt stuck, even when you wanted to act?" },
+    { id:"pa3", rev:false, t:"…felt confident you could figure out how to do something about a problem in front of you?" },
+  ]},
+  { key:"ar", title:"Naming Your Needs", construct:"articulation", lead:"How often have you…", scale:FREQ, items:[
+    { id:"ar1", rev:false, t:"…felt able to put into words what you want to change?" },
+    { id:"ar2", rev:false, t:"…felt clear about why something matters to you?" },
+    { id:"ar3", rev:true,  t:"…felt unable to explain what you and others are working toward?" },
+  ]},
+  { key:"pe", title:"Your Part in the Group", construct:"participatory_efficacy", lead:"How often have you…", scale:FREQ, items:[
+    { id:"pe1", rev:false, t:"…felt that what you do makes a real difference to what your group can achieve?" },
+    { id:"pe2", rev:false, t:"…felt capable of recruiting and developing others as leaders?" },
+  ]},
+  { key:"wt", title:"Working Together", construct:"collective_political_efficacy_linked_fate_group_consciousness",
+    lead:"How often have you…", scale:FREQ, items:[
+    { id:"ce1", rev:false, t:"…felt that when people like you act together, you have power to influence decisions made by institutions and leaders?" },
+    { id:"ce2", rev:true,  t:"…felt that no matter how organized people get, things won’t really change?" },
+    { id:"ce3", rev:false, t:"…felt that institutions would respond if people like you raised a concern?" },
+    { id:"gcx1", rev:false, t:"…felt that people who share your racial or ethnic background have the power to shape what happens in this country?" },
+    { id:"gcx2", rev:false, t:"…felt that what happens to people who share your racial or ethnic background will also affect what happens to you?" },
+  ]},
+];
+/* Dawson linked-fate item (own scale; wording avoids piping since demographics come later) */
+const LF1 = { id:"lf1", t:"Do you think that what happens to people who share your racial or ethnic background will have something to do with what happens in your life?", scale:DAWSON };
+
+/* Participation checklist — internal codes in comments; index = sum of selected codes */
+const PARTICIPATION = [
+  { code:1, t:"By going to a protest or action once or twice" },
+  { code:2, t:"By protesting or taking physical or virtual action" },
+  { code:3, t:"As a member of a civic or political organization (you have attended events or volunteered)" },
+  { code:4, t:"As an active team member of a civic or political organization (you go to team and/or strategy meetings, serve on a team, or carry ongoing responsibilities)" },
+  { code:0, t:"I haven’t been involved", exclusive:true },
+];
+const EMOTIONS = ["Hope","Fear","Anger","Pride"];
+
+/* ================= Expansion blocks (config-gated) ================= */
+const EXP_COMMUNITY = { key:"dgc", title:"More About Your Community", construct:"deep_group_consciousness", items:[
+  { id:"dgc1", t:"How much does your ‘doing well’ depend on people who share your racial or ethnic background also doing well?", scale:EXTENT },
+]};
+const EXP_VOICE = { key:"voice", title:"Your Political Voice", construct:"political_efficacy_sense_of_power", groups:[
+  { lead:"How much do you agree or disagree?", construct:"internal_political_efficacy", scale:AGREE, items:[
+    { id:"ipe1", rev:false, t:"I consider myself well qualified to participate in politics." },
+    { id:"ipe2", rev:false, t:"I feel that I have a pretty good understanding of the important political issues facing our country." },
+    { id:"ipe3", rev:false, t:"I believe I can help to create a more useful government during my lifetime." },
+  ]},
+  { lead:"How much do you agree or disagree?", construct:"external_political_efficacy_reverse_scored", scale:AGREE, items:[
+    { id:"epe1", rev:true, t:"Public officials don’t care much about what people like me think." },
+    { id:"epe2", rev:true, t:"People like me don’t have any say about what the government does." },
+    { id:"epe3", rev:true, t:"Most public officials wouldn’t listen to me no matter what I did." },
+  ]},
+  { lead:"What is your assessment of how much power you have…", construct:"sense_of_power", scale:POWER, items:[
+    { id:"pow1", rev:false, t:"…in your personal life?" },
+    { id:"pow2", rev:false, t:"…in your work life?" },
+    { id:"pow3", rev:false, t:"…in your political, public life?" },
+  ]},
+]};
+/* CPA scale (in validation) — mirrors the live pool at civicpowerlab.github.io/cpa-scale.
+   Sync this list when the CPA wording freezes. */
+const EXP_CPA_STEM = "In the last month, to what extent have you felt…";
+const EXP_CPA = { key:"cpa", title:"Working Together, Continued", construct:"cpa_scale_in_validation", scale:EXTENT, items:[
+  { id:"cpa_m1", t:"…hopeful about what people like you can build together?" },
+  { id:"cpa_m3", t:"…that you were alone in caring about the issues that matter to you?" },
+  { id:"cpa_m4", t:"…worn down by the work of trying to make change?" },
+  { id:"cpa_m5", t:"…angry about an injustice in a way that made you want to act with others?" },
+  { id:"cpa_s1", t:"…that your group knows who actually holds power over the decisions you care about?" },
+  { id:"cpa_s2", t:"…that your group can pick fights that build its power?" },
+  { id:"cpa_s3", t:"…that your group has a strategy connecting what you do this month to what you want to win?" },
+  { id:"cpa_s4", t:"…that your group was reacting to events without a plan of its own?" },
+  { id:"cpa_r2", t:"…that people in your group keep the commitments they make to one another?" },
+  { id:"cpa_r4", t:"…that your group is a collection of individuals rather than a team that depends on one another?" },
+  { id:"cpa_r5", t:"…that there are people who would take a real risk for you, and you for them?" },
+  { id:"cpa_r6", t:"…that you have real say in what your group decides to do?" },
+  { id:"cpa_c1", t:"…that the people you might take public action with could accomplish something together that none of you could alone?" },
+  { id:"cpa_c4", t:"…that your group’s power depended on the same handful of people doing everything?" },
+  { id:"cpa_c5", t:"…that your group can keep people involved for weeks, not just turn out for one day?" },
+  { id:"cpa_c7", t:"…that your group could get enough people to stop cooperating with those in power?" },
+  { id:"cpa_i1", t:"…that when people like you act together, institutions and leaders have to respond?" },
+  { id:"cpa_i2", t:"…that your group can get a seat at the tables where decisions are made?" },
+  { id:"cpa_i4", t:"…that the people who run things will do what they want regardless of what groups like yours do?" },
+  { id:"cpa_i5", t:"…that your group can make ignoring you costly for the people in charge?" },
+  { id:"cpa_gc1", t:"…that people who share your racial or ethnic background have the power to shape what happens in this country?" },
+]};
+const EXP_CPA_EXTRA = { lead:"How much do you agree or disagree?", construct:"additional_collective_capacity", scale:AGREE, items:[
+  { id:"acc1", t:"I believe collective power is more effective than individual power." },
+  { id:"acc2", t:"The only way I can act to improve my community is by connecting to others." },
+  { id:"acc3", t:"When people in my community get together, they can solve political problems." },
+  { id:"acc4", t:"People like me, working together, can influence what the government does." },
+]};
+const EXP_TRAITS = { key:"traits", title:"Your Approach", construct:"trait", adjectives:[
+  "Outgoing","Helpful","Organized","Friendly","Warm","Responsible","Lively","Nervous","Creative",
+  "Hardworking","Imaginative","Self-disciplined","Curious","Cautious","Talkative","Adventurous","Thorough","Thrifty",
+]};
+
+const RACE_OPTIONS = [
+  ["aian","American Indian or Alaska Native"], ["asian","Asian"], ["black_aa","Black, African American"],
+  ["black_african","Black, African"], ["hispanic","Hispanic or Latino"], ["middle_eastern","Middle Eastern"],
+  ["nhpi","Native Hawaiian or Other Pacific Islander"], ["white","White"], ["something_else","Something else"],
+  ["self","Prefer to self-describe below"], ["pnts","Prefer not to say"],
+];
+const GENDER_OPTIONS = ["Woman","Man","Non-binary","Prefer to self-describe","Prefer not to say"];
+const EDU_OPTIONS = ["Less than high school","High school or GED","Some college","Associate degree",
+  "Bachelor’s degree","Graduate or professional degree","Prefer not to say"];
+
+/* ================= Steps ================= */
+function buildSteps() {
+  const steps = ["cover"];
+  if (CONFIG.shareConsent) steps.push("share");
+  steps.push("pa","ar","pe","wt","recent","civic");
+  if (CONFIG.expansions.community) steps.push("community");
+  if (CONFIG.expansions.voice) steps.push("voice");
+  if (CONFIG.expansions.cpa) steps.push("cpa");
+  if (CONFIG.expansions.traits) steps.push("traits");
+  steps.push("about","done");
+  return steps;
+}
+const STEPS = buildSteps();
+const STEP_TITLES = {
+  cover:"Welcome", share:"Sharing your results", pa:"Taking Action", ar:"Naming Your Needs",
+  pe:"Your Part in the Group", wt:"Working Together", recent:"Your recent experience",
+  civic:"Your civic life", community:"More About Your Community", voice:"Your Political Voice",
+  cpa:"Working Together, Continued", traits:"Your Approach", about:"A little about you", done:"Thank you",
+};
+
+/* ================= State + persistence (bulletproofing) ================= */
+const BAT_STORE = "agency_battery_v01";
+let state = { step:0, answers:{}, participation:[], share:{aggregate:false, individual:false, none:false},
+  demo:{}, submitted:false, startedAt:new Date().toISOString() };
+try {
+  const saved = JSON.parse(localStorage.getItem(BAT_STORE) || "null");
+  if (saved && saved.answers) { state = Object.assign(state, saved); }
+} catch (e) {}
+function persist() { try { localStorage.setItem(BAT_STORE, JSON.stringify(state)); } catch (e) {} }
+window.addEventListener("beforeunload", e => {
+  if (state.submitted || Object.keys(state.answers).length === 0) return;
+  e.preventDefault(); e.returnValue = "";
+});
+
+const stage = document.getElementById("stage");
+function setChrome() {
+  const wrap = document.getElementById("progress-wrap");
+  const key = STEPS[state.step];
+  if (key === "cover" || key === "done") { wrap.style.display = "none"; return; }
+  wrap.style.display = "";
+  document.getElementById("where").textContent = STEP_TITLES[key];
+  document.getElementById("count").textContent = `Section ${state.step} of ${STEPS.length - 2}`;
+  document.getElementById("fill").style.width = (100 * state.step / (STEPS.length - 1)) + "%";
+}
+function go(n) { state.step = n; persist(); render(); window.scrollTo(0, 0); }
+
+/* ================= Rendering ================= */
+function chipRow(id, scale, cols) {
+  const cur = state.answers[id];
+  const cls = cols === 3 ? "opts three" : cols === 2 ? "opts two" : "opts";
+  return `<div class="${cls}" role="radiogroup">` + scale.map((label, v) =>
+    `<div class="opt${cur === v ? " sel" : ""}" role="radio" tabindex="0" aria-checked="${cur === v}"
+      data-id="${id}" data-val="${v}"><span class="l">${label}</span></div>`).join("") + `</div>`;
+}
+function itemCards(items, scale) {
+  return items.map(it =>
+    `<div class="item"><div class="text">${it.t}</div>${chipRow(it.id, scale)}</div>`).join("");
+}
+function navButtons(backTo, nextLabel, nextEnabled) {
+  return `<div class="navrow"><button class="btn btn-ghost" onclick="go(${backTo})">&larr; Back</button>
+    <span class="spacer"></span><span class="status" id="gate-note"></span>
+    <button class="btn btn-primary" id="next-btn" ${nextEnabled ? "" : "disabled"}
+      onclick="go(${state.step + 1})">${nextLabel} &rarr;</button></div>`;
+}
+
+function renderCover() {
+  stage.innerHTML = `
+    <div class="kicker">DPI Fund &middot; Civic Power Lab &middot; Agency Research</div>
+    <h1>Agency Instrument</h1>
+    <p class="lede">A short research survey about how people experience power and agency in their organizing. Your answers help us understand how leaders and communities build the capacity to act together.</p>
+    <div class="meta-chips">
+      <span class="chip">About 15 minutes</span>
+      <span class="chip">Voluntary</span>
+      <span class="chip">IRB-approved</span>
+    </div>
+    <p class="sec-desc" style="margin-bottom:18px">You are invited to take part because you are a member of a community organization. Taking part is completely up to you, and you can skip any question or stop at any time.</p>
+    <details class="consent-box">
+      <summary>Consent to participate in research <span class="consent-cue">Read full statement</span></summary>
+      <div class="consent-body">
+        <p><b>Voluntary participation.</b> Whether or not you take part is up to you. You can agree now and change your mind later. Refusing or stopping will not be held against you and costs you no benefit you are otherwise entitled to.</p>
+        <p><b>What this involves.</b> We are studying how power and agency develop in organizational settings. The survey takes about 15 minutes and asks about your experiences and outlook.</p>
+        <p><b>Risks and benefits.</b> We believe the risks are minimal. There is no direct benefit to you. Your responses may help scholars better understand the civic power landscape in the United States.</p>
+        <p><b>Privacy.</b> We limit use and disclosure of your information to people who need to review it, but cannot promise complete confidentiality. The Institutional Review Board and other authorized representatives may inspect and copy your information. Once identifiers are removed, de-identified data may be used or shared for future research without your additional consent.</p>
+        <p><b>Questions.</b> Contact the principal investigator, Elizabeth McKenna, Harvard University (<a href="mailto:emckenna@hks.harvard.edu">emckenna@hks.harvard.edu</a>). For questions about your rights as a research participant, or if you cannot reach the research team, contact the Harvard University Area IRB at (617) 496-2847 or <a href="mailto:cuhs@harvard.edu">cuhs@harvard.edu</a>.</p>
+        <p>This research has been reviewed and approved by the Harvard University Area Institutional Review Board.</p>
+      </div>
+    </details>
+    <label class="consent-check"><input type="checkbox" id="consentBox"> I have read the information above and agree to take part in this research.</label>
+    <div class="navrow"><span class="spacer"></span><button class="btn btn-primary" id="beginBtn" disabled onclick="go(1)">Begin &rarr;</button></div>`;
+  document.getElementById("consentBox").addEventListener("change", function () {
+    document.getElementById("beginBtn").disabled = !this.checked;
+  });
+}
+
+function renderShare() {
+  const s = state.share;
+  stage.innerHTML = `
+    <h2>Sharing your results within your organization</h2>
+    <p class="sec-desc">Your responses to this survey are used for the research study described earlier. Separately, your organization may also want to use survey results to support organizing coaching and team development. Sharing your results this way is entirely optional and separate from your participation in the research study itself. Whatever you choose here will not affect your standing in your organization, your relationship with the research team, or your ability to take part in this study.</p>
+    <p class="sec-desc" style="margin:14px 0 10px"><b>Please choose your preference(s):</b></p>
+    <div class="checks">
+      <label class="checkrow${s.aggregate ? " on" : ""}"><input type="checkbox" id="sh-agg" ${s.aggregate ? "checked" : ""}>
+        <span><b>I agree to let my organization&rsquo;s leaders see aggregate, de-identified results</b> for my team or organization &mdash; combined results where no individual&rsquo;s answers can be identified (for example, only shown when at least 10 people from a team have responded).</span></label>
+      <label class="checkrow${s.individual ? " on" : ""}" style="margin-left:26px"><input type="checkbox" id="sh-ind" ${s.individual ? "checked" : ""} ${s.aggregate ? "" : "disabled"}>
+        <span><b>I additionally agree to let my organizer and/or team lead see my individual results</b>, for the purpose of a coaching or development conversation. I understand this means my name would be connected to my results for this specific person, that this is different from the confidential research use described above, and that I can withdraw this permission at any time by contacting <a href="mailto:emckenna@hks.harvard.edu">emckenna@hks.harvard.edu</a> without affecting my participation in the study overall.</span></label>
+      <label class="checkrow${s.none ? " on" : ""}"><input type="checkbox" id="sh-none" ${s.none ? "checked" : ""}>
+        <span><b>I do not wish to share my results with my organization</b> at all and wish for it to remain confidential.</span></label>
+    </div>
+    ${navButtons(state.step - 1, "Continue", s.aggregate || s.none)}`;
+  const sync = () => { renderShare(); persist(); };
+  document.getElementById("sh-agg").addEventListener("change", function () {
+    state.share.aggregate = this.checked;
+    if (!this.checked) state.share.individual = false;
+    if (this.checked) state.share.none = false;
+    sync();
+  });
+  document.getElementById("sh-ind").addEventListener("change", function () {
+    state.share.individual = this.checked; if (this.checked) state.share.none = false; sync();
+  });
+  document.getElementById("sh-none").addEventListener("change", function () {
+    state.share.none = this.checked;
+    if (this.checked) { state.share.aggregate = false; state.share.individual = false; }
+    sync();
+  });
+}
+
+function renderBlock(block) {
+  stage.innerHTML = `
+    <h2>${block.title}</h2>
+    <div class="stem">${block.lead}</div>
+    ${itemCards(block.items, block.scale)}
+    ${block.key === "wt" ? `<div class="item"><div class="text">${LF1.t}</div>${chipRow(LF1.id, LF1.scale)}</div>` : ""}
+    ${navButtons(state.step - 1, "Continue", blockDone(block))}`;
+}
+function blockDone(block) {
+  const ids = block.items.map(i => i.id).concat(block.key === "wt" ? [LF1.id] : []);
+  return ids.every(id => id in state.answers);
+}
+
+function renderRecent() {
+  stage.innerHTML = `
+    <h2>Your recent experience</h2>
+    <p class="sec-desc">In the last 8 months, how have you taken part in civic or political life? <b>Check all that apply.</b></p>
+    <div class="checks">${PARTICIPATION.map((p, i) =>
+      `<label class="checkrow${state.participation.includes(i) ? " on" : ""}">
+        <input type="checkbox" data-i="${i}" ${state.participation.includes(i) ? "checked" : ""}><span>${p.t}</span></label>`).join("")}
+    </div>
+    ${navButtons(state.step - 1, "Continue", state.participation.length > 0)}`;
+  stage.querySelectorAll('input[type="checkbox"]').forEach(box => box.addEventListener("change", function () {
+    const i = Number(this.dataset.i);
+    if (this.checked) {
+      if (PARTICIPATION[i].exclusive) state.participation = [i];
+      else state.participation = state.participation.filter(x => !PARTICIPATION[x].exclusive).concat(i);
+    } else state.participation = state.participation.filter(x => x !== i);
+    persist(); renderRecent();
+  }));
+}
+
+function renderCivic() {
+  stage.innerHTML = `
+    <h2>Your civic life</h2>
+    <div class="item"><div class="text">Over the last 8 months, how often have you taken part in political education or training?</div>
+      ${chipRow("poled", FREQ)}</div>
+    <p class="sec-desc" style="margin:18px 0 10px">When you think about your civic or political life, how strongly have you felt each of these?</p>
+    ${EMOTIONS.map(e => `<div class="item"><div class="text">${e}</div>${chipRow("emo_" + e.toLowerCase(), EMO, 3)}</div>`).join("")}
+    ${navButtons(state.step - 1, "Continue", ["poled"].concat(EMOTIONS.map(e => "emo_" + e.toLowerCase())).every(id => id in state.answers))}`;
+}
+
+function renderCommunity() {
+  stage.innerHTML = `
+    <h2>${EXP_COMMUNITY.title}</h2>
+    ${EXP_COMMUNITY.items.map(it => `<div class="item"><div class="text">${it.t}</div>${chipRow(it.id, it.scale)}</div>`).join("")}
+    ${navButtons(state.step - 1, "Continue", EXP_COMMUNITY.items.every(it => it.id in state.answers))}`;
+}
+
+function renderVoice() {
+  stage.innerHTML = `
+    <h2>${EXP_VOICE.title}</h2>
+    ${EXP_VOICE.groups.map(g => `<div class="stem">${g.lead}</div>` +
+      g.items.map(it => `<div class="item"><div class="text">${it.t}</div>${chipRow(it.id, g.scale, g.scale === POWER ? 3 : 5)}</div>`).join("")).join("")}
+    ${navButtons(state.step - 1, "Continue", EXP_VOICE.groups.every(g => g.items.every(it => it.id in state.answers)))}`;
+}
+
+function renderCpa() {
+  stage.innerHTML = `
+    <h2>${EXP_CPA.title}</h2>
+    <div class="stem">${EXP_CPA_STEM}</div>
+    ${itemCards(EXP_CPA.items, EXTENT)}
+    <div class="stem">${EXP_CPA_EXTRA.lead}</div>
+    ${itemCards(EXP_CPA_EXTRA.items, AGREE)}
+    ${navButtons(state.step - 1, "Continue",
+      EXP_CPA.items.concat(EXP_CPA_EXTRA.items).every(it => it.id in state.answers))}`;
+}
+
+function renderTraits() {
+  const fixed = [
+    { id:"tr_lead", t:"I am often a leader in groups.", scale:AGREE },
+    { id:"tr_intro", t:"I consider myself to be more…", scale:["Introverted","Extroverted"], cols:2 },
+    { id:"tr_setback", t:"I have overcome setbacks to conquer an important challenge.", scale:AGREE },
+  ];
+  stage.innerHTML = `
+    <h2>${EXP_TRAITS.title}</h2>
+    ${fixed.map(f => `<div class="item"><div class="text">${f.t}</div>${chipRow(f.id, f.scale, f.cols)}</div>`).join("")}
+    <p class="sec-desc" style="margin:18px 0 10px">Each of the following adjectives describes me&hellip;</p>
+    ${EXP_TRAITS.adjectives.map(a =>
+      `<div class="item"><div class="text">${a}</div>${chipRow("adj_" + a.toLowerCase().replace(/[^a-z]/g, ""), LIKEME)}</div>`).join("")}
+    ${navButtons(state.step - 1, "Continue",
+      fixed.map(f => f.id).concat(EXP_TRAITS.adjectives.map(a => "adj_" + a.toLowerCase().replace(/[^a-z]/g, ""))).every(id => id in state.answers))}`;
+}
+
+function renderAbout() {
+  const d = state.demo;
+  stage.innerHTML = `
+    <h2>A little about you</h2>
+    <div class="field"><label>Your name</label><input id="d-name" value="${d.name || ""}"></div>
+    <div class="field"><label>Your organization</label><input id="d-org" value="${d.org || ""}"></div>
+    <div class="field"><label>Your team <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="d-team" value="${d.team || ""}"></div>
+    <div class="field"><label>Racial / ethnic identity <span style="font-weight:400;color:var(--muted)">(check all that apply)</span></label>
+      <div class="checks" id="d-race">${RACE_OPTIONS.map(([v, l]) =>
+        `<label class="checkrow${(d.race || []).includes(v) ? " on" : ""}"><input type="checkbox" value="${v}" ${(d.race || []).includes(v) ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>
+      <input id="d-race-self" placeholder="Self-describe" value="${d.raceSelf || ""}" style="display:${(d.race || []).includes("self") ? "" : "none"}; margin-top:8px">
+    </div>
+    <div class="field"><label>Gender</label><select id="d-gender"><option value=""></option>${GENDER_OPTIONS.map(g =>
+      `<option ${d.gender === g ? "selected" : ""}>${g}</option>`).join("")}</select></div>
+    <div class="field"><label>Year of birth</label><input id="d-yob" type="number" min="1920" max="2012" value="${d.yob || ""}"></div>
+    <div class="field"><label>Highest education</label><select id="d-edu"><option value=""></option>${EDU_OPTIONS.map(e =>
+      `<option ${d.edu === e ? "selected" : ""}>${e}</option>`).join("")}</select></div>
+    <div class="navrow"><button class="btn btn-ghost" onclick="go(${state.step - 1})">&larr; Back</button>
+      <span class="spacer"></span><span class="status" id="save-status"></span>
+      <button class="btn btn-primary" id="submit-btn">Submit &rarr;</button></div>
+    <div class="rescue" id="rescue"><b>Your responses were NOT saved to our database.</b> A backup file of your answers has just downloaded &mdash; please email it to <a href="mailto:emckenna@hks.harvard.edu">emckenna@hks.harvard.edu</a> and you are done. <span id="rescue-detail" style="color:var(--muted)"></span></div>`;
+  const bind = (id, key) => document.getElementById(id).addEventListener("input", function () {
+    state.demo[key] = this.value; persist();
+  });
+  bind("d-name", "name"); bind("d-org", "org"); bind("d-team", "team");
+  bind("d-race-self", "raceSelf"); bind("d-yob", "yob");
+  document.getElementById("d-gender").addEventListener("change", function () { state.demo.gender = this.value; persist(); });
+  document.getElementById("d-edu").addEventListener("change", function () { state.demo.edu = this.value; persist(); });
+  document.getElementById("d-race").querySelectorAll("input").forEach(box => box.addEventListener("change", function () {
+    state.demo.race = Array.from(document.querySelectorAll("#d-race input:checked")).map(x => x.value);
+    persist(); renderAbout();
+  }));
+  document.getElementById("submit-btn").addEventListener("click", submitAll);
+}
+
+/* ================= Scoring for the agency profile (results:"profile") =================
+   Frequency items are 0-4; reverse items flipped. Bands: low = mean < 1.7,
+   high = mean > 2.7, medium otherwise. Participation index: sum of codes,
+   high 4-10, medium 2-3, low 0-1 (per battery spec). */
+function blockMean(items) {
+  const vals = items.map(it => {
+    let v = state.answers[it.id];
+    if (v == null) return null;
+    return it.rev ? 4 - v : v;
+  }).filter(v => v != null);
+  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+}
+function band(mean) { return mean == null ? null : mean < 1.7 ? "low" : mean > 2.7 ? "high" : "medium"; }
+function participationIndex() {
+  return state.participation.reduce((n, i) => n + PARTICIPATION[i].code, 0);
+}
+const PROFILE_TEXT = {
+  pa: { low:"This might be a good moment for a 1:1 conversation focused on a concrete, doable next step. You might be carrying more than you are able to act on right now. What is one thing, even small, that is fully within your control this week?",
+        medium:"What is a slightly bigger task that you can take on next?",
+        high:"You act on what matters to you consistently. Who is someone you could mentor through this same process?" },
+  ar: { low:"Engage in opportunities to practice naming what you want — a 1:1 conversation or political education session could help. Naming what you want and why is a skill, not something you have or don’t have.",
+        medium:"You can often name what you want. Practice saying it out loud (in a meeting, an event, etc.) to others.",
+        high:"You’re clear about what you and others want. Consider facilitating a group visioning or strategy session." },
+  pe: { low:"It may not feel like your piece of this matters. Ask your team lead directly: What would change if I stepped back?",
+        medium:"You’re beginning to see your contributions land. What does it look like to take on one more responsibility?",
+        high:"You clearly see your impact on your group. Consider bringing in and developing another person." },
+  ce: { low:"It is hard to believe organizing changes anything when you haven’t seen a win yet. Ask your team lead to hear about a past win from your organization’s history.",
+        medium:"You believe your group can build toward something. Getting closer to strategy-building may deepen this belief.",
+        high:"You believe in your group’s capacity to win. You are ready to help shape strategy, not just execute it." },
+  gc: { low:"It is hard to feel alone. Consider talking with others (in a safe space) who share your background about shared stakes.",
+        medium:"You are starting to connect your fate to others who share your background. Naming this connection out loud in a group setting may deepen it.",
+        high:"You feel strongly connected to others who share your background. This is a powerful anchor for sustained organizing and is a strength." },
+};
+function renderProfile() {
+  const dims = [
+    { key:"pa", name:"Taking Action", items:CORE_BLOCKS[0].items },
+    { key:"ar", name:"Naming Your Needs", items:CORE_BLOCKS[1].items },
+    { key:"pe", name:"Your Part in the Group", items:CORE_BLOCKS[2].items },
+    { key:"ce", name:"Working Together — building change", items:CORE_BLOCKS[3].items.slice(0, 3) },
+    { key:"gc", name:"Working Together — standing in community", items:CORE_BLOCKS[3].items.slice(3, 5) },
+  ];
+  const pIdx = participationIndex();
+  const pBand = pIdx >= 4 ? "high" : pIdx >= 2 ? "medium" : "low";
+  const collective = dims.filter(d => d.key === "ce" || d.key === "pe");
+  const collHigh = collective.every(d => band(blockMean(d.items)) === "high");
+  const gap = collHigh && pBand === "low";
+  return `
+    <h2>Your agency profile</h2>
+    <p class="sec-desc">These reflections are for you. They are prompts for your own organizing development, not evaluations.</p>
+    ${dims.map(d => {
+      const b = band(blockMean(d.items));
+      return `<div class="profile-card"><span class="dim">${d.name}</span><span class="band ${b}">${b}</span>
+        <div class="advice">${PROFILE_TEXT[d.key][b]}</div></div>`;
+    }).join("")}
+    <div class="profile-card"><span class="dim">Recent participation</span><span class="band ${pBand}">${pBand}</span>
+      <div class="advice">Based on how you have taken part in civic or political life in the last 8 months.</div></div>
+    ${gap ? `<div class="gapnote"><b>Worth noticing:</b> your sense of what your group can do together is high, but your recent participation has been light. What would it look like to put that belief into action this month?</div>` : ""}`;
+}
+
+function renderDone() {
+  const profile = CONFIG.results === "profile" ? renderProfile() : "";
+  stage.innerHTML = `
+    ${profile || "<h2>Thank you</h2><p class='sec-desc'>Thank you for your participation in this research. We will use your responses to learn more about the related constructs and share our findings as a way to better understand, and hopefully improve, organizing programs at large.</p>"}
+    <p class="sec-desc" style="margin-top:22px">Thank you again. Please feel free to come back and take this again in a few months!</p>
+    <p class="sec-desc" style="color:var(--muted); font-size:13px; margin-top:10px"><em>Demo only &mdash; validation in progress.</em></p>`;
+}
+
+/* ================= Submit ================= */
+function exportBackup(payload) {
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `agency-battery-${(state.demo.name || "anonymous").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function buildPayload() {
+  return {
+    kind: "battery",
+    instrument: "agency_full_battery",
+    version: "battery-v0.1-aug2026",
+    config: CONFIG,
+    share_consent: CONFIG.shareConsent ? state.share : null,
+    respondent: state.demo.name || null,
+    answers: state.answers,
+    participation: state.participation.map(i => ({ code: PARTICIPATION[i].code, label: PARTICIPATION[i].t })),
+    participation_index: participationIndex(),
+    demographics: state.demo,
+    startedAt: state.startedAt,
+    submittedAt: new Date().toISOString(),
+  };
+}
+async function submitAll() {
+  const btn = document.getElementById("submit-btn");
+  const status = document.getElementById("save-status");
+  btn.disabled = true; status.className = "status"; status.textContent = "Saving…";
+  const payload = buildPayload();
+  try {
+    await saveToBackend(payload);
+    state.submitted = true; persist();
+    go(STEPS.indexOf("done"));
+  } catch (err) {
+    btn.disabled = false;
+    status.textContent = "";
+    exportBackup(payload);
+    document.getElementById("rescue-detail").textContent = `(${err.message})`;
+    document.getElementById("rescue").style.display = "block";
+  }
+}
+
+/* ================= Wire-up ================= */
+stage.addEventListener("click", e => {
+  const o = e.target.closest(".opt");
+  if (!o) return;
+  state.answers[o.dataset.id] = Number(o.dataset.val);
+  persist();
+  render();
+});
+stage.addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const o = e.target.closest(".opt");
+  if (o) { e.preventDefault(); o.click(); }
+});
+
+function render() {
+  setChrome();
+  const key = STEPS[state.step];
+  if (key === "cover") return renderCover();
+  if (key === "share") return renderShare();
+  if (key === "pa") return renderBlock(CORE_BLOCKS[0]);
+  if (key === "ar") return renderBlock(CORE_BLOCKS[1]);
+  if (key === "pe") return renderBlock(CORE_BLOCKS[2]);
+  if (key === "wt") return renderBlock(CORE_BLOCKS[3]);
+  if (key === "recent") return renderRecent();
+  if (key === "civic") return renderCivic();
+  if (key === "community") return renderCommunity();
+  if (key === "voice") return renderVoice();
+  if (key === "cpa") return renderCpa();
+  if (key === "traits") return renderTraits();
+  if (key === "about") return renderAbout();
+  if (key === "done") return renderDone();
+}
+if (state.submitted) state.step = STEPS.indexOf("done");
+if (state.step >= STEPS.length) state.step = 0;
+render();
+</script>
+</body>
+</html>
